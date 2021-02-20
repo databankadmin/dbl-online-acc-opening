@@ -1,0 +1,116 @@
+﻿@using DBHelper.Schema
+@{
+    var context = new DBLAccountOpeningContext();
+    var idCards = context.IDCardTypes.Where(x=>x.Id==4 || x.Id==5 || x.Id==9);
+}
+
+<h4 class="myHeader">ITF APPLICANT</h4>
+
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="itfApplicantSurname" class="form-label">Surname</label>
+            <input type="text" name="itfApplicantSurname" id="itfApplicantSurname" />
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantFname" class="form-label">First Name</label>
+            <input type="text" name="itfApplicantFname" id="itfApplicantFname" />
+        </div>
+        <div class="form-group">
+            <label for="itfApplicantOname" class="form-label">Other Name</label>
+            <input type="text" name="itfApplicantOname" id="itfApplicantOname" />
+        </div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="itfApplicantNationality" class="form-label">Nationality</label>
+            <select name="itfApplicantNationality" id="itfApplicantNationality" style="width:300px;">
+                <option value="">-select-</option>
+                @{
+                    foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                    {
+                        if (item.ID == 81)
+                        {
+                            <option value="@item.ID" selected>@item.CountryName</option>
+                            continue;
+
+                        }
+                        <option value="@item.ID">@item.CountryName</option>
+                    }
+                }
+            </select>
+
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
+            <input type="date" name="itfApplicantDOB" id="itfApplicantDOB" />
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
+            <input type="text" name="itfApplicantPlaceOfBirth" id="itfApplicantPlaceOfBirth" />
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="itfApplicantIdType" class="form-label">ID Type</label>
+            <select name="itfApplicantIdType" id="itfApplicantIdType" style="width:250px;">
+                <option value="">-select-</option>
+                @{
+                    foreach (var item in idCards.Where(x => x.IsActive).OrderBy(x=>x.Name))
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantIdNumber" class="form-label">ID Number</label>
+            <input type="email" name="itfApplicantIdNumber" id="itfApplicantIdNumber" />
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
+            <input type="email" name="itfApplicantIdIssuingAuthority" id="itfApplicantIdIssuingAuthority" />
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="itfApplicantIdCardIssueDate" class="form-label">Issue Date</label>
+            <input type="date" name="itfApplicantIdCardIssueDate" id="itfApplicantIdCardIssueDate" />
+        </div>
+
+        <div class="form-group">
+            <label for="itfApplicantIdCardExpDate" class="form-label">Expiry Date</label>
+            <input type="date" name="itfApplicantIdCardExpDate" id="itfApplicantIdCardExpDate" />
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,223 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@{ 
+    Layout = null;
+    var context = new DBLAccountOpeningContext();
+    var settings = Utilities.GetAppSettings();
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@settings.AppName | New Account</title>
+
+    <link rel="stylesheet" href="~/wizardFiles/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="~/wizardFiles/vendor/nouislider/nouislider.min.css">
+    <link rel="icon" href="~/images/databank.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="~/wizardFiles/css/style.css">
+
+    <style>
+        body, #main {
+            border-bottom: thin gold;
+            background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            height: auto;
+            min-height: 5px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    @Html.Partial("~/Views/Partials/_header.cshtml")
+
+    <div class="main" style="padding:0;">
+
+        <div class="container">
+            <form method="POST" id="signup-form" class="signup-form" action="#">
+                <div>
+                    @Html.Partial("~/Views/Partials/_csdForm.cshtml")
+
+                    <h3>Databank Brokerage Form</h3>
+                    @{
+                        if (MvcApplication.AccountType <= 3)
+                        {
+                            //single, joint or itf
+                            @Html.Partial("~/Views/Partials/_firstApplicant.cshtml")
+
+                            
+                        }
+
+
+                        else if (MvcApplication.AccountType == 4)
+                        {
+                            //inst
+                            @Html.Partial("~/Views/Partials/_institutionalApplicant.cshtml")
+
+                        }
+                    }
+                    
+
+                    <h3>File Uploads</h3>
+                    <fieldset>
+                        <h2>Set Financial Goals</h2>
+                        <p class="desc">Set up your money limit to reach the future plan</p>
+                        <div class="fieldset-content">
+                            <div class="donate-us">
+                                <div class="price_slider ui-slider ui-slider-horizontal">
+                                    <div id="slider-margin"></div>
+                                    <p class="your-money">
+                                        Your money you can spend per month :
+                                        <span class="money" id="value-lower"></span>
+                                        <span class="money" id="value-upper"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+
+                    <h3>AML Form</h3>
+                    <fieldset>
+                        <h2>Level 4 header</h2>
+                        <p class="desc">Set up your money limit to reach the future plan</p>
+                        <div class="fieldset-content">
+                            <div class="donate-us">
+                                <div class="price_slider ui-slider ui-slider-horizontal">
+                                    <div id="slider-margin"></div>
+                                    <p class="your-money">
+                                        Your money you can spend per month :
+                                        <span class="money" id="value-lower"></span>
+                                        <span class="money" id="value-upper"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <h3>Electronic Transmission Indemnity</h3>
+                    <fieldset>
+                        <h2>Level 4 header</h2>
+                        <p class="desc">Set up your money limit to reach the future plan</p>
+                        <div class="fieldset-content">
+                            <div class="donate-us">
+                                <div class="price_slider ui-slider ui-slider-horizontal">
+                                    <div id="slider-margin"></div>
+                                    <p class="your-money">
+                                        Your money you can spend per month :
+                                        <span class="money" id="value-lower"></span>
+                                        <span class="money" id="value-upper"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+
+                    <h3>Submit Application</h3>
+                    <fieldset>
+                        <h2>Level 4 header</h2>
+                        <p class="desc">Set up your money limit to reach the future plan</p>
+                        <div class="fieldset-content">
+                            <div class="donate-us">
+                                <div class="price_slider ui-slider ui-slider-horizontal">
+                                    <div id="slider-margin"></div>
+                                    <p class="your-money">
+                                        Your money you can spend per month :
+                                        <span class="money" id="value-lower"></span>
+                                        <span class="money" id="value-upper"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>
+    <script src="~/wizardFiles/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/wizardFiles/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/wizardFiles/vendor/jquery-steps/jquery.steps.min.js"></script>
+    <script src="~/wizardFiles/vendor/minimalist-picker/dobpicker.js"></script>
+    <script src="~/wizardFiles/vendor/nouislider/nouislider.min.js"></script>
+    <script src="~/wizardFiles/vendor/wnumb/wNumb.js"></script>
+    <script src="~/wizardFiles/js/main.js"></script>
+
+    <style type="text/css">
+         select{
+        border: 1px solid #ebebeb;
+        box-sizing: border-box;
+        position: relative;
+        background: 0 0;
+        z-index: 10;
+        cursor: pointer;
+        padding: 0 20px;
+        height: 50px;
+        font-size: 14px;
+        font-family: 'Roboto Slab';
+        color: #999;
+        box-sizing: border-box;
+        background-color: #fff;
+        font-weight: bold;
+    }
+        .error {
+        color:red;
+        }
+
+
+
+        .form-flex {
+            width:900px;
+        }
+
+
+        /*#csdDOB-error {
+            margin-top:80px;
+        }*/
+
+        /*.content clearfix, vertical .content, vertical .content, .vertical .actions {
+            overflow: scroll;height:auto;
+        }*/
+
+        .vertical .content, .vertical .actions{height:auto}
+
+        #csdBankAccn-error {
+        margin-top:20px;
+        }
+
+        .actions ul li a {
+            background-color: #00a65a !important;
+        }
+        .actions ul li:first-child a {
+        color:white;
+        }
+
+
+        .myHeader {
+            color: white;
+            background-color: #00a65a !important;
+            padding-left:2%; padding-top:1%; padding-bottom:1%;
+        }
+    </style>
+</body>
+
+
+
+</html>

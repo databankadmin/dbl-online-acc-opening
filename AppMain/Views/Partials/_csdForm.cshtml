@@ -1,0 +1,330 @@
+﻿@using DBHelper.Schema
+@{
+    var context = new DBLAccountOpeningContext();
+ }
+
+<h3>CSD Account Form</h3>
+<fieldset>
+    <h2>SECURITY ACCOUNT OPENING FORM (CSD FORM)</h2>
+    <p class="desc">Please provide details for your CSD Account</p>
+    <div class="fieldset-content">
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="depositorParticipant" class="form-label">Name of Depositor Participant</label>
+                    <input type="text" name="depositorParticipant" id="depositorParticipant" />
+                </div>
+
+                <div class="form-group">
+                    <label for="depositorParticipantNo" class="form-label">Depository Participant No.</label>
+                    <input type="text" name="depositorParticipantNo" id="depositorParticipantNo" />
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdTitle" class="form-label">Title</label>
+                    <select name="csdTitle" id="csdTitle" style="width:300px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Titles)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="csdSurname" class="form-label">Surname/Company Name</label>
+                    <input type="text" name="csdSurname" id="csdSurname" />
+                </div>
+
+                <div class="form-group">
+                    <label for="csdOthernames" class="form-label">Other Names</label>
+                    <input type="text" name="csdOthernames" id="csdOthernames" />
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdAddress" class="form-label">Address</label>
+                    <input type="text" name="csdAddress" id="csdAddress" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="csdResidentialAddress" class="form-label">Residential Address</label>
+                    <input type="text" name="csdResidentialAddress" id="csdResidentialAddress" />
+                </div>
+
+                <div class="form-group">
+                    <label for="csdResidentialStatus" class="form-label">Residential Status</label>
+                    <select name="csdResidentialStatus" id="csdResidentialStatus" style="width:300px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.ResidentialStatus.Where(x => x.IsActive))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdHomeTel" class="form-label">Tel. No:(Home)</label>
+                    <input type="text" name="csdHomeTel" id="csdHomeTel" />
+                </div>
+                <div class="form-group">
+                    <label for="csdOfficeNo" class="form-label">Office No.</label>
+                    <input type="text" name="csdOfficeNo" id="csdOfficeNo" />
+                </div>
+                <div class="form-group">
+                    <label for="csdFaxNo" class="form-label">Fax. No.</label>
+                    <input type="text" name="csdFaxNo" id="csdFaxNo" />
+                </div>
+                <div class="form-group">
+                    <label for="csdEmail" class="form-label">Email</label>
+                    <input type="text" name="csdEmail" id="csdEmail" />
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdDOB" class="form-label" style="font-size:14px;">Date of Birth / Incorporation of Business</label>
+                    <input type="date" name="csdDOB" id="csdDOB" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="csdOccupation" class="form-label">Occupation</label>
+                    <input type="text" name="csdOccupation" id="csdOccupation" />
+                </div>
+
+                <div class="form-group">
+                    <label for="csdNationality" class="form-label">Nationality</label>
+                    <select name="csdNationality" id="csdNationality" style="width:300px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                            {
+                                if (item.ID == 81)
+                                {
+                                    <option value="@item.ID" selected>@item.CountryName</option>
+                                    continue;
+
+                                }
+                                <option value="@item.ID">@item.CountryName</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-flex">
+
+                <div class="form-group">
+                    <label for="csdIdType" class="form-label">ID Type</label>
+                    <select name="csdIdType" id="csdIdType" style="width:250px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.IDCardTypes.Where(x => x.IsActive))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="csdIdNumber" class="form-label">ID Number</label>
+                    <input type="text" name="csdIdNumber" id="csdIdNumber" />
+                </div>
+                <div class="form-group">
+                    <label for="csdIDIssuePlace" class="form-label">Place of Issue</label>
+                    <input type="text" name="csdIDIssuePlace" id="csdIDIssuePlace" />
+                </div>
+
+                <div class="form-group">
+                    <label for="csdCardExpiryDate" class="form-label" style="font-size:14px;">Expiry Date</label>
+                    <input type="date" name="csdCardExpiryDate" id="csdCardExpiryDate" />
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdBoughtTBill" class="form-label" style="float:left;display:inline;width:500px;">
+                        Have you bought a security such as Treasury bill, bond, shares etc. before?
+                    </label>
+                    <select name="csdBoughtTBill" id="csdBoughtTBill" style="width:100px;display:inline;">
+                        <option value="">-select-</option>
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+
+
+                    </select>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="existingCSDClientID" class="form-label" style="float:left;display:inline;width:300px;">
+                        Existing CSD Client ID (if applicable)
+                    </label>
+                    <input type="text" name="existingCSDClientID" id="existingCSDClientID" style="width:200px; float:left;display:inline; font-weight:bold; font-size:20px" maxlength="13" placeholder="*************" />
+                    <input type="text" name="existingCSDClientIDArr2" id="existingCSDClientIDArr2" style="width:80px;display:inline; font-weight:bold; font-size:20px; margin-left:5px;" maxlength="2" placeholder="**" />
+                    <input type="text" name="existingCSDClientIDArr3" id="existingCSDClientIDArr3" style="width:80px;display:inline; font-weight:bold; font-size:20px; margin-left:5px;" maxlength="2" placeholder="**" />
+
+                </div>
+            </div>
+        </div>
+
+        <center>
+            <p style="font-weight:bold;">Bank Information of the Investor for Dividend, Interest and maturity Disposal Instructions (for equity or shares the Bank information is optional)</p>
+        </center>
+
+        <div class="form-row">
+            <div class="form-flex">
+
+                <div class="form-group">
+                    <label for="csdBankId" class="form-label">Bank</label>
+                    <select name="csdBankId" id="csdBankId" style="width:250px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="csdBankBranch" class="form-label">Branch</label>
+                    <input type="text" name="csdBankBranch" id="csdBankBranch" />
+                </div>
+                <div class="form-group">
+                    <label for="csdBankAccn" class="form-label">Account Number</label>
+                    <input type="text" name="csdBankAccn" id="csdBankAccn" />
+                </div>
+
+            </div>
+        </div>
+
+        <center>
+            <p style="font-weight:bold;">DECLARATION</p>
+        </center>
+        <p>I hereby:</p>
+        <ol style="list-style-type:lower-roman">
+            <li>request to open and maintain a Security Account in my/our name</li>
+            <li>affirm that all information in the form are correct</li>
+            <li>undertake to notify this Depository Participant of any change of particulars or information provided by me in this form</li>
+        </ol>
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdDeclareFullname" class="form-label">Fullname</label>
+                    <input type="text" name="csdDeclareFullname" id="csdDeclareFullname" />
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="csdDepositoryParticipantOptions" class="form-label">For Depository Participant Use Only</label>
+                    <select name="csdDepositoryParticipantOptions" id="csdDepositoryParticipantOptions" style="width:300px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.CSDDepositoryParticipantOptions.Where(x => x.IsActive).OrderBy(x => x.Id))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="clientCSDSecAccNo" class="form-label" style="float:left;display:inline;">
+                        Client CSD Securities Account Number
+                    </label>
+                    <input type="text" name="clientCSDSecAccNo" id="clientCSDSecAccNo" style="width:100px; float:left;display:inline; font-weight:bold;margin-right:5px; font-size:20px" maxlength="4" placeholder="****" />
+                    <input type="text" name="clientCSDSecAccNo2" id="clientCSDSecAccNo2" style="width:80px; float:left;display:inline; font-weight:bold;margin-right:5px; font-size:20px" maxlength="1" placeholder="*" />
+
+
+
+                    <input type="text" name="clientCSDSecAccNo3" id="clientCSDSecAccNo3" style="width:200px; float:left;display:inline; font-weight:bold; font-size:20px" maxlength="13" placeholder="*************" />
+                    <input type="text" name="existingCSDClientIDArr4" id="existingCSDClientIDArr4" style="width:80px;display:inline; font-weight:bold; font-size:20px; margin-left:5px;" maxlength="2" placeholder="**" />
+                    <input type="text" name="existingCSDClientIDArr5" id="existingCSDClientIDArr5" style="width:80px;display:inline; font-weight:bold; font-size:20px; margin-left:5px;" maxlength="2" placeholder="**" />
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</fieldset>
+

@@ -1,0 +1,202 @@
+﻿@using AppUtils
+@using DBHelper.Schema
+@{
+    Layout = null;
+    var settings = Utilities.GetAppSettings();
+    string msg = ViewBag.Message != null ? ViewBag.Message.ToString() : string.Empty;
+    var context = new DBLAccountOpeningContext();
+
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+
+
+    <title>@settings.AppName - Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="~/Assets/backyard/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="~/Assets/backyard/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Assets/backyard/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/animate.css" rel="stylesheet" media="screen">
+    <link href="~/Assets/backyard/css/owl.theme.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/owl.carousel.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/css-index.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic" />
+    <link rel="icon" href="~/images/databank.png" type="image/x-icon">
+
+
+
+    <script src="~/Assets/backyard/js/jquery.js"></script>
+    <script src="~/Assets/backyard/js/bootstrap.min.js"></script>
+    <style>
+        #grad {
+            border-bottom: thin gold;
+            background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            height: auto;
+            min-height: 5px;
+        }
+
+        #submitBtn {
+            background-color: #157941
+        }
+
+        #para {
+            background-image: url("https://pfp.databankgroup.com/img/bg.png");
+        }
+    </style>
+
+</head>
+
+
+<body data-spy="scroll" data-target="#navbar-scroll">
+    @Html.Partial("~/Views/Partials/_header.cshtml");
+
+    <div id="para" class="fullscreen landing parallax" data-img-width="2000" data-img-height="1333" data-diff="100">
+        <div class="overlay">
+            <div class="container" style="min-height:590px;">
+                <div class="row signup-header wow fadeInUp animated">
+
+                    <h3 class="form-title text-center" style="font-weight:bold">@settings.AppName</h3>
+                    <center>
+                        <form class="form-header" action="@Url.Action("Index", "Home")" role="form" method="POST" id="#" style="width:500px;" onsubmit="return submitFirm()">
+                            @Html.AntiForgeryToken()
+
+                            <select name="accountType" id="accountType" tabindex="4" class="form-control input-lg" required>
+                                <option value="">Type of Account</option>
+                                @{
+                                    foreach (var item in context.AccountTypes.Where(x => x.IsActive))
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+
+                            </select>
+                            <br />
+                            <div class="form-group" style="width:30%;">
+                                <input id="submitBtn" type="submit" class="btn btn-warning btn-block btn-lg" value="NEXT">
+                            </div>
+                            <br/>
+                        </form>
+                    </center>
+                    @*<p class="privacy text-center" style="font-size:16px;">Already have an account <a href="@Url.Action("Index","Home")"> Sign in</a>.</p>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Partials/_footer.cshtml");
+
+
+
+
+
+
+
+    <script src="~/Assets/backyard/js/custom.js"></script>
+    <script src="~/Assets/backyard/js/jquery.sticky.js"></script>
+    <script src="~/Assets/backyard/js/wow.min.js"></script>
+    <script src="~/Assets/backyard/js/owl.carousel.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+
+
+    <script type="text/javascript">
+        function submitFirm() {
+
+            $("#requirementsModal").modal();
+          //  alert('done');
+            return false;
+
+        }
+    </script>
+
+
+
+
+
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="requirementsModal" role="dialog" aria-labelledby="requirementsModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><b>Required Documents</b></h4>
+                </div>
+                <div class="modal-body" style="text-align:justify">
+
+
+                    <div class="modal-form--content">
+                        
+                          <b>a. Passport size photographs</b><br/>
+                            <b>b. Acceptable form of Valid Identification:</b><br/>
+                            <ul style="padding-left: 2rem;list-style: disc outside none;">
+                                <li>
+                                    <b>Ghanaian Nationals</b> (any of the following) for all Signatories to the account:
+                                    <ul class="classic-ul-new" style="margin: 0;margin-bottom: 0.3rem;padding-left: 1rem!important;">
+                                        <li>Passport</li>
+                                        <li>Driver’s Licence</li>
+                                        <li>Voter’s ID</li>
+                                        <li>National ID</li>
+                                        <li>Birth Certificate of beneficiary (in case of account opened in trust for a child)</li>
+                                    </ul>
+                                </li>
+                                <li style="margin-bottom: 0.3rem;">
+                                    <b>Non–Ghanaians</b> (any of the following):
+                                    <ul class="classic-ul-new" style="margin: 0;margin-bottom: 0.3rem;padding-left: 1rem!important;">
+                                        <li>Passport</li>
+                                        <li>Resident Permit/Work Permit</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p><b>c. Proof of Residential Address/Reference Letter</b> (Any of the following):</p>
+                            <ul class="classic-ul-new">
+                                <li>A utility bill in customer’s name not older than 6 months.</li>
+                                <li>Reference letter from an existing Ecobank customer with satisfactory account operation for at least 6 months.</li>
+                                <li>Tenancy Agreement.</li>
+                                <li>Employer’s Letter of Introduction indicating residential address of prospective customer (on Company’s Letterhead).</li>
+                                <li>Ghana Post GPS co-ordinates.</li>
+                                <li>Letter from a Person of Repute (e.g. a Senior Public Officer, Doctor, Lawyer, Head of School, Clergy, Imam, Senior Manager/ Director/CEO of a renowned company).</li>
+                            </ul>
+                        </div>
+                    <div class="text-center">
+                        <h3>Do you have the necessary documents?</h3>
+                        <center>
+                            <span>
+                                <a style="width:100px;" class="btn btn-success btn-lg" onclick="javascript:initiate('@Guid.NewGuid().ToString()')">YES</a>
+                                <a style="width:100px;" class="btn btn-warning btn-lg" onclick="javascript:hideWindow()">No</a>
+                            </span>
+                           
+                        </center>
+                        
+                    </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+    <script type="text/javascript">
+        function initiate(param) {
+            accType = $("#accountType").val();
+
+            document.location.href = "@Url.Action("Initiate", "NewAccount")?acc_type=" + btoa(accType) + "&param=" + btoa(param);
+
+        }
+        function hideWindow()
+        {
+            $('#requirementsModal').modal('hide');
+
+        }
+    </script>
+</body>
+
+
+</html>

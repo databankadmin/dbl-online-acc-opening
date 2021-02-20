@@ -1,0 +1,100 @@
+﻿@using DBHelper.Schema
+@{
+    var context = new DBLAccountOpeningContext();
+    var idCards = context.IDCardTypes.Where(x => x.Id == 4 || x.Id == 5 || x.Id == 9);
+}
+
+<h4 class="myHeader">Next of Kin's Details</h4>
+
+<h4 style="font-weight:bold">Next of Kin 1</h4>
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="nextOfKin1Name" class="form-label">Name</label>
+            <input type="text" name="nextOfKin1Name" id="nextOfKin1Name" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin1Phone" class="form-label">Telephone</label>
+            <input type="text" name="nextOfKin1Phone" id="nextOfKin1Phone" />
+        </div>
+
+        <div class="form-group">
+            <label for="nextOfKin1Mobile" class="form-label">Mobile</label>
+            <input type="text" name="nextOfKin1Mobile" id="nextOfKin1Mobile" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin1Fax" class="form-label">Fax</label>
+            <input type="text" name="nextOfKin1Fax" id="nextOfKin1Fax" />
+        </div>
+
+
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="nextOfKin1Relation" class="form-label">Relation to the Account Holder</label>
+            <input type="text" name="nextOfKin1Relation" id="nextOfKin1Relation" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin1Email" class="form-label">E-mail address</label>
+            <input type="email" name="nextOfKin1Email" id="nextOfKin1Email" />
+        </div>
+
+        <div class="form-group">
+            <label for="nextOfKin1MailAddress" class="form-label">Mailing Address</label>
+            <input type="text" name="nextOfKin1MailAddress" id="nextOfKin1MailAddress" />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<h4 style="font-weight:bold">Next of Kin 2</h4>
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="nextOfKin2Name" class="form-label">Name</label>
+            <input type="text" name="nextOfKin2Name" id="nextOfKin2Name" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin2Phone" class="form-label">Telephone</label>
+            <input type="text" name="nextOfKin2Phone" id="nextOfKin2Phone" />
+        </div>
+
+        <div class="form-group">
+            <label for="nextOfKin2Mobile" class="form-label">Mobile</label>
+            <input type="text" name="nextOfKin2Mobile" id="nextOfKin2Mobile" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin2Fax" class="form-label">Fax</label>
+            <input type="text" name="nextOfKin2Fax" id="nextOfKin2Fax" />
+        </div>
+
+
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="nextOfKin2Relation" class="form-label">Relation to the Account Holder</label>
+            <input type="text" name="nextOfKin2Relation" id="nextOfKin2Relation" />
+        </div>
+        <div class="form-group">
+            <label for="nextOfKin2Email" class="form-label">E-mail address</label>
+            <input type="email" name="nextOfKin2Email" id="nextOfKin2Email" />
+        </div>
+
+        <div class="form-group">
+            <label for="nextOfKin2MailAddress" class="form-label">Mailing Address</label>
+            <input type="text" name="nextOfKin2MailAddress" id="nextOfKin2MailAddress" />
+        </div>
+    </div>
+</div>
+
+

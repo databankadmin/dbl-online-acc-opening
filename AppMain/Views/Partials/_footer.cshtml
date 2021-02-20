@@ -1,0 +1,36 @@
+﻿@{
+    var settings = AppUtils.Utilities.GetAppSettings();
+}
+<footer id="footer">
+    <div class="container">
+        <div class="col-sm-5">
+            <img src="~/Images/phone2.png" />
+            <a href="tel:@settings.Phone">
+                <span style="font-weight:bold; font-size:18px;  color:#124830">@settings.Phone</span>
+            </a>
+            <span style="font-weight:bold">/</span>
+            <a href="tel:@settings.Phone2">
+                <span style="font-weight:bold; font-size:18px;  color:#124830">@settings.Phone2</span>
+            </a>
+        </div>
+        <div class="col-sm-4">
+            <a id="terms">
+                <img src="~/Images/terms.png" />
+                <span style="font-weight:bold; font-size:18px;  color:#124830; cursor:pointer">Terms and Conditions</span>
+            </a>
+
+        </div>
+        <div class="col-sm-3">
+
+           <a href="https://www.databankgroup.com/" target="_blank">
+                <img src="~/Images/www.png" />
+                <span style="font-weight:bold; font-size:20px;  color:#124830">Website</span>
+            </a>
+
+        </div>
+
+
+    </div>
+</footer>
+
+
