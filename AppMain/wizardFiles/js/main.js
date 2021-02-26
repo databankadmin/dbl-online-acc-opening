@@ -1,5 +1,12 @@
-(function($) {
+function markBorderRed(itemId,msg)
+{
+    $("#" + itemId).css("border", "2px dashed red");
+    alert(msg);
+    $("#" + itemId).focus();
 
+}
+(function ($) {
+    
 
 
     var form = $("#signup-form");
@@ -105,14 +112,14 @@
             // fname:{
             //     fname: 'fname required <i class="zmdi zmdi-info"></i>'
             // }
-             csdTitle: 'select title',
-             csdResidentialStatus: 'select residential status',
-             csdEmail: 'provide a valid email',
-             csdNationality: 'select nationality',
-             csdIdType: 'select card type',
-             csdBoughtTBill: 'select item',
-             csdBankId: 'select bank',
-             csdBankAccn:'enter a valid account number'
+             //csdTitle: 'select title',
+             //csdResidentialStatus: 'select residential status',
+             //csdEmail: 'provide a valid email',
+             //csdNationality: 'select nationality',
+             //csdIdType: 'select card type',
+             //csdBoughtTBill: 'select item',
+             //csdBankId: 'select bank',
+             //csdBankAccn:'enter a valid account number'
 
 
 
@@ -131,29 +138,133 @@
         labels: {
             previous: 'Previous',
             next: 'Next',
-            finish: 'Finish',
+            finish: 'Submit Application',
             current: ''
         },
-        onStepChanging: function(event, currentIndex, newIndex) {
-            if (currentIndex === 0) {
+        onStepChanging: function (event, currentIndex, newIndex) {
+            const urlParams = new URLSearchParams(window.location.search);
+            var accType = atob(urlParams.get('acc_type'));
+            var accountTypeId = Number(accType);
+
+            if (currentIndex === 0) {//csd form
+                if ($("#csdimagedivhidden").val()==='') {
+                    markBorderRed('csd-image-div','upload photo ID');
+                    return;
+                }
                 form.parent().parent().parent().append('<div class="footer footer-' + currentIndex + '"></div>');
             }
-            if (currentIndex === 1) {
+
+
+            if (currentIndex === 1) {//DBL  form; individual, joint, itf or institutional
+               
+                if (accountTypeId===1) {//single
+                    if ($("#firstApplicantIdPhotohidden").val() === '')
+                    {
+                        markBorderRed('firstApplicantIdPhoto', 'upload photo ID');
+                        return;
+                    }
+                }
+
+                if (accountTypeId === 2) {//joint
+
+                    if ($("#firstApplicantIdPhotohidden").val() === '') {
+                        markBorderRed('firstApplicantIdPhoto', 'upload first applicant photo ID');
+                        return;
+                    }
+                    if ($("#jointApplicantIdPhotohidden").val() === '') {
+                        markBorderRed('jointApplicantIdPhoto', 'upload joint photo ID');
+                        return;
+                    }
+                }
+
+
+
+                if (accountTypeId === 3) {//itf
+
+                    if ($("#firstApplicantIdPhotohidden").val() === '') {
+                        markBorderRed('firstApplicantIdPhoto', 'upload photo ID');
+                        return;
+                    }
+                    if ($("#itfApplicantIdPhotohidden").val() === '') {
+                        markBorderRed('itfApplicantIdPhoto', 'upload ITF photo ID');
+                        return;
+                    }
+
+
+                }
+                if (accountTypeId === 4) {//inst
+
+                    if ($("#instAuthorisedOfficer1PhotoIdhidden").val() === '') {
+                        markBorderRed('instAuthorisedOfficer1PhotoId', 'upload photo ID');
+                        return;
+                    }
+                    if ($("#instAuthorisedOfficer2PhotoIdhidden").val() === '') {
+                        markBorderRed('instAuthorisedOfficer2PhotoId', 'upload photo ID');
+                        return;
+                    }
+                    if ($("#instSignatory1hidden").val() === '') {
+                        markBorderRed('instSignatory1', 'upload signature 1');
+                        return;
+                    }
+
+                    if ($("#instSignatory2hidden").val() === '') {
+                        markBorderRed('instSignatory2', 'upload signature 2');
+                        return;
+                    }
+
+
+
+                }
+
+
+                if (accountTypeId === 1 || accountTypeId === 2 || accountTypeId === 3)
+                {
+                    if ($("#firstJointItfAuthorisedPersonhidden").val() === '') {
+                        markBorderRed('firstJointItfAuthorisedPerson', 'upload authorised person photo ID');
+                        return;
+                    }
+                    
+                }
+
                 form.parent().parent().parent().find('.footer').removeClass('footer-0').addClass('footer-' + currentIndex + '');
             }
-            if (currentIndex === 2) {
+
+
+
+
+            if (currentIndex === 2) {//file uploads
+                if ($("#proofOfResidencehidden").val() === '') {
+                    markBorderRed('proofOfResidence', 'upload proof of residence');
+                    return;
+                }
+
+                if (accountTypeId===4) {//inst
+                    if ($("#otherBusinessFileshidden").val() === '') {
+                        markBorderRed('otherBusinessFiles', 'upload other business documents');
+                        return;
+                    }
+                }
                 form.parent().parent().parent().find('.footer').removeClass('footer-1').addClass('footer-' + currentIndex + '');
             }
+
+
+
+
             if (currentIndex === 3) {
                 form.parent().parent().parent().find('.footer').removeClass('footer-2').addClass('footer-' + currentIndex + '');
             }
 
-            if (currentIndex === 4) {
+            if (currentIndex === 4) {//aml
                 form.parent().parent().parent().find('.footer').removeClass('footer-3').addClass('footer-' + currentIndex + '');
             }
-            // if(currentIndex === 4) {
-            //     form.parent().parent().parent().append('<div class="footer" style="height:752px;"></div>');
-            // }
+
+            if (currentIndex === 5) {//indemnity
+                form.parent().parent().parent().find('.footer').removeClass('footer-4').addClass('footer-' + currentIndex + '');
+            }
+
+
+
+
             form.validate().settings.ignore = ":disabled,:hidden";
             return form.valid();
         },

@@ -15,5 +15,20 @@ namespace AppMain.Controllers
             MvcApplication.AccountType =int.Parse(Utilities.DecodeBase64(acc_type));
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Initiate(string username, string password,
+          HttpPostedFileBase file1 = null, HttpPostedFileBase file2 = null, HttpPostedFileBase file3 = null, HttpPostedFileBase file4 = null)
+        {
+            //  return Json(new { status = true, Message = "New Posted." });
+            return RedirectToAction("AccountCreated");
+
+        }
+
+
+        public ActionResult AccountCreated()
+        {
+            return View();
+        }
     }
 }

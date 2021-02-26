@@ -1,0 +1,56 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@{
+    Layout = null;
+    var context = new DBLAccountOpeningContext();
+    var settings = Utilities.GetAppSettings();
+
+}
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@settings.AppName | New Account</title>
+
+    <link rel="stylesheet" href="~/wizardFiles/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="~/wizardFiles/vendor/nouislider/nouislider.min.css">
+    <link rel="icon" href="~/images/databank.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="~/wizardFiles/css/style.css">
+    <script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>
+
+    <style>
+        body, #main {
+            border-bottom: thin gold;
+            background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            height: auto;
+            min-height: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    @Html.Partial("~/Views/Partials/_header.cshtml")
+    <br/><br/>
+    <div class="main" style="padding:0;">
+        
+        <h2>
+        Success!
+        <br/>
+        
+        Your details has been submitted to the Databank Brokerage Team</h2>
+    </div>
+
+</body>
+</html>

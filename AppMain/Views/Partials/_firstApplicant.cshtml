@@ -12,7 +12,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="investmentType" class="form-label">Investment Type</label>
-                <select name="csdResidentialStatus" id="investmentType" style="width:300px;">
+                <select name="csdResidentialStatus" id="investmentType" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.InvestmentTypes.Where(x => x.IsActive))
@@ -24,8 +24,8 @@
 
             </div>
             <div class="form-group">
-                <label for="dblAccNumber" class="form-label">Account Number.</label>
-                <input type="text" name="dblAccNumber" id="dblAccNumber" />
+                <label for="dblAccNumber" class="form-label">Account Number</label>
+                <input type="text" name="dblAccNumber" id="dblAccNumber" pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number" />
             </div>
 
             <div class="form-group">
@@ -42,7 +42,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantTitle" class="form-label">Title</label>
-                <select name="firstApplicantTitle" id="firstApplicantTitle" style="width:300px;">
+                <select name="firstApplicantTitle" id="firstApplicantTitle" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Titles)
@@ -56,12 +56,12 @@
 
             <div class="form-group">
                 <label for="firstApplicantSurname" class="form-label">Surname</label>
-                <input type="text" name="firstApplicantSurname" id="firstApplicantSurname" />
+                <input type="text" name="firstApplicantSurname" id="firstApplicantSurname" required />
             </div>
 
             <div class="form-group">
                 <label for="firstApplicantFname" class="form-label">First Name</label>
-                <input type="text" name="firstApplicantFname" id="firstApplicantFname" />
+                <input type="text" name="firstApplicantFname" id="firstApplicantFname" required/>
             </div>
             <div class="form-group">
                 <label for="firstApplicantOname" class="form-label">Other Name</label>
@@ -75,7 +75,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantNationality" class="form-label">Nationality</label>
-                <select name="firstApplicantNationality" id="firstApplicantNationality" style="width:300px;">
+                <select name="firstApplicantNationality" id="firstApplicantNationality" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -95,12 +95,12 @@
 
             <div class="form-group">
                 <label for="firstApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
-                <input type="date" name="firstApplicantDOB" id="firstApplicantDOB" />
+                <input type="date" name="firstApplicantDOB" id="firstApplicantDOB" required/>
             </div>
 
             <div class="form-group">
                 <label for="firstApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
-                <input type="text" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" />
+                <input type="text" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" required/>
             </div>
 
 
@@ -114,7 +114,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantMaritalStatus" class="form-label">Marital Status</label>
-                <select name="firstApplicantMaritalStatus" id="firstApplicantMaritalStatus" style="width:300px;">
+                <select name="firstApplicantMaritalStatus" id="firstApplicantMaritalStatus" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.MaritalStatus.Where(x => x.IsActive))
@@ -127,7 +127,7 @@
 
             <div class="form-group">
                 <label for="firstApplicantMotherMaidenName" class="form-label">Mother’s Maiden Name</label>
-                <input type="text" name="firstApplicantMotherMaidenName" id="firstApplicantMotherMaidenName" />
+                <input type="text" name="firstApplicantMotherMaidenName" id="firstApplicantMotherMaidenName" required/>
             </div>
 
         </div>
@@ -158,7 +158,7 @@
 
             <div class="form-group">
                 <label for="firstApplicantResidentialCountry" class="form-label">Country</label>
-                <select name="firstApplicantResidentialCountry" id="firstApplicantResidentialCountry" style="width:300px;">
+                <select name="firstApplicantResidentialCountry" id="firstApplicantResidentialCountry" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -200,7 +200,7 @@
 
             <div class="form-group">
                 <label for="firstApplicantMailingCountry" class="form-label">Country</label>
-                <select name="firstApplicantMailingCountry" id="firstApplicantMailingCountry" style="width:300px;">
+                <select name="firstApplicantMailingCountry" id="firstApplicantMailingCountry" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -226,7 +226,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantTickApplicable" class="form-label">Select where applicable</label>
-                <select name="firstApplicantTickApplicable" id="firstApplicantTickApplicable" style="width:300px;">
+                <select name="firstApplicantTickApplicable" id="firstApplicantTickApplicable" style="width:300px;" required>
                     <option value="0">-select-</option>
                     @{
                         foreach (var item in context.CSDDepositoryParticipantOptions.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -261,11 +261,11 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantOccupation" class="form-label">Occupation</label>
-                <input type="text" name="firstApplicantOccupation" id="firstApplicantOccupation" />
+                <input type="text" name="firstApplicantOccupation" id="firstApplicantOccupation" required/>
             </div>
             <div class="form-group">
                 <label for="firstApplicantEmail" class="form-label">Email</label>
-                <input type="email" name="firstApplicantEmail" id="firstApplicantEmail" />
+                <input type="email" name="firstApplicantEmail" id="firstApplicantEmail" required />
             </div>
         </div>
     </div>
@@ -276,7 +276,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="firstApplicantIdType" class="form-label">ID Type</label>
-                <select name="firstApplicantIdType" id="firstApplicantIdType" style="width:250px;">
+                <select name="firstApplicantIdType" id="firstApplicantIdType" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
@@ -290,14 +290,17 @@
 
             <div class="form-group">
                 <label for="firstApplicantIdNumber" class="form-label">ID Number</label>
-                <input type="email" name="firstApplicantIdNumber" id="firstApplicantIdNumber" />
+                <input type="text" name="firstApplicantIdNumber" id="firstApplicantIdNumber" required />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-                <input type="email" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" />
+                <div class="dropzone dropzone-previews" id="firstApplicantIdPhoto" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID
+                    </center>
+                </div>
             </div>
-
+            <input type="hidden" name="firstApplicantIdPhotohidden" id="firstApplicantIdPhotohidden" />
 
 
         </div>
@@ -306,9 +309,17 @@
 
     <div class="form-row">
         <div class="form-flex">
+
+            <div class="form-group">
+                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
+                <input type="text" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required />
+            </div>
+
+
+
             <div class="form-group">
                 <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date</label>
-                <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" />
+                <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" required/>
             </div>
 
             <div class="form-group">
@@ -343,7 +354,7 @@
 
             <div class="form-group">
                 <label for="authorisedPersonName" class="form-label">Name</label>
-                <input type="text" name="authorisedPersonName" id="authorisedPersonName" />
+                <input type="text" name="authorisedPersonName" id="authorisedPersonName" required />
             </div>
 
             <div class="form-group">
@@ -353,7 +364,7 @@
 
             <div class="form-group">
                 <label for="authorisedPersonMobile" class="form-label">Mobile</label>
-                <input type="text" name="authorisedPersonMobile" id="authorisedPersonMobile" />
+                <input type="text" name="authorisedPersonMobile" id="authorisedPersonMobile" required/>
             </div>
             <div class="form-group">
                 <label for="authorisedPersonFax" class="form-label">Fax</label>
@@ -368,7 +379,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="authorisedPersonRelation" class="form-label">Relation to the Account Holder</label>
-                <input type="text" name="authorisedPersonRelation" id="authorisedPersonRelation" />
+                <input type="text" name="authorisedPersonRelation" id="authorisedPersonRelation" required />
             </div>
 
             <div class="form-group">
@@ -399,7 +410,7 @@
             </div>
             <div class="form-group">
                 <label for="authorisedPersonZipCountryId" class="form-label">Country</label>
-                <select name="authorisedPersonZipCountryId" id="authorisedPersonZipCountryId" style="width:300px;">
+                <select name="authorisedPersonZipCountryId" id="authorisedPersonZipCountryId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -429,8 +440,8 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantIdType" class="form-label">ID Type</label>
-                <select name="firstApplicantIdType" id="firstApplicantIdType" style="width:250px;">
+                <label for="authorisedPersonApplicantIdType" class="form-label">ID Type</label>
+                <select name="authorisedPersonApplicantIdType" id="authorisedPersonApplicantIdType" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
@@ -443,16 +454,20 @@
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantIdNumber" class="form-label">ID Number</label>
-                <input type="email" name="firstApplicantIdNumber" id="firstApplicantIdNumber" />
+                <label for="authorisedPersonApplicantIdNumber" class="form-label">ID Number</label>
+                <input type="text" name="authorisedPersonApplicantIdNumber" id="authorisedPersonApplicantIdNumber" required/>
             </div>
+
 
             <div class="form-group">
-                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-                <input type="email" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" />
+                <div class="dropzone dropzone-previews" id="firstJointItfAuthorisedPerson" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID
+                    </center>
+                </div>
+                <input type="hidden" name="firstJointItfAuthorisedPersonhidden" id="firstJointItfAuthorisedPersonhidden" />
+
             </div>
-
-
 
         </div>
     </div>
@@ -460,6 +475,12 @@
 
     <div class="form-row">
         <div class="form-flex">
+            <div class="form-group">
+                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
+                <input type="email" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required />
+            </div>
+
+
             <div class="form-group">
                 <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date</label>
                 <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" />
@@ -480,15 +501,15 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="settlementDetailsAccountName" class="form-label">Account Name</label>
-                <input type="text" name="settlementDetailsAccountName" id="settlementDetailsAccountName" />
+                <input type="text" name="settlementDetailsAccountName" id="settlementDetailsAccountName" required/>
             </div>
             <div class="form-group">
                 <label for="settlementDetailsAccountNumber" class="form-label">Account Number</label>
-                <input type="text" name="settlementDetailsAccountNumber" id="settlementDetailsAccountNumber" />
+                <input type="text" name="settlementDetailsAccountNumber" id="settlementDetailsAccountNumber" required  pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number"/>
             </div>
             <div class="form-group">
                 <label for="settlementDetailsAccountBankId" class="form-label">Bank</label>
-                <select name="settlementDetailsAccountBankId" id="settlementDetailsAccountBankId" style="width:250px;">
+                <select name="settlementDetailsAccountBankId" id="settlementDetailsAccountBankId" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
@@ -508,7 +529,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="settlementDetailsAccountBankBranch" class="form-label">Bank Branch</label>
-                <input type="text" name="settlementDetailsAccountBankBranch" id="settlementDetailsAccountBankBranch" />
+                <input type="text" name="settlementDetailsAccountBankBranch" id="settlementDetailsAccountBankBranch" required/>
             </div>
             <div class="form-group">
                 <label for="settlementDetailsAccountBankSortCode" class="form-label">Swift / Sort Code</label>
@@ -528,7 +549,7 @@
 
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsModeOfInstruction" class="form-label">Mode of Instructions</label>
-                <select name="instructionsEmploymentDetailsModeOfInstruction" id="instructionsEmploymentDetailsModeOfInstruction" style="width:250px;">
+                <select name="instructionsEmploymentDetailsModeOfInstruction" id="instructionsEmploymentDetailsModeOfInstruction" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.ModeOfInstructions.Where(x => x.IsActive))
@@ -541,7 +562,7 @@
 
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsModeOfNotification" class="form-label">Mode of Notification</label>
-                <select name="instructionsEmploymentDetailsModeOfNotification" id="instructionsEmploymentDetailsModeOfNotification" style="width:250px;">
+                <select name="instructionsEmploymentDetailsModeOfNotification" id="instructionsEmploymentDetailsModeOfNotification" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.ModeOfNotifications.Where(x => x.IsActive))
@@ -555,7 +576,7 @@
 
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsSourceOfIncome" class="form-label">Source(s) of Income/Funds</label>
-                <input type="text" name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" />
+                <input type="text" name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" required/>
             </div>
 
 
@@ -570,7 +591,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsEmploymentStatus" class="form-label">Employment Status</label>
-                <select name="instructionsEmploymentDetailsEmploymentStatus" id="instructionsEmploymentDetailsEmploymentStatus" style="width:250px;">
+                <select required name="instructionsEmploymentDetailsEmploymentStatus" id="instructionsEmploymentDetailsEmploymentStatus" style="width:250px;">
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.EmploymentStatus.Where(x => x.IsActive))
@@ -603,14 +624,14 @@
 
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsCurrentOccupation" class="form-label">Current Occupation</label>
-                <input type="text" name="instructionsEmploymentDetailsCurrentOccupation" id="instructionsEmploymentDetailsCurrentOccupation" />
+                <input type="text" name="instructionsEmploymentDetailsCurrentOccupation" id="instructionsEmploymentDetailsCurrentOccupation" required/>
             </div>
 
 
 
             <div class="form-group">
                 <label for="instructionsEmploymentDetailsCurrentEmployer" class="form-label">Current Employer</label>
-                <input type="text" name="instructionsEmploymentDetailsCurrentEmployer" id="instructionsEmploymentDetailsCurrentEmployer" />
+                <input type="text" name="instructionsEmploymentDetailsCurrentEmployer" id="instructionsEmploymentDetailsCurrentEmployer" required/>
             </div>
 
             <div class="form-group">
@@ -645,7 +666,7 @@
 
             <div class="form-group">
                 <label for="annualIncomeId" class="form-label">Approximate Annual Income(GHS)</label>
-                <select name="annualIncomeId" id="annualIncomeId" style="width:300px;">
+                <select name="annualIncomeId" id="annualIncomeId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.ApproximateAnnualIncomes.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -663,7 +684,7 @@
 
             <div class="form-group">
                 <label for="networthId" class="form-label">Net Worth(GHS)</label>
-                <select name="networthId" id="networthId" style="width:300px;">
+                <select required name="networthId" id="networthId" style="width:300px;">
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.NetWorths.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -678,7 +699,7 @@
 
             <div class="form-group">
                 <label for="investmentHorizonId" class="form-label">Investment Horizon</label>
-                <select name="investmentHorizonId" id="investmentHorizonId" style="width:300px;">
+                <select required name="investmentHorizonId" id="investmentHorizonId" style="width:300px;">
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.InvestmentHorizons.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -703,7 +724,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="objectivesId" class="form-label">Objectives</label>
-                <select name="objectivesId" id="objectivesId" style="width:300px;">
+                <select name="objectivesId" id="objectivesId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Objectives.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -717,7 +738,7 @@
             </div>
             <div class="form-group">
                 <label for="investmentKnowledgeId" class="form-label">Investment Knowledge</label>
-                <select name="investmentKnowledgeId" id="investmentKnowledgeId" style="width:300px;">
+                <select name="investmentKnowledgeId" id="investmentKnowledgeId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.InvestmentKnowledges.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -732,7 +753,7 @@
 
             <div class="form-group">
                 <label for="riskToleranceId" class="form-label">Risk Tolerance</label>
-                <select name="riskToleranceId" id="riskToleranceId" style="width:300px;">
+                <select name="riskToleranceId" id="riskToleranceId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.RiskTolerances.Where(x => x.IsActive).OrderBy(x => x.Id))
@@ -755,7 +776,7 @@
 
             <div class="form-group">
                 <label for="onlineTradingFacilityId" class="form-label">Online Trading Facility</label>
-                <select name="onlineTradingFacilityId" id="onlineTradingFacilityId" style="width:300px;">
+                <select name="onlineTradingFacilityId" id="onlineTradingFacilityId" style="width:300px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
@@ -775,7 +796,7 @@
                     Have you been convicted in any Court of Law for a criminal offence or are there any proceedings
                     now pending against you which may lead to such a conviction?
                 </label>
-                <select name="declarationHasBeenConvicted" id="declarationHasBeenConvicted" style="width:300px;">
+                <select name="declarationHasBeenConvicted" id="declarationHasBeenConvicted" style="width:300px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
@@ -799,7 +820,7 @@
                 <label for="actingAsNominee" class="form-label">
                     Are you acting as a nominee in trust for others?
                 </label>
-                <select name="actingAsNominee" id="actingAsNominee" style="width:300px;">
+                <select name="actingAsNominee" id="actingAsNominee" style="width:300px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
@@ -836,10 +857,10 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="numberOfSignatories" class="form-label">Indicate the Number of Signatories</label>
-                <select name="numberOfSignatories" id="numberOfSignatories" style="width:300px;">
+                <select name="numberOfSignatories" id="numberOfSignatories" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
-                        foreach (var item in context.SignatureTypes.OrderBy(x => x.Id))
+                        foreach (var item in context.SignatureTypes.OrderBy(x => x.Id).Take(3))
                         {
                           
                             <option value="@item.Id">@item.Name</option>

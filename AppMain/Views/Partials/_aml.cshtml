@@ -1,1 +1,216 @@
-﻿
+﻿@using DBHelper.Schema
+@{
+    var context = new DBLAccountOpeningContext();
+    var questions = context.AMLQuestions.OrderBy(x => x.Id).ToList();
+}
+
+<fieldset>
+    <h2>AML QUESTIONNAIRE</h2>
+    <div class="fieldset-content">
+
+        <table>
+            <thead>
+                <tr class="greenHeader">
+                    <td>Category</td>
+                    <td style="width:700px;">Question</td>
+                    <td>Yes/No</td>
+                    <td style="width:300px;">Rank</td>
+                    <td style="width:300px;">Remark</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PEP</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>I</td>
+                    <td>@questions.FirstOrDefault().Question</td>
+                    <td>
+                        <select required="required" name="q1Option" id="q1Option">
+                            <option value="">-select-</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+
+                <tr>
+                    <td>II</td>
+                    <td>@questions.ElementAt(1).Question</td>
+                    <td>
+                        <select required name="q2Option" id="q2Option">
+                            <option value="">-select-</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+                <tr>
+                <tr>
+                    <td style="font-weight:bold;">Income</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+
+                <tr>
+                    <td>I</td>
+                    <td>@questions.ElementAt(2).Question</td>
+                    <td>
+                        <select required name="q3Option" id="q3Option">
+                            <option value="">-select-</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+                <tr>
+                    <td>II</td>
+                    <td>@questions.ElementAt(3).Question</td>
+                    <td>
+                        @*<select required name="q4Option">
+                    <option value="">-select-</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>*@
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+                <tr>
+                    <td style="font-weight:bold;" colspan="5">
+                        Country
+                        of Origin
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td>I</td>
+                    <td>@questions.ElementAt(4).Question</td>
+                    <td>
+                        <select required name="q5Option" id="q5Option">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == 81)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+                <tr>
+                    <td colspan="5">
+                        Names of blacklisted country: This should be scored:
+                        Iran: Yemen: Syria: Ecuador: Libya: Pakistan: Myanmar: North Korea: Algeria: Somalia: Columbia:
+                        Non-blacklisted countries should be scored: 0
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td style="font-weight:bold;" colspan="5">
+                        Mode of
+                        Payment
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>@questions.ElementAt(5).Question</td>
+                    <td>
+                        <select required name="q6Option" id="q6Option">
+                            <option value="">-select-</option>
+                            <option value="E-payment e.g. Credit or debit cards">E-payment e.g. Credit or debit cards</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Bank transfers">Bank transfers</option>
+                            <option value="Cash">Cash</option>
+
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+
+
+                <tr>
+                    <td style="font-weight:bold;" colspan="5">
+                        NON
+                        FACE-TO
+                        -FACE
+                    </td>
+
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@questions.ElementAt(6).Question</td>
+                    <td>
+                        <select required name="q7Option" id="q7Option">
+                            <option value="">-select-</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>@questions.ElementAt(7).Question</td>
+                    <td>
+                        <select required name="q8Option" id="q8Option">
+                            <option value="">-select-</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+                    </td>
+                    <td><input type="text" name="rank[]" /> </td>
+                    <td><input type="text" name="remark[]" /></td>
+                </tr>
+
+
+
+            </tbody>
+
+        </table>
+        <br/><br/>
+
+        <style type="text/css">
+            #q1Option, #q2Option, #q3Option, #q4Option, #q5Option, #q6Option, #q7Option, #q8Option {
+                min-width: 200px;
+            }
+        </style>
+    </div>
+</fieldset>
+
+

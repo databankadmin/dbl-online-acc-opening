@@ -9,8 +9,8 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="firstApplicantTitle" class="form-label">Title</label>
-            <select name="firstApplicantTitle" id="firstApplicantTitle" style="width:300px;">
+            <label for="jointApplicantTitle" class="form-label">Title</label>
+            <select name="jointApplicantTitle" id="jointApplicantTitle" style="width:300px;" required>
                 <option value="">-select-</option>
                 @{
                     foreach (var item in context.Titles)
@@ -23,17 +23,17 @@
 
 
         <div class="form-group">
-            <label for="firstApplicantSurname" class="form-label">Surname</label>
-            <input type="text" name="firstApplicantSurname" id="firstApplicantSurname" />
+            <label for="jointApplicantSurname" class="form-label">Surname</label>
+            <input type="text" name="jointApplicantSurname" id="jointApplicantSurname" required />
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantFname" class="form-label">First Name</label>
-            <input type="text" name="firstApplicantFname" id="firstApplicantFname" />
+            <label for="jointApplicantFname" class="form-label">First Name</label>
+            <input type="text" name="jointApplicantFname" id="jointApplicantFname" required/>
         </div>
         <div class="form-group">
-            <label for="firstApplicantOname" class="form-label">Other Name</label>
-            <input type="text" name="firstApplicantOname" id="firstApplicantOname" />
+            <label for="jointApplicantOname" class="form-label">Other Name</label>
+            <input type="text" name="jointApplicantOname" id="jointApplicantOname" />
         </div>
     </div>
 </div>
@@ -42,8 +42,8 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="firstApplicantNationality" class="form-label">Nationality</label>
-            <select name="firstApplicantNationality" id="firstApplicantNationality" style="width:300px;">
+            <label for="jointApplicantNationality" class="form-label">Nationality</label>
+            <select name="jointApplicantNationality" id="jointApplicantNationality" style="width:300px;" required>
                 <option value="">-select-</option>
                 @{
                     foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -62,13 +62,13 @@
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
-            <input type="date" name="firstApplicantDOB" id="firstApplicantDOB" />
+            <label for="jointApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
+            <input type="date" name="jointApplicantDOB" id="jointApplicantDOB" required/>
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
-            <input type="text" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" />
+            <label for="jointApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
+            <input type="text" name="jointApplicantPlaceOfBirth" id="jointApplicantPlaceOfBirth"  required/>
         </div>
 
 
@@ -83,18 +83,18 @@
     <div class="form-flex">
 
         <div class="form-group">
-            <label for="firstApplicantResidentialCity" class="form-label">Telephone</label>
-            <input type="text" name="firstApplicantResidentialCity" id="firstApplicantResidentialCity" />
+            <label for="jointApplicantTelephone" class="form-label">Telephone</label>
+            <input type="text" name="jointApplicantTelephone" id="jointApplicantTelephone" />
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantResidentialZipCode" class="form-label">Mobile</label>
-            <input type="text" name="firstApplicantResidentialZipCode" id="firstApplicantResidentialZipCode" />
+            <label for="jointApplicantMobile" class="form-label">Mobile</label>
+            <input type="text" name="jointApplicantMobile" id="jointApplicantMobile" required/>
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantResidentialCountry" class="form-label">Fax</label>
-            <input type="text" name="firstApplicantResidentialZipCode" id="firstApplicantResidentialZipCode" />
+            <label for="jointApplicantResidentialCountry" class="form-label">Fax</label>
+            <input type="text" name="jointApplicantResidentialCountry" id="jointApplicantResidentialCountry" />
 
         </div>
 
@@ -111,18 +111,18 @@
     <div class="form-flex">
 
         <div class="form-group">
-            <label for="firstApplicantMailingCity" class="form-label">Email</label>
-            <input type="text" name="firstApplicantMailingCity" id="firstApplicantMailingCity" />
+            <label for="jointApplicantMailingEmail" class="form-label">Email</label>
+            <input type="text" name="jointApplicantMailingEmail" id="jointApplicantMailingEmail" required/>
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantMailingZipCode" class="form-label">Residential Address</label>
-            <input type="text" name="firstApplicantMailingZipCode" id="firstApplicantMailingZipCode" />
+            <label for="jointApplicantResidentialAddress" class="form-label">Residential Address</label>
+            <input type="text" name="jointApplicantResidentialAddress" id="jointApplicantResidentialAddress" />
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantMailingCountry" class="form-label">Occupation</label>
-            <input type="text" name="firstApplicantMailingZipCode" id="firstApplicantMailingZipCode" />
+            <label for="jointApplicantOccupation" class="form-label">Occupation</label>
+            <input type="text" name="jointApplicantOccupation" id="jointApplicantOccupation" required/>
 
         </div>
 
@@ -140,8 +140,8 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="firstApplicantIdType" class="form-label">ID Type</label>
-            <select name="firstApplicantIdType" id="firstApplicantIdType" style="width:250px;">
+            <label for="jointApplicantIdType" class="form-label">ID Type</label>
+            <select name="jointApplicantIdType" id="jointApplicantIdType" style="width:250px;" required>
                 <option value="">-select-</option>
                 @{
                     foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
@@ -154,14 +154,18 @@
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantIdNumber" class="form-label">ID Number</label>
-            <input type="email" name="firstApplicantIdNumber" id="firstApplicantIdNumber" />
+            <label for="jointApplicantIdNumber" class="form-label">ID Number</label>
+            <input type="email" name="jointApplicantIdNumber" id="jointApplicantIdNumber" required/>
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-            <input type="email" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" />
+            <div class="dropzone dropzone-previews" id="jointApplicantIdPhoto" style="padding-top:2px;">
+                <center style="text-align:center;">
+                    UPLOAD ID
+                </center>
+            </div>
         </div>
+        <input type="hidden" name="jointApplicantIdPhotohidden" id="jointApplicantIdPhotohidden" />
 
 
 
@@ -171,14 +175,22 @@
 
 <div class="form-row">
     <div class="form-flex">
+
         <div class="form-group">
-            <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date</label>
-            <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" />
+            <label for="jointApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
+            <input type="email" name="jointApplicantIdIssuingAuthority" id="jointApplicantIdIssuingAuthority" required/>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="jointApplicantIdCardIssueDate" class="form-label">Issue Date</label>
+            <input type="date" name="jointApplicantIdCardIssueDate" id="jointApplicantIdCardIssueDate" />
         </div>
 
         <div class="form-group">
-            <label for="firstApplicantIdCardExpDate" class="form-label">Expiry Date</label>
-            <input type="date" name="firstApplicantIdCardExpDate" id="firstApplicantIdCardExpDate" />
+            <label for="jointApplicantIdCardExpDate" class="form-label">Expiry Date</label>
+            <input type="date" name="jointApplicantIdCardExpDate" id="jointApplicantIdCardExpDate" />
         </div>
     </div>
 </div>

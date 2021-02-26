@@ -6,14 +6,15 @@
 <h3>CSD Account Form</h3>
 <fieldset>
     <h2>SECURITY ACCOUNT OPENING FORM (CSD FORM)</h2>
-    <p class="desc">Please provide details for your CSD Account</p>
+    @*<p class="desc">Please provide details for your CSD Account</p>*@
+    <br/>
     <div class="fieldset-content">
 
         <div class="form-row">
             <div class="form-flex">
                 <div class="form-group">
                     <label for="depositorParticipant" class="form-label">Name of Depositor Participant</label>
-                    <input type="text" name="depositorParticipant" id="depositorParticipant" />
+                    <input type="text" name="depositorParticipant" id="depositorParticipant" required/>
                 </div>
 
                 <div class="form-group">
@@ -30,7 +31,7 @@
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdTitle" class="form-label">Title</label>
-                    <select name="csdTitle" id="csdTitle" style="width:300px;">
+                    <select name="csdTitle" id="csdTitle" style="width:300px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.Titles)
@@ -44,12 +45,12 @@
 
                 <div class="form-group">
                     <label for="csdSurname" class="form-label">Surname/Company Name</label>
-                    <input type="text" name="csdSurname" id="csdSurname" />
+                    <input type="text" name="csdSurname" id="csdSurname" required/>
                 </div>
 
                 <div class="form-group">
                     <label for="csdOthernames" class="form-label">Other Names</label>
-                    <input type="text" name="csdOthernames" id="csdOthernames" />
+                    <input type="text" name="csdOthernames" id="csdOthernames"  required/>
                 </div>
 
             </div>
@@ -62,7 +63,7 @@
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdAddress" class="form-label">Address</label>
-                    <input type="text" name="csdAddress" id="csdAddress" />
+                    <input type="text" name="csdAddress" id="csdAddress" required />
                 </div>
 
 
@@ -73,7 +74,7 @@
 
                 <div class="form-group">
                     <label for="csdResidentialStatus" class="form-label">Residential Status</label>
-                    <select name="csdResidentialStatus" id="csdResidentialStatus" style="width:300px;">
+                    <select name="csdResidentialStatus" id="csdResidentialStatus" style="width:300px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.ResidentialStatus.Where(x => x.IsActive))
@@ -108,7 +109,7 @@
                 </div>
                 <div class="form-group">
                     <label for="csdEmail" class="form-label">Email</label>
-                    <input type="text" name="csdEmail" id="csdEmail" />
+                    <input type="email" name="csdEmail" id="csdEmail" required />
                 </div>
 
             </div>
@@ -122,18 +123,18 @@
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdDOB" class="form-label" style="font-size:14px;">Date of Birth / Incorporation of Business</label>
-                    <input type="date" name="csdDOB" id="csdDOB" />
+                    <input type="date" name="csdDOB" id="csdDOB" required/>
                 </div>
 
 
                 <div class="form-group">
                     <label for="csdOccupation" class="form-label">Occupation</label>
-                    <input type="text" name="csdOccupation" id="csdOccupation" />
+                    <input type="text" name="csdOccupation" id="csdOccupation" required />
                 </div>
 
                 <div class="form-group">
                     <label for="csdNationality" class="form-label">Nationality</label>
-                    <select name="csdNationality" id="csdNationality" style="width:300px;">
+                    <select name="csdNationality" id="csdNationality" style="width:300px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -154,13 +155,13 @@
             </div>
         </div>
 
+      
 
         <div class="form-row">
             <div class="form-flex">
-
-                <div class="form-group">
+                <div class="form-group" style="width:350px;">
                     <label for="csdIdType" class="form-label">ID Type</label>
-                    <select name="csdIdType" id="csdIdType" style="width:250px;">
+                    <select name="csdIdType" id="csdIdType" style="width:250px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.IDCardTypes.Where(x => x.IsActive))
@@ -174,11 +175,31 @@
 
                 <div class="form-group">
                     <label for="csdIdNumber" class="form-label">ID Number</label>
-                    <input type="text" name="csdIdNumber" id="csdIdNumber" />
+                    <input type="text" name="csdIdNumber" id="csdIdNumber" required />
                 </div>
+                <br/>
+
+
+
+                <div class="form-group">
+                    <div class="dropzone dropzone-previews" id="csd-image-div" style="padding-top:2px;">
+                        <center style="text-align:center;">
+                            UPLOAD ID
+                        </center>
+                    </div>
+                </div>
+                <input type="hidden" name="csdimagedivhidden" id="csdimagedivhidden" />
+
+
+
+                </div>
+            </div>
+
+        <div class="form-row">
+            <div class="form-flex">
                 <div class="form-group">
                     <label for="csdIDIssuePlace" class="form-label">Place of Issue</label>
-                    <input type="text" name="csdIDIssuePlace" id="csdIDIssuePlace" />
+                    <input type="text" name="csdIDIssuePlace" id="csdIDIssuePlace" required />
                 </div>
 
                 <div class="form-group">
@@ -190,13 +211,17 @@
 
 
 
+
+
+
+
         <div class="form-row">
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdBoughtTBill" class="form-label" style="float:left;display:inline;width:500px;">
                         Have you bought a security such as Treasury bill, bond, shares etc. before?
                     </label>
-                    <select name="csdBoughtTBill" id="csdBoughtTBill" style="width:100px;display:inline;">
+                    <select name="csdBoughtTBill" id="csdBoughtTBill" style="width:100px;display:inline;" required>
                         <option value="">-select-</option>
                         <option value="YES">YES</option>
                         <option value="NO">NO</option>
@@ -237,7 +262,7 @@
 
                 <div class="form-group">
                     <label for="csdBankId" class="form-label">Bank</label>
-                    <select name="csdBankId" id="csdBankId" style="width:250px;">
+                    <select name="csdBankId" id="csdBankId" style="width:250px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
@@ -251,11 +276,11 @@
 
                 <div class="form-group">
                     <label for="csdBankBranch" class="form-label">Branch</label>
-                    <input type="text" name="csdBankBranch" id="csdBankBranch" />
+                    <input type="text" name="csdBankBranch" id="csdBankBranch" required/>
                 </div>
                 <div class="form-group">
                     <label for="csdBankAccn" class="form-label">Account Number</label>
-                    <input type="text" name="csdBankAccn" id="csdBankAccn" />
+                    <input type="text" name="csdBankAccn" id="csdBankAccn" required/>
                 </div>
 
             </div>
@@ -275,7 +300,7 @@
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdDeclareFullname" class="form-label">Fullname</label>
-                    <input type="text" name="csdDeclareFullname" id="csdDeclareFullname" />
+                    <input type="text" name="csdDeclareFullname" id="csdDeclareFullname" required/>
                 </div>
             </div>
         </div>
@@ -285,7 +310,7 @@
             <div class="form-flex">
                 <div class="form-group">
                     <label for="csdDepositoryParticipantOptions" class="form-label">For Depository Participant Use Only</label>
-                    <select name="csdDepositoryParticipantOptions" id="csdDepositoryParticipantOptions" style="width:300px;">
+                    <select name="csdDepositoryParticipantOptions" id="csdDepositoryParticipantOptions" style="width:300px;" required>
                         <option value="">-select-</option>
                         @{
                             foreach (var item in context.CSDDepositoryParticipantOptions.Where(x => x.IsActive).OrderBy(x => x.Id))

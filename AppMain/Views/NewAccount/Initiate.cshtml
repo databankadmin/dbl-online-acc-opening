@@ -23,6 +23,7 @@
     <link rel="icon" href="~/images/databank.png" type="image/x-icon">
 
     <link rel="stylesheet" href="~/wizardFiles/css/style.css">
+    <script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>
 
     <style>
         body, #main {
@@ -34,7 +35,11 @@
             min-height: 5px;
         }
     </style>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.js"></script>
 
 </head>
 
@@ -44,7 +49,7 @@
     <div class="main" style="padding:0;">
 
         <div class="container">
-            <form method="POST" id="signup-form" class="signup-form" action="#">
+            <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data" action="@Url.Action("Initiate")">
                 <div>
                     @Html.Partial("~/Views/Partials/_csdForm.cshtml")
 
@@ -55,7 +60,7 @@
                             //single, joint or itf
                             @Html.Partial("~/Views/Partials/_firstApplicant.cshtml")
 
-                            
+
                         }
 
 
@@ -66,82 +71,39 @@
 
                         }
                     }
-                    
+
 
                     <h3>File Uploads</h3>
-                    <fieldset>
-                        <h2>Set Financial Goals</h2>
-                        <p class="desc">Set up your money limit to reach the future plan</p>
-                        <div class="fieldset-content">
-                            <div class="donate-us">
-                                <div class="price_slider ui-slider ui-slider-horizontal">
-                                    <div id="slider-margin"></div>
-                                    <p class="your-money">
-                                        Your money you can spend per month :
-                                        <span class="money" id="value-lower"></span>
-                                        <span class="money" id="value-upper"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+                    @{
+                        @Html.Partial("~/Views/Partials/_fileUploads.cshtml")
+                    }
 
 
+                    <h3>AML Questionnaire</h3>
+                    @{
+                        @Html.Partial("~/Views/Partials/_aml.cshtml")
 
-                    <h3>AML Form</h3>
-                    <fieldset>
-                        <h2>Level 4 header</h2>
-                        <p class="desc">Set up your money limit to reach the future plan</p>
-                        <div class="fieldset-content">
-                            <div class="donate-us">
-                                <div class="price_slider ui-slider ui-slider-horizontal">
-                                    <div id="slider-margin"></div>
-                                    <p class="your-money">
-                                        Your money you can spend per month :
-                                        <span class="money" id="value-lower"></span>
-                                        <span class="money" id="value-upper"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-
+                    }
                     <h3>Electronic Transmission Indemnity</h3>
-                    <fieldset>
-                        <h2>Level 4 header</h2>
-                        <p class="desc">Set up your money limit to reach the future plan</p>
-                        <div class="fieldset-content">
-                            <div class="donate-us">
-                                <div class="price_slider ui-slider ui-slider-horizontal">
-                                    <div id="slider-margin"></div>
-                                    <p class="your-money">
-                                        Your money you can spend per month :
-                                        <span class="money" id="value-lower"></span>
-                                        <span class="money" id="value-upper"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+                    @{
+                        if (MvcApplication.AccountType <= 3)
+                        {
+                            @Html.Partial("~/Views/Partials/_indemnity_individual.cshtml")
+                        }
+                        else
+                        {
+                            @Html.Partial("~/Views/Partials/_indemnity_institutions.cshtml")
+
+                        }
+                    }
 
 
 
                     <h3>Submit Application</h3>
                     <fieldset>
-                        <h2>Level 4 header</h2>
-                        <p class="desc">Set up your money limit to reach the future plan</p>
-                        <div class="fieldset-content">
-                            <div class="donate-us">
-                                <div class="price_slider ui-slider ui-slider-horizontal">
-                                    <div id="slider-margin"></div>
-                                    <p class="your-money">
-                                        Your money you can spend per month :
-                                        <span class="money" id="value-lower"></span>
-                                        <span class="money" id="value-upper"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <h2>You are about to submit your application to Databank.</h2>
+                        
+                        <br/><br/><br/>
                     </fieldset>
 
                 </div>
@@ -151,7 +113,6 @@
     </div>
 
     <!-- JS -->
-    <script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>
     <script src="~/wizardFiles/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/wizardFiles/vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="~/wizardFiles/vendor/jquery-steps/jquery.steps.min.js"></script>
@@ -159,61 +120,84 @@
     <script src="~/wizardFiles/vendor/nouislider/nouislider.min.js"></script>
     <script src="~/wizardFiles/vendor/wnumb/wNumb.js"></script>
     <script src="~/wizardFiles/js/main.js"></script>
+    <script src="~/Scripts/dropZoneInit.js"></script>
 
     <style type="text/css">
-         select{
-        border: 1px solid #ebebeb;
-        box-sizing: border-box;
-        position: relative;
-        background: 0 0;
-        z-index: 10;
-        cursor: pointer;
-        padding: 0 20px;
-        height: 50px;
-        font-size: 14px;
-        font-family: 'Roboto Slab';
-        color: #999;
-        box-sizing: border-box;
-        background-color: #fff;
-        font-weight: bold;
-    }
+        select {
+            border: 1px solid #ebebeb;
+            box-sizing: border-box;
+            position: relative;
+            background: 0 0;
+            z-index: 10;
+            cursor: pointer;
+            padding: 0 20px;
+            height: 50px;
+            font-size: 14px;
+            font-family: 'Roboto Slab';
+            color: #999;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-weight: bold;
+        }
+
         .error {
-        color:red;
+            color: red;
         }
 
 
 
         .form-flex {
-            width:900px;
+            width: 900px;
         }
 
-
-        /*#csdDOB-error {
-            margin-top:80px;
-        }*/
-
-        /*.content clearfix, vertical .content, vertical .content, .vertical .actions {
-            overflow: scroll;height:auto;
-        }*/
-
-        .vertical .content, .vertical .actions{height:auto}
+        .vertical .content, .vertical .actions {
+            height: auto
+        }
 
         #csdBankAccn-error {
-        margin-top:20px;
+            margin-top: 20px;
         }
 
         .actions ul li a {
             background-color: #00a65a !important;
         }
+
         .actions ul li:first-child a {
-        color:white;
+            color: white;
         }
 
 
         .myHeader {
             color: white;
             background-color: #00a65a !important;
-            padding-left:2%; padding-top:1%; padding-bottom:1%;
+            padding-left: 2%;
+            padding-top: 1%;
+            padding-bottom: 1%;
+        }
+
+        #csd-image-div, #firstApplicantIdPhoto, #jointApplicantIdPhoto, #itfApplicantIdPhoto,
+        #firstJointItfAuthorisedPerson, #instAuthorisedOfficer1PhotoId, #instAuthorisedOfficer2PhotoId {
+            width: 250px;
+            height: 200px;
+            border: 2px dashed #0087f7;
+        }
+
+
+        #instSignatory1, #instSignatory2, #instSignatory3, #instSignatory4 {
+            width: 250px;
+            height: 50px;
+            border: 2px dashed #0087f7;
+        }
+
+        #proofOfResidence, #otherBusinessFiles {
+            width: 1000px;
+            height: 250px;
+            border: 2px dashed #0087f7;
+        }
+
+
+        tr.greenHeader {
+            background-color: #00a65a; color:white; font-weight:bold; text-align:center; 
         }
     </style>
 </body>

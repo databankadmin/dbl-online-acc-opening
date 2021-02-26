@@ -233,6 +233,7 @@
     <Content Include="Assets\backyard\shortcodes.html" />
     <Content Include="Assets\backyard\subscribe.html" />
     <Content Include="Assets\backyard\video.html" />
+    <Content Include="Scripts\dropZoneInit.js" />
     <Content Include="wizardFiles\css\style.css" />
     <Content Include="wizardFiles\fonts\material-icon\css\material-design-iconic-font.css" />
     <Content Include="wizardFiles\fonts\material-icon\css\material-design-iconic-font.min.css" />
@@ -535,8 +536,10 @@
     <Content Include="Views\Partials\_institutionalApplicant.cshtml" />
     <Content Include="Views\Partials\_fileUploads.cshtml" />
     <Content Include="Views\Partials\_aml.cshtml" />
-    <Content Include="Views\Partials\_electronic indemnity.cshtml" />
+    <Content Include="Views\Partials\_indemnity_individual.cshtml" />
     <Content Include="Views\Partials\_nextOfKin.cshtml" />
+    <Content Include="Views\Partials\_indemnity_institutions.cshtml" />
+    <Content Include="Views\NewAccount\AccountCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
