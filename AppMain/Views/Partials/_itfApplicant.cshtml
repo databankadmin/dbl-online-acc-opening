@@ -10,25 +10,40 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="itfApplicantSurname" class="form-label">Surname</label>
-            <input type="text" name="itfApplicantSurname" id="itfApplicantSurname" required/>
+            <label for="itfApplicantSurname" class="form-label">Surname *</label>
+            <input type="text" name="itfApplicantSurname" id="itfApplicantSurname" required />
         </div>
 
         <div class="form-group">
-            <label for="itfApplicantFname" class="form-label">First Name</label>
-            <input type="text" name="itfApplicantFname" id="itfApplicantFname" required/>
+            <label for="itfApplicantFname" class="form-label">First Name *</label>
+            <input type="text" name="itfApplicantFname" id="itfApplicantFname" required />
         </div>
         <div class="form-group">
             <label for="itfApplicantOname" class="form-label">Other Name</label>
             <input type="text" name="itfApplicantOname" id="itfApplicantOname" />
         </div>
+
+
+        <div class="form-group">
+            <label for="itfApplicantGender" class="form-label">Gender *</label>
+            <select name="itfApplicantGender" id="itfApplicantGender" style="width:200px;" required>
+                <option value="">-select-</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
     </div>
 </div>
 
 <div class="form-row">
     <div class="form-flex">
+
+
+
+
         <div class="form-group">
-            <label for="itfApplicantNationality" class="form-label">Nationality</label>
+            <label for="itfApplicantNationality" class="form-label">Nationality *</label>
             <select name="itfApplicantNationality" id="itfApplicantNationality" style="width:300px;" required>
                 <option value="">-select-</option>
                 @{
@@ -48,13 +63,13 @@
         </div>
 
         <div class="form-group">
-            <label for="itfApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
+            <label for="itfApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
             <input type="date" name="itfApplicantDOB" id="itfApplicantDOB" required />
         </div>
 
         <div class="form-group">
-            <label for="itfApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
-            <input type="text" name="itfApplicantPlaceOfBirth" id="itfApplicantPlaceOfBirth"  required/>
+            <label for="itfApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+            <input type="text" name="itfApplicantPlaceOfBirth" id="itfApplicantPlaceOfBirth" required />
         </div>
 
 
@@ -69,7 +84,7 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="itfApplicantIdType" class="form-label">ID Type</label>
+            <label for="itfApplicantIdType" class="form-label">ID Type *</label>
             <select name="itfApplicantIdType" id="itfApplicantIdType" style="width:250px;" required>
                 <option value="">-select-</option>
                 @{
@@ -83,15 +98,15 @@
         </div>
 
         <div class="form-group">
-            <label for="itfApplicantIdNumber" class="form-label">ID Number</label>
-            <input type="email" name="itfApplicantIdNumber" id="itfApplicantIdNumber"  required/>
+            <label for="itfApplicantIdNumber" class="form-label">ID Number *</label>
+            <input type="text" name="itfApplicantIdNumber" id="itfApplicantIdNumber"  required/>
         </div>
 
 
         <div class="form-group">
             <div class="dropzone dropzone-previews" id="itfApplicantIdPhoto" style="padding-top:2px;">
                 <center style="text-align:center;">
-                    UPLOAD ID
+                    UPLOAD ID *
                 </center>
             </div>
             <input type="hidden" name="itfApplicantIdPhotohidden" id="itfApplicantIdPhotohidden" />
@@ -105,8 +120,8 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="itfApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-            <input type="email" name="itfApplicantIdIssuingAuthority" id="itfApplicantIdIssuingAuthority" required />
+            <label for="itfApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+            <input type="text" name="itfApplicantIdIssuingAuthority" id="itfApplicantIdIssuingAuthority" required />
         </div>
 
         <div class="form-group">

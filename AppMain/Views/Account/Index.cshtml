@@ -1,0 +1,147 @@
+﻿@using AppUtils
+@{
+    Layout = null;
+    var settings = Utilities.GetAppSettings();
+    string msg = ViewBag.Message != null ? ViewBag.Message.ToString() : string.Empty;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+    <title>@settings.AppName</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="~/Assets/backyard/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="~/Assets/backyard/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Assets/backyard/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/animate.css" rel="stylesheet" media="screen">
+    <link href="~/Assets/backyard/css/owl.theme.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/owl.carousel.css" rel="stylesheet">
+    <link href="~/Assets/backyard/css/css-index.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic" />
+    <link rel="icon" href="~/images/databank.PNG" type="image/x-icon">
+
+    <style>
+        #grad {
+            border-bottom: thin gold;
+            background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            height: auto;
+            min-height: 5px;
+        }
+
+        #submitBtn, .btn-primary, .btn-default {
+            background-color: #A9C32C
+        }
+
+        #para {
+            background-image: url("https://pfp.databankgroup.com/img/bg.png");
+        }
+    </style>
+
+</head>
+
+<body data-spy="scroll" data-target="#navbar-scroll">
+    @Html.Partial("~/Views/Partials/_header.cshtml");
+    <br /><br />
+    <div id="preloader"></div>
+    <div id="top"></div>
+
+    <div id="para" class="fullscreen landing parallax" data-img-width="2000" data-img-height="1333" data-diff="100">
+
+        <div class="overlay">
+            <div class="container">
+                <div class="row">
+                    @*<div class="col-md-7">
+
+
+                        <h1 class="wow fadeInLeft" style="color:#035915">
+                            Newmont Financial
+                            <span style="color:#A9C32C">Wellbeing Program</span>
+                        </h1>
+
+                         /.header paragraph 
+                        <div class="landing-text wow fadeInUp">
+                            <p>
+                                Welcome to the Newmont Financial Wellbeing Program, which is powered by Databank.
+                            </p>
+                            <p>
+                                The Program is designed to help put you on the path to financial independence through financial education as well as ongoing support and advice on appropriate financial solutions.
+                            </p>
+                            <p>
+                                <span style="color: #035915; font-weight: bold"> So let’s get started…</span>
+                                <br />
+                                Please note that you will be automatically logged out if the screen is left idle for 15 minutes.
+
+                            </p>
+                        </div>
+
+
+
+
+                    </div>*@
+
+                    <!-- /.signup form -->
+                    <div class="col-md-offset-3 col-md-6">
+
+                        <div class="signup-header wow fadeInUp" style="background-color:#035915; margin-top:15%;">
+                          
+                            <h3 class="form-title text-center wow fadeInLeft">DBL ONLINE ACCOUNT OPENING - SIGN IN</h3>
+                            @{
+                                if (!string.IsNullOrEmpty(msg))
+                                {
+                                    <center style="color:red; font-weight:bold; font-size:14px;">@msg</center>
+                                }
+                            }
+                            <form class="form-header" action="@Url.Action("Index","Account")" role="form" method="POST" id="#">
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <input class="form-control input-lg" name="username" id="username" type="email" placeholder="Email" required autofocus value="@ViewBag.username">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control input-lg" name="password" id="email" type="password" placeholder="Password" required>
+                                </div>
+
+                                @*<div class="form-group">
+                                    <input class="form-control input-lg" name="pin" id="pin" title="Enter your six-digit pin" maxlength="6" type="text" pattern="[0-9]{6}" placeholder="PIN" required>
+                                </div>*@
+
+                                <div class="form-group last">
+                                    <input id="submitBtn" type="submit" class="btn btn-warning btn-block btn-lg" value="SIGN IN">
+                                </div>
+                                <br/><br/>
+
+                                @*<p class="privacy text-center" style="font-size:16px;">Have no account yet? <a href="@Url.Action("SignUp","Account")"> Sign Up Now</a>.</p>*@
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*@Html.Partial("~/Views/Partials/_footer.cshtml");*@
+
+
+
+    <!-- /.javascript files -->
+    <script src="~/Assets/backyard/js/jquery.js"></script>
+    <script src="~/Assets/backyard/js/bootstrap.min.js"></script>
+    <script src="~/Assets/backyard/js/custom.js"></script>
+    <script src="~/Assets/backyard/js/jquery.sticky.js"></script>
+    <script src="~/Assets/backyard/js/wow.min.js"></script>
+    <script src="~/Assets/backyard/js/owl.carousel.min.js"></script>
+
+    <script>
+        new WOW().init();
+        $(document).ready(function () {
+            $("#username").focus();
+        });
+    </script>
+
+    
+</body>
+</html>

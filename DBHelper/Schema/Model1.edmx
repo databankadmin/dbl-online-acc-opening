@@ -5,6 +5,264 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DBLAccountOpeningModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountTypeId" Type="int" Nullable="false" />
+          <Property Name="InvestmentTypeId" Type="int" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="100" />
+          <Property Name="CSDNumber" Type="varchar" MaxLength="100" />
+          <Property Name="InstitutionClientName" Type="varchar" MaxLength="100" />
+          <Property Name="InstitutionalPrincipalBroker" Type="varchar" MaxLength="100" />
+          <Property Name="InstitutionNatureOfBusiness" Type="varchar" MaxLength="100" />
+          <Property Name="InsstitutionalCountryOfIncorporation" Type="int" />
+          <Property Name="InstitutionRegistrationNumber" Type="varchar" MaxLength="100" />
+          <Property Name="InstCompanyType" Type="varchar" MaxLength="100" />
+          <Property Name="MailingAddressFull" Type="varchar" MaxLength="100" />
+          <Property Name="MailingAddressCity" Type="varchar" MaxLength="100" />
+          <Property Name="InstMailingAddressCountryId" Type="int" />
+          <Property Name="StreetAddressFull" Type="varchar" MaxLength="100" />
+          <Property Name="InstStreetAddressCity" Type="varchar" MaxLength="100" />
+          <Property Name="InsStreetAddressZipCode" Type="varchar" MaxLength="100" />
+          <Property Name="InsStreetAddressCountryId" Type="int" />
+          <Property Name="InsStreetAddressTel" Type="varchar" MaxLength="100" />
+          <Property Name="InsStreetAddressFax" Type="varchar" MaxLength="100" />
+          <Property Name="InsStreetAddressEmail" Type="varchar" MaxLength="100" />
+          <Property Name="SelectApplicableId" Type="int" />
+          <Property Name="RegionalInvestmentId" Type="int" />
+          <Property Name="FrequencyOfStatementsId" Type="int" />
+          <Property Name="DeclarationConvictedOfLaw" Type="varchar" MaxLength="500" />
+          <Property Name="DeclarationConvictedOfLawDetails" Type="varchar" MaxLength="500" />
+          <Property Name="DeclarationActingAsNominee" Type="varchar" MaxLength="500" />
+          <Property Name="DeclarationActingAsNomineeName" Type="varchar" MaxLength="500" />
+          <Property Name="DeclarationIWe" Type="varchar" MaxLength="500" />
+          <Property Name="SignatureTypeId" Type="int" />
+          <Property Name="InstOtherDetails" Type="varchar(max)" />
+          <Property Name="CSDFormPath" Type="varchar" MaxLength="500" />
+          <Property Name="YearsOfWorkExperience" Type="int" />
+          <Property Name="TIN" Type="varchar" MaxLength="500" />
+          <Property Name="ExpectedAccountActivityId" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountAMLResponses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="QuestionId" Type="int" Nullable="false" />
+          <Property Name="YesNo" Type="varchar" MaxLength="500" />
+          <Property Name="Rank" Type="varchar" MaxLength="500" />
+          <Property Name="Remark" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountAuthorisedPerson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="TitleId" Type="int" />
+          <Property Name="Tel" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Fax" Type="varchar" MaxLength="100" />
+          <Property Name="Mobile" Type="varchar" MaxLength="100" />
+          <Property Name="RelationToAccountHolder" Type="varchar" MaxLength="100" />
+          <Property Name="MailingAddress" Type="varchar" MaxLength="100" />
+          <Property Name="StreetAddress" Type="varchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="100" />
+          <Property Name="ZipCode" Type="varchar" MaxLength="100" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="IdType" Type="int" />
+          <Property Name="IdNumber" Type="varchar" MaxLength="100" />
+          <Property Name="IssueDate" Type="varchar" MaxLength="50" />
+          <Property Name="IDExpiryDate" Type="varchar" MaxLength="50" />
+          <Property Name="IdIssueAuthority" Type="varchar" MaxLength="100" />
+          <Property Name="IdPath" Type="varchar" MaxLength="200" />
+          <Property Name="SignaturePath" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountETI">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Text1" Type="varchar" MaxLength="500" />
+          <Property Name="Text2" Type="varchar" MaxLength="500" />
+          <Property Name="Text3" Type="varchar" MaxLength="500" />
+          <Property Name="Text4" Type="varchar" MaxLength="500" />
+          <Property Name="Text5" Type="varchar" MaxLength="500" />
+          <Property Name="Name1" Type="varchar" MaxLength="500" />
+          <Property Name="Email1" Type="varchar" MaxLength="500" />
+          <Property Name="Name2" Type="varchar" MaxLength="500" />
+          <Property Name="Email2" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountFileUploads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="Path" Type="varchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountFinancialInvestmentRiskProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AnnualIncomeId" Type="int" />
+          <Property Name="NetworthId" Type="int" />
+          <Property Name="InvestmentHorizonId" Type="int" />
+          <Property Name="ObjectivesId" Type="int" />
+          <Property Name="InvestmentKnowledgeId" Type="int" />
+          <Property Name="RiskToleranceId" Type="int" />
+          <Property Name="OnlineTradingFacility" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountInsCustodyAccountDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustodianName" Type="varchar" MaxLength="500" />
+          <Property Name="Telephone" Type="varchar" MaxLength="100" />
+          <Property Name="Address" Type="varchar" MaxLength="100" />
+          <Property Name="Fax" Type="varchar" MaxLength="100" />
+          <Property Name="CashAccountNumber" Type="varchar" MaxLength="100" />
+          <Property Name="SecuritiesAccountNumber" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountInsTradingContacts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TitleId" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="Tel" Type="varchar" MaxLength="100" />
+          <Property Name="Mobile" Type="varchar" MaxLength="100" />
+          <Property Name="Fax" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountInstructionEmploymentDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ModeOfInstructionId" Type="int" />
+          <Property Name="ModeOfNotificationId" Type="int" />
+          <Property Name="SourceOfFundId" Type="int" />
+          <Property Name="EmploymentStatusId" Type="int" />
+          <Property Name="PrevOccupation" Type="varchar" MaxLength="200" />
+          <Property Name="PrevEmployer" Type="varchar" MaxLength="200" />
+          <Property Name="CurrentOccupation" Type="varchar" MaxLength="200" />
+          <Property Name="CurrentEmployer" Type="varchar" MaxLength="200" />
+          <Property Name="CurrentEmployerAddress" Type="varchar" MaxLength="200" />
+          <Property Name="EmploymentDateFrom" Type="varchar" MaxLength="200" />
+          <Property Name="EmploymentDateTo" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="YearsOfEmployment" Type="int" />
+        </EntityType>
+        <EntityType Name="AccountInstSignatoriesMandates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="Position" Type="varchar" MaxLength="100" />
+          <Property Name="SignaturePath" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountMember">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TitleId" Type="int" />
+          <Property Name="Fname" Type="varchar" MaxLength="500" />
+          <Property Name="Lname" Type="varchar" MaxLength="500" />
+          <Property Name="Othername" Type="varchar" MaxLength="500" />
+          <Property Name="NationalityId" Type="int" />
+          <Property Name="DOB" Type="varchar" MaxLength="100" />
+          <Property Name="PlaceOfBirth" Type="varchar" MaxLength="200" />
+          <Property Name="MaritalStatusId" Type="int" />
+          <Property Name="MothersMaidenName" Type="varchar" MaxLength="200" />
+          <Property Name="MaidenName" Type="varchar" MaxLength="50" />
+          <Property Name="ResidentialAddressFull" Type="varchar" MaxLength="200" />
+          <Property Name="ResidentialCity" Type="varchar" MaxLength="200" />
+          <Property Name="ResidentialZipCode" Type="varchar" MaxLength="200" />
+          <Property Name="ResidentialCountryId" Type="int" />
+          <Property Name="MailingAddressFull" Type="varchar" MaxLength="200" />
+          <Property Name="MailingAddressCity" Type="varchar" MaxLength="200" />
+          <Property Name="MailingAddressZipCode" Type="varchar" MaxLength="200" />
+          <Property Name="MailingAddressCountryId" Type="int" />
+          <Property Name="SelectWhereApplicableId" Type="int" />
+          <Property Name="Telephone" Type="varchar" MaxLength="100" />
+          <Property Name="Mobile" Type="varchar" MaxLength="100" />
+          <Property Name="Fax" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Occupation" Type="varchar" MaxLength="100" />
+          <Property Name="IdTypeId" Type="int" />
+          <Property Name="IdNumber" Type="varchar" MaxLength="200" />
+          <Property Name="IssuingAuthority" Type="varchar" MaxLength="200" />
+          <Property Name="IdCardIssueDate" Type="varchar" MaxLength="200" />
+          <Property Name="IdCardExpiryDate" Type="varchar" MaxLength="200" />
+          <Property Name="IdPath" Type="varchar" MaxLength="200" />
+          <Property Name="SignaturePath" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AccountNextOfKinDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="Telephone" Type="varchar" MaxLength="100" />
+          <Property Name="Mobile" Type="varchar" MaxLength="100" />
+          <Property Name="Fax" Type="varchar" MaxLength="100" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="RelationToAccount" Type="varchar" MaxLength="200" />
+          <Property Name="MailingAddress" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountSettlementDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountName" Type="varchar" MaxLength="500" />
+          <Property Name="AccountNumber" Type="varchar" MaxLength="500" />
+          <Property Name="BankId" Type="int" />
+          <Property Name="CorrespondentBankId" Type="int" />
+          <Property Name="IntermediaryBankId" Type="int" />
+          <Property Name="Branch" Type="varchar" MaxLength="500" />
+          <Property Name="SwiftCode" Type="varchar" MaxLength="500" />
+          <Property Name="CorrespondentBankSwiftCode" Type="varchar" MaxLength="500" />
+          <Property Name="IntermediaryBankSwiftCode" Type="varchar" MaxLength="500" />
+          <Property Name="NameOfBeneficiary" Type="varchar" MaxLength="500" />
+          <Property Name="BIC" Type="varchar" MaxLength="500" />
+          <Property Name="MarginTradingOption" Type="varchar" MaxLength="500" />
+          <Property Name="OnlineTradingFacility" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="AccountType">
           <Key>
             <PropertyRef Name="Id" />
@@ -40,6 +298,20 @@
           <Property Name="Phone" Type="varchar" MaxLength="50" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Phone2" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="LastLogin" Type="datetime" />
         </EntityType>
         <EntityType Name="Bank">
           <Key>
@@ -81,6 +353,22 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExpectedAccountActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FileUploadTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IDCardType">
@@ -214,12 +502,28 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="SignatureTypes">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SourceOfIncome">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="StatementFrequency">
@@ -237,16 +541,512 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
         </EntityType>
+        <Association Name="FK_Account_AccountType">
+          <End Role="AccountType" Type="Self.AccountType" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="AccountTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InsStreetAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_Country1">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InstMailingAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_CSDDepositoryParticipantOption">
+          <End Role="CSDDepositoryParticipantOption" Type="Self.CSDDepositoryParticipantOption" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CSDDepositoryParticipantOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="SelectApplicableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_CSDDepositoryParticipantOption1">
+          <End Role="CSDDepositoryParticipantOption" Type="Self.CSDDepositoryParticipantOption" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CSDDepositoryParticipantOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="SelectApplicableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_ExpectedAccountActivity">
+          <End Role="ExpectedAccountActivity" Type="Self.ExpectedAccountActivity" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpectedAccountActivity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ExpectedAccountActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_InvestmentType">
+          <End Role="InvestmentType" Type="Self.InvestmentType" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InvestmentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_RegionalInvesmentInterest">
+          <End Role="RegionalInvesmentInterest" Type="Self.RegionalInvesmentInterest" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegionalInvesmentInterest">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="RegionalInvestmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_StatementFrequency">
+          <End Role="StatementFrequency" Type="Self.StatementFrequency" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatementFrequency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="FrequencyOfStatementsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAMLResponses_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountAMLResponses" Type="Self.AccountAMLResponses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAMLResponses">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAMLResponses_AMLQuestions">
+          <End Role="AMLQuestions" Type="Self.AMLQuestions" Multiplicity="1" />
+          <End Role="AccountAMLResponses" Type="Self.AccountAMLResponses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AMLQuestions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAMLResponses">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAuthorisedPerson_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountAuthorisedPerson" Type="Self.AccountAuthorisedPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAuthorisedPerson">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountETI_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountETI" Type="Self.AccountETI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountETI">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFileUploads_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountFileUploads" Type="Self.AccountFileUploads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFileUploads">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFileUploads_FileUploadTypes">
+          <End Role="FileUploadTypes" Type="Self.FileUploadTypes" Multiplicity="1" />
+          <End Role="AccountFileUploads" Type="Self.AccountFileUploads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileUploadTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFileUploads">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome">
+          <End Role="ApproximateAnnualIncome" Type="Self.ApproximateAnnualIncome" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApproximateAnnualIncome">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="AnnualIncomeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon">
+          <End Role="InvestmentHorizon" Type="Self.InvestmentHorizon" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentHorizon">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="InvestmentHorizonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge">
+          <End Role="InvestmentKnowledge" Type="Self.InvestmentKnowledge" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentKnowledge">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="InvestmentKnowledgeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_NetWorth">
+          <End Role="NetWorth" Type="Self.NetWorth" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NetWorth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="NetworthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_Objectives">
+          <End Role="Objectives" Type="Self.Objectives" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objectives">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="ObjectivesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_RiskTolerance">
+          <End Role="RiskTolerance" Type="Self.RiskTolerance" Multiplicity="0..1" />
+          <End Role="AccountFinancialInvestmentRiskProfile" Type="Self.AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskTolerance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="RiskToleranceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsCustodyAccountDetails_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountInsCustodyAccountDetails" Type="Self.AccountInsCustodyAccountDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsCustodyAccountDetails">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsTradingContacts_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountInsTradingContacts" Type="Self.AccountInsTradingContacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsTradingContacts">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsTradingContacts_Title">
+          <End Role="Title" Type="Self.Title" Multiplicity="0..1" />
+          <End Role="AccountInsTradingContacts" Type="Self.AccountInsTradingContacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsTradingContacts">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountInstructionEmploymentDetails" Type="Self.AccountInstructionEmploymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetails">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_EmploymentStatus">
+          <End Role="EmploymentStatus" Type="Self.EmploymentStatus" Multiplicity="0..1" />
+          <End Role="AccountInstructionEmploymentDetails" Type="Self.AccountInstructionEmploymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmploymentStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetails">
+              <PropertyRef Name="EmploymentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_ModeOfInstruction">
+          <End Role="ModeOfInstruction" Type="Self.ModeOfInstruction" Multiplicity="0..1" />
+          <End Role="AccountInstructionEmploymentDetails" Type="Self.AccountInstructionEmploymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModeOfInstruction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetails">
+              <PropertyRef Name="ModeOfInstructionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_ModeOfNotification">
+          <End Role="ModeOfNotification" Type="Self.ModeOfNotification" Multiplicity="0..1" />
+          <End Role="AccountInstructionEmploymentDetails" Type="Self.AccountInstructionEmploymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModeOfNotification">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetails">
+              <PropertyRef Name="ModeOfNotificationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_SourceOfIncome">
+          <End Role="SourceOfIncome" Type="Self.SourceOfIncome" Multiplicity="0..1" />
+          <End Role="AccountInstructionEmploymentDetails" Type="Self.AccountInstructionEmploymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceOfIncome">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetails">
+              <PropertyRef Name="SourceOfFundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstSignatoriesMandates_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountInstSignatoriesMandates" Type="Self.AccountInstSignatoriesMandates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstSignatoriesMandates">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="NationalityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country1">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="ResidentialCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country2">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="MailingAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_MaritalStatus">
+          <End Role="MaritalStatus" Type="Self.MaritalStatus" Multiplicity="0..1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MaritalStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="MaritalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Title">
+          <End Role="Title" Type="Self.Title" Multiplicity="0..1" />
+          <End Role="AccountMember" Type="Self.AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountNextOfKinDetails_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountNextOfKinDetails" Type="Self.AccountNextOfKinDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountNextOfKinDetails">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountSettlementDetails_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountSettlementDetails" Type="Self.AccountSettlementDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountSettlementDetails">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppUser_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBLAccountOpeningModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountAMLResponses" EntityType="Self.AccountAMLResponses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountAuthorisedPerson" EntityType="Self.AccountAuthorisedPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountETI" EntityType="Self.AccountETI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountFileUploads" EntityType="Self.AccountFileUploads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountFinancialInvestmentRiskProfile" EntityType="Self.AccountFinancialInvestmentRiskProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountInsCustodyAccountDetails" EntityType="Self.AccountInsCustodyAccountDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountInsTradingContacts" EntityType="Self.AccountInsTradingContacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountInstructionEmploymentDetails" EntityType="Self.AccountInstructionEmploymentDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountInstSignatoriesMandates" EntityType="Self.AccountInstSignatoriesMandates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountMember" EntityType="Self.AccountMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountNextOfKinDetails" EntityType="Self.AccountNextOfKinDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountSettlementDetails" EntityType="Self.AccountSettlementDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountType" EntityType="Self.AccountType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AMLQuestions" EntityType="Self.AMLQuestions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApproximateAnnualIncome" EntityType="Self.ApproximateAnnualIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppSettings" EntityType="Self.AppSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSDDepositoryParticipantOption" EntityType="Self.CSDDepositoryParticipantOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocTypes" EntityType="Self.DocTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmploymentStatus" EntityType="Self.EmploymentStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpectedAccountActivity" EntityType="Self.ExpectedAccountActivity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileUploadTypes" EntityType="Self.FileUploadTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IDCardType" EntityType="Self.IDCardType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentHorizon" EntityType="Self.InvestmentHorizon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentKnowledge" EntityType="Self.InvestmentKnowledge" Schema="dbo" store:Type="Tables" />
@@ -262,9 +1062,171 @@
           <EntitySet Name="RegionalInvesmentInterest" EntityType="Self.RegionalInvesmentInterest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResidentialStatus" EntityType="Self.ResidentialStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskTolerance" EntityType="Self.RiskTolerance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SignatureTypes" EntityType="Self.SignatureTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SourceOfIncome" EntityType="Self.SourceOfIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatementFrequency" EntityType="Self.StatementFrequency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Account_AccountType" Association="Self.FK_Account_AccountType">
+            <End Role="AccountType" EntitySet="AccountType" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_Country" Association="Self.FK_Account_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_Country1" Association="Self.FK_Account_Country1">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_CSDDepositoryParticipantOption" Association="Self.FK_Account_CSDDepositoryParticipantOption">
+            <End Role="CSDDepositoryParticipantOption" EntitySet="CSDDepositoryParticipantOption" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_CSDDepositoryParticipantOption1" Association="Self.FK_Account_CSDDepositoryParticipantOption1">
+            <End Role="CSDDepositoryParticipantOption" EntitySet="CSDDepositoryParticipantOption" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_ExpectedAccountActivity" Association="Self.FK_Account_ExpectedAccountActivity">
+            <End Role="ExpectedAccountActivity" EntitySet="ExpectedAccountActivity" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_InvestmentType" Association="Self.FK_Account_InvestmentType">
+            <End Role="InvestmentType" EntitySet="InvestmentType" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_RegionalInvesmentInterest" Association="Self.FK_Account_RegionalInvesmentInterest">
+            <End Role="RegionalInvesmentInterest" EntitySet="RegionalInvesmentInterest" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_StatementFrequency" Association="Self.FK_Account_StatementFrequency">
+            <End Role="StatementFrequency" EntitySet="StatementFrequency" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAMLResponses_Account" Association="Self.FK_AccountAMLResponses_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountAMLResponses" EntitySet="AccountAMLResponses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAMLResponses_AMLQuestions" Association="Self.FK_AccountAMLResponses_AMLQuestions">
+            <End Role="AMLQuestions" EntitySet="AMLQuestions" />
+            <End Role="AccountAMLResponses" EntitySet="AccountAMLResponses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAuthorisedPerson_Account" Association="Self.FK_AccountAuthorisedPerson_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountAuthorisedPerson" EntitySet="AccountAuthorisedPerson" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountETI_Account" Association="Self.FK_AccountETI_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountETI" EntitySet="AccountETI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFileUploads_Account" Association="Self.FK_AccountFileUploads_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFileUploads" EntitySet="AccountFileUploads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFileUploads_FileUploadTypes" Association="Self.FK_AccountFileUploads_FileUploadTypes">
+            <End Role="FileUploadTypes" EntitySet="FileUploadTypes" />
+            <End Role="AccountFileUploads" EntitySet="AccountFileUploads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_Account" Association="Self.FK_AccountFinancialInvestmentRiskProfile_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome" Association="Self.FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome">
+            <End Role="ApproximateAnnualIncome" EntitySet="ApproximateAnnualIncome" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon" Association="Self.FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon">
+            <End Role="InvestmentHorizon" EntitySet="InvestmentHorizon" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge" Association="Self.FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge">
+            <End Role="InvestmentKnowledge" EntitySet="InvestmentKnowledge" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_NetWorth" Association="Self.FK_AccountFinancialInvestmentRiskProfile_NetWorth">
+            <End Role="NetWorth" EntitySet="NetWorth" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_Objectives" Association="Self.FK_AccountFinancialInvestmentRiskProfile_Objectives">
+            <End Role="Objectives" EntitySet="Objectives" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_RiskTolerance" Association="Self.FK_AccountFinancialInvestmentRiskProfile_RiskTolerance">
+            <End Role="RiskTolerance" EntitySet="RiskTolerance" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsCustodyAccountDetails_Account" Association="Self.FK_AccountInsCustodyAccountDetails_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountInsCustodyAccountDetails" EntitySet="AccountInsCustodyAccountDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsTradingContacts_Account" Association="Self.FK_AccountInsTradingContacts_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountInsTradingContacts" EntitySet="AccountInsTradingContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsTradingContacts_Title" Association="Self.FK_AccountInsTradingContacts_Title">
+            <End Role="Title" EntitySet="Title" />
+            <End Role="AccountInsTradingContacts" EntitySet="AccountInsTradingContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_Account" Association="Self.FK_AccountInstructionEmploymentDetails_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountInstructionEmploymentDetails" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_EmploymentStatus" Association="Self.FK_AccountInstructionEmploymentDetails_EmploymentStatus">
+            <End Role="EmploymentStatus" EntitySet="EmploymentStatus" />
+            <End Role="AccountInstructionEmploymentDetails" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_ModeOfInstruction" Association="Self.FK_AccountInstructionEmploymentDetails_ModeOfInstruction">
+            <End Role="ModeOfInstruction" EntitySet="ModeOfInstruction" />
+            <End Role="AccountInstructionEmploymentDetails" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_ModeOfNotification" Association="Self.FK_AccountInstructionEmploymentDetails_ModeOfNotification">
+            <End Role="ModeOfNotification" EntitySet="ModeOfNotification" />
+            <End Role="AccountInstructionEmploymentDetails" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_SourceOfIncome" Association="Self.FK_AccountInstructionEmploymentDetails_SourceOfIncome">
+            <End Role="SourceOfIncome" EntitySet="SourceOfIncome" />
+            <End Role="AccountInstructionEmploymentDetails" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstSignatoriesMandates_Account" Association="Self.FK_AccountInstSignatoriesMandates_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountInstSignatoriesMandates" EntitySet="AccountInstSignatoriesMandates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Account" Association="Self.FK_AccountMember_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country" Association="Self.FK_AccountMember_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country1" Association="Self.FK_AccountMember_Country1">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country2" Association="Self.FK_AccountMember_Country2">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_MaritalStatus" Association="Self.FK_AccountMember_MaritalStatus">
+            <End Role="MaritalStatus" EntitySet="MaritalStatus" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Title" Association="Self.FK_AccountMember_Title">
+            <End Role="Title" EntitySet="Title" />
+            <End Role="AccountMember" EntitySet="AccountMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountNextOfKinDetails_Account" Association="Self.FK_AccountNextOfKinDetails_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountNextOfKinDetails" EntitySet="AccountNextOfKinDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountSettlementDetails_Account" Association="Self.FK_AccountSettlementDetails_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountSettlementDetails" EntitySet="AccountSettlementDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppUser_Role" Association="Self.FK_AppUser_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="AppUser" EntitySet="AppUser" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -277,6 +1239,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_AccountType" FromRole="AccountType" ToRole="Account" />
         </EntityType>
         <EntityType Name="AMLQuestion">
           <Key>
@@ -285,6 +1248,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Question" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountAMLResponses" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_AMLQuestions" FromRole="AMLQuestion" ToRole="AccountAMLRespons" />
         </EntityType>
         <EntityType Name="ApproximateAnnualIncome">
           <Key>
@@ -293,6 +1257,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome" FromRole="ApproximateAnnualIncome" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="AppSetting">
           <Key>
@@ -323,6 +1288,11 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CountryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_Country" FromRole="Country" ToRole="Account" />
+          <NavigationProperty Name="Accounts1" Relationship="DBLAccountOpeningModel.FK_Account_Country1" FromRole="Country" ToRole="Account" />
+          <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country" FromRole="Country" ToRole="AccountMember" />
+          <NavigationProperty Name="AccountMembers1" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country1" FromRole="Country" ToRole="AccountMember" />
+          <NavigationProperty Name="AccountMembers2" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country2" FromRole="Country" ToRole="AccountMember" />
         </EntityType>
         <EntityType Name="CSDDepositoryParticipantOption">
           <Key>
@@ -331,6 +1301,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption" FromRole="CSDDepositoryParticipantOption" ToRole="Account" />
+          <NavigationProperty Name="Accounts1" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption1" FromRole="CSDDepositoryParticipantOption" ToRole="Account" />
         </EntityType>
         <EntityType Name="DocType">
           <Key>
@@ -347,6 +1319,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_EmploymentStatus" FromRole="EmploymentStatu" ToRole="AccountInstructionEmploymentDetail" />
         </EntityType>
         <EntityType Name="IDCardType">
           <Key>
@@ -363,6 +1336,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon" FromRole="InvestmentHorizon" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="InvestmentKnowledge">
           <Key>
@@ -371,6 +1345,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge" FromRole="InvestmentKnowledge" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="InvestmentType">
           <Key>
@@ -379,6 +1354,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_InvestmentType" FromRole="InvestmentType" ToRole="Account" />
         </EntityType>
         <EntityType Name="MailServerSetting">
           <Key>
@@ -414,6 +1390,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfInstruction" FromRole="ModeOfInstruction" ToRole="AccountInstructionEmploymentDetail" />
         </EntityType>
         <EntityType Name="ModeOfNotification">
           <Key>
@@ -422,6 +1399,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfNotification" FromRole="ModeOfNotification" ToRole="AccountInstructionEmploymentDetail" />
         </EntityType>
         <EntityType Name="ModeOfReceivingStatement">
           <Key>
@@ -438,6 +1416,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_NetWorth" FromRole="NetWorth" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="Objective">
           <Key>
@@ -446,6 +1425,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Objectives" FromRole="Objective" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="RegionalInvesmentInterest">
           <Key>
@@ -454,6 +1434,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_RegionalInvesmentInterest" FromRole="RegionalInvesmentInterest" ToRole="Account" />
         </EntityType>
         <EntityType Name="ResidentialStatu">
           <Key>
@@ -470,6 +1451,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_RiskTolerance" FromRole="RiskTolerance" ToRole="AccountFinancialInvestmentRiskProfile" />
         </EntityType>
         <EntityType Name="SignatureType">
           <Key>
@@ -486,6 +1468,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_StatementFrequency" FromRole="StatementFrequency" ToRole="Account" />
         </EntityType>
         <EntityType Name="Title">
           <Key>
@@ -493,6 +1476,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountInsTradingContacts" Relationship="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Title" FromRole="Title" ToRole="AccountInsTradingContact" />
+          <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_Title" FromRole="Title" ToRole="AccountMember" />
         </EntityType>
         <EntityContainer Name="DBLAccountOpeningContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountTypes" EntityType="Self.AccountType" />
@@ -522,6 +1507,184 @@
           <EntitySet Name="StatementFrequencies" EntityType="Self.StatementFrequency" />
           <EntitySet Name="Titles" EntityType="Self.Title" />
           <EntitySet Name="MaritalStatus" EntityType="DBLAccountOpeningModel.MaritalStatu" />
+          <EntitySet Name="SourceOfIncomes" EntityType="DBLAccountOpeningModel.SourceOfIncome" />
+          <EntitySet Name="Accounts" EntityType="DBLAccountOpeningModel.Account" />
+          <EntitySet Name="AccountAMLResponses" EntityType="DBLAccountOpeningModel.AccountAMLRespons" />
+          <EntitySet Name="AccountAuthorisedPersons" EntityType="DBLAccountOpeningModel.AccountAuthorisedPerson" />
+          <EntitySet Name="AccountETIs" EntityType="DBLAccountOpeningModel.AccountETI" />
+          <EntitySet Name="AccountFileUploads" EntityType="DBLAccountOpeningModel.AccountFileUpload" />
+          <EntitySet Name="AccountFinancialInvestmentRiskProfiles" EntityType="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" />
+          <EntitySet Name="AccountInsCustodyAccountDetails" EntityType="DBLAccountOpeningModel.AccountInsCustodyAccountDetail" />
+          <EntitySet Name="AccountInsTradingContacts" EntityType="DBLAccountOpeningModel.AccountInsTradingContact" />
+          <EntitySet Name="AccountInstructionEmploymentDetails" EntityType="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" />
+          <EntitySet Name="AccountInstSignatoriesMandates" EntityType="DBLAccountOpeningModel.AccountInstSignatoriesMandate" />
+          <EntitySet Name="AccountMembers" EntityType="DBLAccountOpeningModel.AccountMember" />
+          <EntitySet Name="AccountNextOfKinDetails" EntityType="DBLAccountOpeningModel.AccountNextOfKinDetail" />
+          <EntitySet Name="AccountSettlementDetails" EntityType="DBLAccountOpeningModel.AccountSettlementDetail" />
+          <EntitySet Name="FileUploadTypes" EntityType="DBLAccountOpeningModel.FileUploadType" />
+          <AssociationSet Name="FK_Account_AccountType" Association="DBLAccountOpeningModel.FK_Account_AccountType">
+            <End Role="AccountType" EntitySet="AccountTypes" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_Country" Association="DBLAccountOpeningModel.FK_Account_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_Country1" Association="DBLAccountOpeningModel.FK_Account_Country1">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_CSDDepositoryParticipantOption" Association="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption">
+            <End Role="CSDDepositoryParticipantOption" EntitySet="CSDDepositoryParticipantOptions" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_CSDDepositoryParticipantOption1" Association="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption1">
+            <End Role="CSDDepositoryParticipantOption" EntitySet="CSDDepositoryParticipantOptions" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_RegionalInvesmentInterest" Association="DBLAccountOpeningModel.FK_Account_RegionalInvesmentInterest">
+            <End Role="RegionalInvesmentInterest" EntitySet="RegionalInvesmentInterests" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_StatementFrequency" Association="DBLAccountOpeningModel.FK_Account_StatementFrequency">
+            <End Role="StatementFrequency" EntitySet="StatementFrequencies" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAMLResponses_Account" Association="DBLAccountOpeningModel.FK_AccountAMLResponses_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountAMLRespons" EntitySet="AccountAMLResponses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAuthorisedPerson_Account" Association="DBLAccountOpeningModel.FK_AccountAuthorisedPerson_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountAuthorisedPerson" EntitySet="AccountAuthorisedPersons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountETI_Account" Association="DBLAccountOpeningModel.FK_AccountETI_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountETI" EntitySet="AccountETIs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFileUploads_Account" Association="DBLAccountOpeningModel.FK_AccountFileUploads_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountFileUpload" EntitySet="AccountFileUploads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_Account" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsCustodyAccountDetails_Account" Association="DBLAccountOpeningModel.FK_AccountInsCustodyAccountDetails_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountInsCustodyAccountDetail" EntitySet="AccountInsCustodyAccountDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsTradingContacts_Account" Association="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountInsTradingContact" EntitySet="AccountInsTradingContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_Account" Association="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountInstructionEmploymentDetail" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstSignatoriesMandates_Account" Association="DBLAccountOpeningModel.FK_AccountInstSignatoriesMandates_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountInstSignatoriesMandate" EntitySet="AccountInstSignatoriesMandates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Account" Association="DBLAccountOpeningModel.FK_AccountMember_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountNextOfKinDetails_Account" Association="DBLAccountOpeningModel.FK_AccountNextOfKinDetails_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountNextOfKinDetail" EntitySet="AccountNextOfKinDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountSettlementDetails_Account" Association="DBLAccountOpeningModel.FK_AccountSettlementDetails_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountSettlementDetail" EntitySet="AccountSettlementDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountAMLResponses_AMLQuestions" Association="DBLAccountOpeningModel.FK_AccountAMLResponses_AMLQuestions">
+            <End Role="AMLQuestion" EntitySet="AMLQuestions" />
+            <End Role="AccountAMLRespons" EntitySet="AccountAMLResponses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFileUploads_FileUploadTypes" Association="DBLAccountOpeningModel.FK_AccountFileUploads_FileUploadTypes">
+            <End Role="FileUploadType" EntitySet="FileUploadTypes" />
+            <End Role="AccountFileUpload" EntitySet="AccountFileUploads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome">
+            <End Role="ApproximateAnnualIncome" EntitySet="ApproximateAnnualIncomes" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon">
+            <End Role="InvestmentHorizon" EntitySet="InvestmentHorizons" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge">
+            <End Role="InvestmentKnowledge" EntitySet="InvestmentKnowledges" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_NetWorth" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_NetWorth">
+            <End Role="NetWorth" EntitySet="NetWorths" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_Objectives" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Objectives">
+            <End Role="Objective" EntitySet="Objectives" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountFinancialInvestmentRiskProfile_RiskTolerance" Association="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_RiskTolerance">
+            <End Role="RiskTolerance" EntitySet="RiskTolerances" />
+            <End Role="AccountFinancialInvestmentRiskProfile" EntitySet="AccountFinancialInvestmentRiskProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInsTradingContacts_Title" Association="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Title">
+            <End Role="Title" EntitySet="Titles" />
+            <End Role="AccountInsTradingContact" EntitySet="AccountInsTradingContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_EmploymentStatus" Association="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_EmploymentStatus">
+            <End Role="EmploymentStatu" EntitySet="EmploymentStatus" />
+            <End Role="AccountInstructionEmploymentDetail" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_ModeOfInstruction" Association="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfInstruction">
+            <End Role="ModeOfInstruction" EntitySet="ModeOfInstructions" />
+            <End Role="AccountInstructionEmploymentDetail" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_ModeOfNotification" Association="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfNotification">
+            <End Role="ModeOfNotification" EntitySet="ModeOfNotifications" />
+            <End Role="AccountInstructionEmploymentDetail" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountInstructionEmploymentDetails_SourceOfIncome" Association="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_SourceOfIncome">
+            <End Role="SourceOfIncome" EntitySet="SourceOfIncomes" />
+            <End Role="AccountInstructionEmploymentDetail" EntitySet="AccountInstructionEmploymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country" Association="DBLAccountOpeningModel.FK_AccountMember_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country1" Association="DBLAccountOpeningModel.FK_AccountMember_Country1">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Country2" Association="DBLAccountOpeningModel.FK_AccountMember_Country2">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_MaritalStatus" Association="DBLAccountOpeningModel.FK_AccountMember_MaritalStatus">
+            <End Role="MaritalStatu" EntitySet="MaritalStatus" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountMember_Title" Association="DBLAccountOpeningModel.FK_AccountMember_Title">
+            <End Role="Title" EntitySet="Titles" />
+            <End Role="AccountMember" EntitySet="AccountMembers" />
+          </AssociationSet>
+          <EntitySet Name="ExpectedAccountActivities" EntityType="DBLAccountOpeningModel.ExpectedAccountActivity" />
+          <AssociationSet Name="FK_Account_ExpectedAccountActivity" Association="DBLAccountOpeningModel.FK_Account_ExpectedAccountActivity">
+            <End Role="ExpectedAccountActivity" EntitySet="ExpectedAccountActivities" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_InvestmentType" Association="DBLAccountOpeningModel.FK_Account_InvestmentType">
+            <End Role="InvestmentType" EntitySet="InvestmentTypes" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <EntitySet Name="AppUsers" EntityType="DBLAccountOpeningModel.AppUser" />
+          <EntitySet Name="Roles" EntityType="DBLAccountOpeningModel.Role" />
+          <AssociationSet Name="FK_AppUser_Role" Association="DBLAccountOpeningModel.FK_AppUser_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="AppUser" EntitySet="AppUsers" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="MaritalStatu">
           <Key>
@@ -530,7 +1693,848 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_MaritalStatus" FromRole="MaritalStatu" ToRole="AccountMember" />
         </EntityType>
+        <EntityType Name="SourceOfIncome">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_SourceOfIncome" FromRole="SourceOfIncome" ToRole="AccountInstructionEmploymentDetail" />
+        </EntityType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountTypeId" Type="Int32" Nullable="false" />
+          <Property Name="AccountNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CSDNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstitutionClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstitutionalPrincipalBroker" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstitutionNatureOfBusiness" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InsstitutionalCountryOfIncorporation" Type="Int32" />
+          <Property Name="InstitutionRegistrationNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddressFull" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddressCity" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstMailingAddressCountryId" Type="Int32" />
+          <Property Name="StreetAddressFull" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InstStreetAddressCity" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InsStreetAddressZipCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InsStreetAddressCountryId" Type="Int32" />
+          <Property Name="InsStreetAddressTel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InsStreetAddressFax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InsStreetAddressEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SelectApplicableId" Type="Int32" />
+          <Property Name="RegionalInvestmentId" Type="Int32" />
+          <Property Name="FrequencyOfStatementsId" Type="Int32" />
+          <Property Name="DeclarationConvictedOfLaw" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeclarationConvictedOfLawDetails" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeclarationActingAsNominee" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeclarationActingAsNomineeName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DeclarationIWe" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SignatureTypeId" Type="Int32" />
+          <Property Name="InstOtherDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CSDFormPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountType" Relationship="DBLAccountOpeningModel.FK_Account_AccountType" FromRole="Account" ToRole="AccountType" />
+          <NavigationProperty Name="Country" Relationship="DBLAccountOpeningModel.FK_Account_Country" FromRole="Account" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="DBLAccountOpeningModel.FK_Account_Country1" FromRole="Account" ToRole="Country" />
+          <NavigationProperty Name="CSDDepositoryParticipantOption" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption" FromRole="Account" ToRole="CSDDepositoryParticipantOption" />
+          <NavigationProperty Name="CSDDepositoryParticipantOption1" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption1" FromRole="Account" ToRole="CSDDepositoryParticipantOption" />
+          <NavigationProperty Name="RegionalInvesmentInterest" Relationship="DBLAccountOpeningModel.FK_Account_RegionalInvesmentInterest" FromRole="Account" ToRole="RegionalInvesmentInterest" />
+          <NavigationProperty Name="StatementFrequency" Relationship="DBLAccountOpeningModel.FK_Account_StatementFrequency" FromRole="Account" ToRole="StatementFrequency" />
+          <NavigationProperty Name="AccountAMLResponses" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_Account" FromRole="Account" ToRole="AccountAMLRespons" />
+          <NavigationProperty Name="AccountAuthorisedPersons" Relationship="DBLAccountOpeningModel.FK_AccountAuthorisedPerson_Account" FromRole="Account" ToRole="AccountAuthorisedPerson" />
+          <NavigationProperty Name="AccountETIs" Relationship="DBLAccountOpeningModel.FK_AccountETI_Account" FromRole="Account" ToRole="AccountETI" />
+          <NavigationProperty Name="AccountFileUploads" Relationship="DBLAccountOpeningModel.FK_AccountFileUploads_Account" FromRole="Account" ToRole="AccountFileUpload" />
+          <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Account" FromRole="Account" ToRole="AccountFinancialInvestmentRiskProfile" />
+          <NavigationProperty Name="AccountInsCustodyAccountDetails" Relationship="DBLAccountOpeningModel.FK_AccountInsCustodyAccountDetails_Account" FromRole="Account" ToRole="AccountInsCustodyAccountDetail" />
+          <NavigationProperty Name="AccountInsTradingContacts" Relationship="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Account" FromRole="Account" ToRole="AccountInsTradingContact" />
+          <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_Account" FromRole="Account" ToRole="AccountInstructionEmploymentDetail" />
+          <NavigationProperty Name="AccountInstSignatoriesMandates" Relationship="DBLAccountOpeningModel.FK_AccountInstSignatoriesMandates_Account" FromRole="Account" ToRole="AccountInstSignatoriesMandate" />
+          <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_Account" FromRole="Account" ToRole="AccountMember" />
+          <NavigationProperty Name="AccountNextOfKinDetails" Relationship="DBLAccountOpeningModel.FK_AccountNextOfKinDetails_Account" FromRole="Account" ToRole="AccountNextOfKinDetail" />
+          <NavigationProperty Name="AccountSettlementDetails" Relationship="DBLAccountOpeningModel.FK_AccountSettlementDetails_Account" FromRole="Account" ToRole="AccountSettlementDetail" />
+          <Property Name="InstCompanyType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="YearsOfWorkExperience" Type="Int32" />
+          <Property Name="TIN" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ExpectedAccountActivityId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ExpectedAccountActivity" Relationship="DBLAccountOpeningModel.FK_Account_ExpectedAccountActivity" FromRole="Account" ToRole="ExpectedAccountActivity" />
+          <Property Name="InvestmentTypeId" Type="Int32" />
+          <NavigationProperty Name="InvestmentType" Relationship="DBLAccountOpeningModel.FK_Account_InvestmentType" FromRole="Account" ToRole="InvestmentType" />
+        </EntityType>
+        <EntityType Name="AccountAMLRespons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="YesNo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Rank" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_Account" FromRole="AccountAMLRespons" ToRole="Account" />
+          <NavigationProperty Name="AMLQuestion" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_AMLQuestions" FromRole="AccountAMLRespons" ToRole="AMLQuestion" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountAuthorisedPerson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TitleId" Type="Int32" />
+          <Property Name="Tel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RelationToAccountHolder" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StreetAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="IdType" Type="Int32" />
+          <Property Name="IdNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IssueDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IDExpiryDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdIssueAuthority" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SignaturePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountAuthorisedPerson_Account" FromRole="AccountAuthorisedPerson" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountETI">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="Text1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Text2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Text3" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Text4" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Text5" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Name1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Email1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Name2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Email2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountETI_Account" FromRole="AccountETI" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountFileUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="Path" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountFileUploads_Account" FromRole="AccountFileUpload" ToRole="Account" />
+          <NavigationProperty Name="FileUploadType" Relationship="DBLAccountOpeningModel.FK_AccountFileUploads_FileUploadTypes" FromRole="AccountFileUpload" ToRole="FileUploadType" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountFinancialInvestmentRiskProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="AnnualIncomeId" Type="Int32" />
+          <Property Name="NetworthId" Type="Int32" />
+          <Property Name="InvestmentHorizonId" Type="Int32" />
+          <Property Name="ObjectivesId" Type="Int32" />
+          <Property Name="InvestmentKnowledgeId" Type="Int32" />
+          <Property Name="RiskToleranceId" Type="Int32" />
+          <Property Name="OnlineTradingFacility" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Account" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="Account" />
+          <NavigationProperty Name="ApproximateAnnualIncome" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="ApproximateAnnualIncome" />
+          <NavigationProperty Name="InvestmentHorizon" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="InvestmentHorizon" />
+          <NavigationProperty Name="InvestmentKnowledge" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="InvestmentKnowledge" />
+          <NavigationProperty Name="NetWorth" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_NetWorth" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="NetWorth" />
+          <NavigationProperty Name="Objective" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_Objectives" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="Objective" />
+          <NavigationProperty Name="RiskTolerance" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_RiskTolerance" FromRole="AccountFinancialInvestmentRiskProfile" ToRole="RiskTolerance" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountInsCustodyAccountDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="CustodianName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CashAccountNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SecuritiesAccountNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountInsCustodyAccountDetails_Account" FromRole="AccountInsCustodyAccountDetail" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountInsTradingContact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="TitleId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Tel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Account" FromRole="AccountInsTradingContact" ToRole="Account" />
+          <NavigationProperty Name="Title" Relationship="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Title" FromRole="AccountInsTradingContact" ToRole="Title" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountInstructionEmploymentDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="ModeOfInstructionId" Type="Int32" />
+          <Property Name="ModeOfNotificationId" Type="Int32" />
+          <Property Name="SourceOfFundId" Type="Int32" />
+          <Property Name="EmploymentStatusId" Type="Int32" />
+          <Property Name="PrevOccupation" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PrevEmployer" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CurrentOccupation" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CurrentEmployer" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CurrentEmployerAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="EmploymentDateFrom" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="EmploymentDateTo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_Account" FromRole="AccountInstructionEmploymentDetail" ToRole="Account" />
+          <NavigationProperty Name="EmploymentStatu" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_EmploymentStatus" FromRole="AccountInstructionEmploymentDetail" ToRole="EmploymentStatu" />
+          <NavigationProperty Name="ModeOfInstruction" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfInstruction" FromRole="AccountInstructionEmploymentDetail" ToRole="ModeOfInstruction" />
+          <NavigationProperty Name="ModeOfNotification" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfNotification" FromRole="AccountInstructionEmploymentDetail" ToRole="ModeOfNotification" />
+          <NavigationProperty Name="SourceOfIncome" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_SourceOfIncome" FromRole="AccountInstructionEmploymentDetail" ToRole="SourceOfIncome" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="YearsOfEmployment" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AccountInstSignatoriesMandate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SignaturePath" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountInstSignatoriesMandates_Account" FromRole="AccountInstSignatoriesMandate" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountMember">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="TitleId" Type="Int32" />
+          <Property Name="Fname" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Lname" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Othername" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NationalityId" Type="Int32" />
+          <Property Name="DOB" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PlaceOfBirth" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MaritalStatusId" Type="Int32" />
+          <Property Name="MothersMaidenName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentialAddressFull" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentialCity" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentialZipCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentialCountryId" Type="Int32" />
+          <Property Name="MailingAddressFull" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddressCity" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddressZipCode" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddressCountryId" Type="Int32" />
+          <Property Name="SelectWhereApplicableId" Type="Int32" />
+          <Property Name="Telephone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Occupation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdTypeId" Type="Int32" />
+          <Property Name="IdNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IssuingAuthority" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdCardIssueDate" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdCardExpiryDate" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SignaturePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountMember_Account" FromRole="AccountMember" ToRole="Account" />
+          <NavigationProperty Name="Country" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country" FromRole="AccountMember" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country1" FromRole="AccountMember" ToRole="Country" />
+          <NavigationProperty Name="Country2" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country2" FromRole="AccountMember" ToRole="Country" />
+          <NavigationProperty Name="MaritalStatu" Relationship="DBLAccountOpeningModel.FK_AccountMember_MaritalStatus" FromRole="AccountMember" ToRole="MaritalStatu" />
+          <NavigationProperty Name="Title" Relationship="DBLAccountOpeningModel.FK_AccountMember_Title" FromRole="AccountMember" ToRole="Title" />
+          <Property Name="MaidenName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccountNextOfKinDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RelationToAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MailingAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountNextOfKinDetails_Account" FromRole="AccountNextOfKinDetail" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="AccountSettlementDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="AccountName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AccountNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BankId" Type="Int32" />
+          <Property Name="CorrespondentBankId" Type="Int32" />
+          <Property Name="IntermediaryBankId" Type="Int32" />
+          <Property Name="Branch" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SwiftCode" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CorrespondentBankSwiftCode" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IntermediaryBankSwiftCode" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NameOfBeneficiary" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="BIC" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MarginTradingOption" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="OnlineTradingFacility" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountSettlementDetails_Account" FromRole="AccountSettlementDetail" ToRole="Account" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FileUploadType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountFileUploads" Relationship="DBLAccountOpeningModel.FK_AccountFileUploads_FileUploadTypes" FromRole="FileUploadType" ToRole="AccountFileUpload" />
+        </EntityType>
+        <Association Name="FK_Account_AccountType">
+          <End Type="DBLAccountOpeningModel.AccountType" Role="AccountType" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="AccountTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_Country">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InsStreetAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_Country1">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InstMailingAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_CSDDepositoryParticipantOption">
+          <End Type="DBLAccountOpeningModel.CSDDepositoryParticipantOption" Role="CSDDepositoryParticipantOption" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CSDDepositoryParticipantOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="SelectApplicableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_CSDDepositoryParticipantOption1">
+          <End Type="DBLAccountOpeningModel.CSDDepositoryParticipantOption" Role="CSDDepositoryParticipantOption" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CSDDepositoryParticipantOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="SelectApplicableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_RegionalInvesmentInterest">
+          <End Type="DBLAccountOpeningModel.RegionalInvesmentInterest" Role="RegionalInvesmentInterest" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegionalInvesmentInterest">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="RegionalInvestmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_StatementFrequency">
+          <End Type="DBLAccountOpeningModel.StatementFrequency" Role="StatementFrequency" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatementFrequency">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="FrequencyOfStatementsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAMLResponses_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountAMLRespons" Role="AccountAMLRespons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAMLRespons">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAuthorisedPerson_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountAuthorisedPerson" Role="AccountAuthorisedPerson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAuthorisedPerson">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountETI_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountETI" Role="AccountETI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountETI">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFileUploads_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountFileUpload" Role="AccountFileUpload" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFileUpload">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsCustodyAccountDetails_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountInsCustodyAccountDetail" Role="AccountInsCustodyAccountDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsCustodyAccountDetail">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsTradingContacts_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountInsTradingContact" Role="AccountInsTradingContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsTradingContact">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" Role="AccountInstructionEmploymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetail">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstSignatoriesMandates_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountInstSignatoriesMandate" Role="AccountInstSignatoriesMandate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstSignatoriesMandate">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountNextOfKinDetails_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountNextOfKinDetail" Role="AccountNextOfKinDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountNextOfKinDetail">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountSettlementDetails_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountSettlementDetail" Role="AccountSettlementDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountSettlementDetail">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountAMLResponses_AMLQuestions">
+          <End Type="DBLAccountOpeningModel.AMLQuestion" Role="AMLQuestion" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountAMLRespons" Role="AccountAMLRespons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AMLQuestion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountAMLRespons">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFileUploads_FileUploadTypes">
+          <End Type="DBLAccountOpeningModel.FileUploadType" Role="FileUploadType" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountFileUpload" Role="AccountFileUpload" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FileUploadType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFileUpload">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome">
+          <End Type="DBLAccountOpeningModel.ApproximateAnnualIncome" Role="ApproximateAnnualIncome" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApproximateAnnualIncome">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="AnnualIncomeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentHorizon">
+          <End Type="DBLAccountOpeningModel.InvestmentHorizon" Role="InvestmentHorizon" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentHorizon">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="InvestmentHorizonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_InvestmentKnowledge">
+          <End Type="DBLAccountOpeningModel.InvestmentKnowledge" Role="InvestmentKnowledge" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentKnowledge">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="InvestmentKnowledgeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_NetWorth">
+          <End Type="DBLAccountOpeningModel.NetWorth" Role="NetWorth" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NetWorth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="NetworthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_Objectives">
+          <End Type="DBLAccountOpeningModel.Objective" Role="Objective" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objective">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="ObjectivesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountFinancialInvestmentRiskProfile_RiskTolerance">
+          <End Type="DBLAccountOpeningModel.RiskTolerance" Role="RiskTolerance" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile" Role="AccountFinancialInvestmentRiskProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskTolerance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountFinancialInvestmentRiskProfile">
+              <PropertyRef Name="RiskToleranceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInsTradingContacts_Title">
+          <End Type="DBLAccountOpeningModel.Title" Role="Title" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountInsTradingContact" Role="AccountInsTradingContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInsTradingContact">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_EmploymentStatus">
+          <End Type="DBLAccountOpeningModel.EmploymentStatu" Role="EmploymentStatu" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" Role="AccountInstructionEmploymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmploymentStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetail">
+              <PropertyRef Name="EmploymentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_ModeOfInstruction">
+          <End Type="DBLAccountOpeningModel.ModeOfInstruction" Role="ModeOfInstruction" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" Role="AccountInstructionEmploymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModeOfInstruction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetail">
+              <PropertyRef Name="ModeOfInstructionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_ModeOfNotification">
+          <End Type="DBLAccountOpeningModel.ModeOfNotification" Role="ModeOfNotification" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" Role="AccountInstructionEmploymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ModeOfNotification">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetail">
+              <PropertyRef Name="ModeOfNotificationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountInstructionEmploymentDetails_SourceOfIncome">
+          <End Type="DBLAccountOpeningModel.SourceOfIncome" Role="SourceOfIncome" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountInstructionEmploymentDetail" Role="AccountInstructionEmploymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceOfIncome">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountInstructionEmploymentDetail">
+              <PropertyRef Name="SourceOfFundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="NationalityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country1">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="ResidentialCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Country2">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="MailingAddressCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_MaritalStatus">
+          <End Type="DBLAccountOpeningModel.MaritalStatu" Role="MaritalStatu" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MaritalStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="MaritalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountMember_Title">
+          <End Type="DBLAccountOpeningModel.Title" Role="Title" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountMember" Role="AccountMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountMember">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ExpectedAccountActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_ExpectedAccountActivity" FromRole="ExpectedAccountActivity" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_Account_ExpectedAccountActivity">
+          <End Type="DBLAccountOpeningModel.ExpectedAccountActivity" Role="ExpectedAccountActivity" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpectedAccountActivity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ExpectedAccountActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_InvestmentType">
+          <End Type="DBLAccountOpeningModel.InvestmentType" Role="InvestmentType" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvestmentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="InvestmentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Role" Relationship="DBLAccountOpeningModel.FK_AppUser_Role" FromRole="AppUser" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AppUsers" Relationship="DBLAccountOpeningModel.FK_AppUser_Role" FromRole="Role" ToRole="AppUser" />
+        </EntityType>
+        <Association Name="FK_AppUser_Role">
+          <End Type="DBLAccountOpeningModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AppUser" Role="AppUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="AppUser">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -793,6 +2797,328 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SourceOfIncomes">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.SourceOfIncome">
+              <MappingFragment StoreEntitySet="SourceOfIncome">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="InvestmentTypeId" ColumnName="InvestmentTypeId" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ExpectedAccountActivityId" ColumnName="ExpectedAccountActivityId" />
+                <ScalarProperty Name="TIN" ColumnName="TIN" />
+                <ScalarProperty Name="YearsOfWorkExperience" ColumnName="YearsOfWorkExperience" />
+                <ScalarProperty Name="InstCompanyType" ColumnName="InstCompanyType" />
+                <ScalarProperty Name="CSDFormPath" ColumnName="CSDFormPath" />
+                <ScalarProperty Name="InstOtherDetails" ColumnName="InstOtherDetails" />
+                <ScalarProperty Name="SignatureTypeId" ColumnName="SignatureTypeId" />
+                <ScalarProperty Name="DeclarationIWe" ColumnName="DeclarationIWe" />
+                <ScalarProperty Name="DeclarationActingAsNomineeName" ColumnName="DeclarationActingAsNomineeName" />
+                <ScalarProperty Name="DeclarationActingAsNominee" ColumnName="DeclarationActingAsNominee" />
+                <ScalarProperty Name="DeclarationConvictedOfLawDetails" ColumnName="DeclarationConvictedOfLawDetails" />
+                <ScalarProperty Name="DeclarationConvictedOfLaw" ColumnName="DeclarationConvictedOfLaw" />
+                <ScalarProperty Name="FrequencyOfStatementsId" ColumnName="FrequencyOfStatementsId" />
+                <ScalarProperty Name="RegionalInvestmentId" ColumnName="RegionalInvestmentId" />
+                <ScalarProperty Name="SelectApplicableId" ColumnName="SelectApplicableId" />
+                <ScalarProperty Name="InsStreetAddressEmail" ColumnName="InsStreetAddressEmail" />
+                <ScalarProperty Name="InsStreetAddressFax" ColumnName="InsStreetAddressFax" />
+                <ScalarProperty Name="InsStreetAddressTel" ColumnName="InsStreetAddressTel" />
+                <ScalarProperty Name="InsStreetAddressCountryId" ColumnName="InsStreetAddressCountryId" />
+                <ScalarProperty Name="InsStreetAddressZipCode" ColumnName="InsStreetAddressZipCode" />
+                <ScalarProperty Name="InstStreetAddressCity" ColumnName="InstStreetAddressCity" />
+                <ScalarProperty Name="StreetAddressFull" ColumnName="StreetAddressFull" />
+                <ScalarProperty Name="InstMailingAddressCountryId" ColumnName="InstMailingAddressCountryId" />
+                <ScalarProperty Name="MailingAddressCity" ColumnName="MailingAddressCity" />
+                <ScalarProperty Name="MailingAddressFull" ColumnName="MailingAddressFull" />
+                <ScalarProperty Name="InstitutionRegistrationNumber" ColumnName="InstitutionRegistrationNumber" />
+                <ScalarProperty Name="InsstitutionalCountryOfIncorporation" ColumnName="InsstitutionalCountryOfIncorporation" />
+                <ScalarProperty Name="InstitutionNatureOfBusiness" ColumnName="InstitutionNatureOfBusiness" />
+                <ScalarProperty Name="InstitutionalPrincipalBroker" ColumnName="InstitutionalPrincipalBroker" />
+                <ScalarProperty Name="InstitutionClientName" ColumnName="InstitutionClientName" />
+                <ScalarProperty Name="CSDNumber" ColumnName="CSDNumber" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountTypeId" ColumnName="AccountTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountAMLResponses">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountAMLRespons">
+              <MappingFragment StoreEntitySet="AccountAMLResponses">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="YesNo" ColumnName="YesNo" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountAuthorisedPersons">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountAuthorisedPerson">
+              <MappingFragment StoreEntitySet="AccountAuthorisedPerson">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
+                <ScalarProperty Name="IdPath" ColumnName="IdPath" />
+                <ScalarProperty Name="IdIssueAuthority" ColumnName="IdIssueAuthority" />
+                <ScalarProperty Name="IDExpiryDate" ColumnName="IDExpiryDate" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="IdNumber" ColumnName="IdNumber" />
+                <ScalarProperty Name="IdType" ColumnName="IdType" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="MailingAddress" ColumnName="MailingAddress" />
+                <ScalarProperty Name="RelationToAccountHolder" ColumnName="RelationToAccountHolder" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountETIs">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountETI">
+              <MappingFragment StoreEntitySet="AccountETI">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="Name2" ColumnName="Name2" />
+                <ScalarProperty Name="Email1" ColumnName="Email1" />
+                <ScalarProperty Name="Name1" ColumnName="Name1" />
+                <ScalarProperty Name="Text5" ColumnName="Text5" />
+                <ScalarProperty Name="Text4" ColumnName="Text4" />
+                <ScalarProperty Name="Text3" ColumnName="Text3" />
+                <ScalarProperty Name="Text2" ColumnName="Text2" />
+                <ScalarProperty Name="Text1" ColumnName="Text1" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountFileUploads">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountFileUpload">
+              <MappingFragment StoreEntitySet="AccountFileUploads">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountFinancialInvestmentRiskProfiles">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountFinancialInvestmentRiskProfile">
+              <MappingFragment StoreEntitySet="AccountFinancialInvestmentRiskProfile">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="OnlineTradingFacility" ColumnName="OnlineTradingFacility" />
+                <ScalarProperty Name="RiskToleranceId" ColumnName="RiskToleranceId" />
+                <ScalarProperty Name="InvestmentKnowledgeId" ColumnName="InvestmentKnowledgeId" />
+                <ScalarProperty Name="ObjectivesId" ColumnName="ObjectivesId" />
+                <ScalarProperty Name="InvestmentHorizonId" ColumnName="InvestmentHorizonId" />
+                <ScalarProperty Name="NetworthId" ColumnName="NetworthId" />
+                <ScalarProperty Name="AnnualIncomeId" ColumnName="AnnualIncomeId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountInsCustodyAccountDetails">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountInsCustodyAccountDetail">
+              <MappingFragment StoreEntitySet="AccountInsCustodyAccountDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SecuritiesAccountNumber" ColumnName="SecuritiesAccountNumber" />
+                <ScalarProperty Name="CashAccountNumber" ColumnName="CashAccountNumber" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="CustodianName" ColumnName="CustodianName" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountInsTradingContacts">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountInsTradingContact">
+              <MappingFragment StoreEntitySet="AccountInsTradingContacts">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountInstructionEmploymentDetails">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountInstructionEmploymentDetail">
+              <MappingFragment StoreEntitySet="AccountInstructionEmploymentDetails">
+                <ScalarProperty Name="YearsOfEmployment" ColumnName="YearsOfEmployment" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="EmploymentDateTo" ColumnName="EmploymentDateTo" />
+                <ScalarProperty Name="EmploymentDateFrom" ColumnName="EmploymentDateFrom" />
+                <ScalarProperty Name="CurrentEmployerAddress" ColumnName="CurrentEmployerAddress" />
+                <ScalarProperty Name="CurrentEmployer" ColumnName="CurrentEmployer" />
+                <ScalarProperty Name="CurrentOccupation" ColumnName="CurrentOccupation" />
+                <ScalarProperty Name="PrevEmployer" ColumnName="PrevEmployer" />
+                <ScalarProperty Name="PrevOccupation" ColumnName="PrevOccupation" />
+                <ScalarProperty Name="EmploymentStatusId" ColumnName="EmploymentStatusId" />
+                <ScalarProperty Name="SourceOfFundId" ColumnName="SourceOfFundId" />
+                <ScalarProperty Name="ModeOfNotificationId" ColumnName="ModeOfNotificationId" />
+                <ScalarProperty Name="ModeOfInstructionId" ColumnName="ModeOfInstructionId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountInstSignatoriesMandates">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountInstSignatoriesMandate">
+              <MappingFragment StoreEntitySet="AccountInstSignatoriesMandates">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountMembers">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountMember">
+              <MappingFragment StoreEntitySet="AccountMember">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="MaidenName" ColumnName="MaidenName" />
+                <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
+                <ScalarProperty Name="IdPath" ColumnName="IdPath" />
+                <ScalarProperty Name="IdCardExpiryDate" ColumnName="IdCardExpiryDate" />
+                <ScalarProperty Name="IdCardIssueDate" ColumnName="IdCardIssueDate" />
+                <ScalarProperty Name="IssuingAuthority" ColumnName="IssuingAuthority" />
+                <ScalarProperty Name="IdNumber" ColumnName="IdNumber" />
+                <ScalarProperty Name="IdTypeId" ColumnName="IdTypeId" />
+                <ScalarProperty Name="Occupation" ColumnName="Occupation" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="SelectWhereApplicableId" ColumnName="SelectWhereApplicableId" />
+                <ScalarProperty Name="MailingAddressCountryId" ColumnName="MailingAddressCountryId" />
+                <ScalarProperty Name="MailingAddressZipCode" ColumnName="MailingAddressZipCode" />
+                <ScalarProperty Name="MailingAddressCity" ColumnName="MailingAddressCity" />
+                <ScalarProperty Name="MailingAddressFull" ColumnName="MailingAddressFull" />
+                <ScalarProperty Name="ResidentialCountryId" ColumnName="ResidentialCountryId" />
+                <ScalarProperty Name="ResidentialZipCode" ColumnName="ResidentialZipCode" />
+                <ScalarProperty Name="ResidentialCity" ColumnName="ResidentialCity" />
+                <ScalarProperty Name="ResidentialAddressFull" ColumnName="ResidentialAddressFull" />
+                <ScalarProperty Name="MothersMaidenName" ColumnName="MothersMaidenName" />
+                <ScalarProperty Name="MaritalStatusId" ColumnName="MaritalStatusId" />
+                <ScalarProperty Name="PlaceOfBirth" ColumnName="PlaceOfBirth" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="NationalityId" ColumnName="NationalityId" />
+                <ScalarProperty Name="Othername" ColumnName="Othername" />
+                <ScalarProperty Name="Lname" ColumnName="Lname" />
+                <ScalarProperty Name="Fname" ColumnName="Fname" />
+                <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountNextOfKinDetails">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountNextOfKinDetail">
+              <MappingFragment StoreEntitySet="AccountNextOfKinDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="MailingAddress" ColumnName="MailingAddress" />
+                <ScalarProperty Name="RelationToAccount" ColumnName="RelationToAccount" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountSettlementDetails">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountSettlementDetail">
+              <MappingFragment StoreEntitySet="AccountSettlementDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="OnlineTradingFacility" ColumnName="OnlineTradingFacility" />
+                <ScalarProperty Name="MarginTradingOption" ColumnName="MarginTradingOption" />
+                <ScalarProperty Name="BIC" ColumnName="BIC" />
+                <ScalarProperty Name="NameOfBeneficiary" ColumnName="NameOfBeneficiary" />
+                <ScalarProperty Name="IntermediaryBankSwiftCode" ColumnName="IntermediaryBankSwiftCode" />
+                <ScalarProperty Name="CorrespondentBankSwiftCode" ColumnName="CorrespondentBankSwiftCode" />
+                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="IntermediaryBankId" ColumnName="IntermediaryBankId" />
+                <ScalarProperty Name="CorrespondentBankId" ColumnName="CorrespondentBankId" />
+                <ScalarProperty Name="BankId" ColumnName="BankId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileUploadTypes">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.FileUploadType">
+              <MappingFragment StoreEntitySet="FileUploadTypes">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpectedAccountActivities">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.ExpectedAccountActivity">
+              <MappingFragment StoreEntitySet="ExpectedAccountActivity">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppUsers">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AppUser">
+              <MappingFragment StoreEntitySet="AppUser">
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,285 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AppModels
+{
+
+    public class AccountBasicModel {
+        public System.Guid Id { get; set; }
+        public int AccountTypeId { get; set; }
+        public string AccountTypeName { get; set; }
+        public string AccountNumber { get; set; }
+        public string  AccountName { get; set; }
+        public string CSDNumber { get; set; }
+        public string InstitutionClientName { get; set; }
+        public string InstitutionalPrincipalBroker { get; set; }
+        public string InstitutionNatureOfBusiness { get; set; }
+        public Nullable<int> InsstitutionalCountryOfIncorporation { get; set; }
+        public string InsstitutionalCountryOfIncorporationName { get; set; }
+        public string InstitutionRegistrationNumber { get; set; }
+        public string MailingAddressFull { get; set; }
+        public string MailingAddressCity { get; set; }
+        public Nullable<int> InstMailingAddressCountryId { get; set; }
+        public string InstMailingAddressCountryIdName { get; set; }
+        public string StreetAddressFull { get; set; }
+        public string InstStreetAddressCity { get; set; }
+        public string InsStreetAddressZipCode { get; set; }
+        public Nullable<int> InsStreetAddressCountryId { get; set; }
+        public string InsStreetAddressCountryIdName { get; set; }
+        public string InsStreetAddressTel { get; set; }
+        public string InsStreetAddressFax { get; set; }
+        public string InsStreetAddressEmail { get; set; }
+        public Nullable<int> SelectApplicableId { get; set; }
+        public string SelectApplicableName { get; set; }
+        public Nullable<int> RegionalInvestmentId { get; set; }
+        public string RegionalInvestmentName { get; set; }
+        public Nullable<int> FrequencyOfStatementsId { get; set; }
+        public string FrequencyOfStatementsName { get; set; }
+        public string DeclarationConvictedOfLaw { get; set; }
+        public string DeclarationConvictedOfLawDetails { get; set; }
+        public string DeclarationActingAsNominee { get; set; }
+        public string DeclarationActingAsNomineeName { get; set; }
+        public string DeclarationIWe { get; set; }
+        public Nullable<int> SignatureTypeId { get; set; }
+        public string SignatureTypeName { get; set; }
+        public string InstOtherDetails { get; set; }
+        public string CSDFormPath { get; set; }
+        public string InstCompanyType { get; set; }
+        public Nullable<int> YearsOfWorkExperience { get; set; }
+        public string TIN { get; set; }
+        public Nullable<int> ExpectedAccountActivityId { get; set; }
+        public string ExpectedAccountActivityName { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public Nullable<int> InvestmentTypeId { get; set; }
+        public string InvestmentTypeName { get; set; }
+
+      
+    }
+
+    public class AccountAuthorisedPersonModel {
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> TitleId { get; set; }
+        public string Title { get; set; }
+        public string Tel { get; set; }
+        public string Email { get; set; }
+        public string Fax { get; set; }
+        public string Mobile { get; set; }
+        public string RelationToAccountHolder { get; set; }
+        public string MailingAddress { get; set; }
+        public string StreetAddress { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+        public Nullable<int> CountryId { get; set; }
+        public string CountryName { get; set; }
+        public Nullable<int> IdType { get; set; }
+        public string IdTypeName { get; set; }
+        public string IdNumber { get; set; }
+        public string IssueDate { get; set; }
+        public string IDExpiryDate { get; set; }
+        public string IdIssueAuthority { get; set; }
+        public string IdPath { get; set; }
+        public string SignaturePath { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+    }
+
+    public class AccountETIModel {
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string Text1 { get; set; }
+        public string Text2 { get; set; }
+        public string Text3 { get; set; }
+        public string Text4 { get; set; }
+        public string Text5 { get; set; }
+        public string Name1 { get; set; }
+        public string Email1 { get; set; }
+        public string Name2 { get; set; }
+        public string Email2 { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+
+    }
+    public class AccountFileUploadModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public int TypeId { get; set; }
+        public string Path { get; set; }
+        public bool IsActive { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+
+        public string FileUploadTypeName { get; set; }
+    }
+
+    public class AccountFinancialInvestmentRiskProfileModel
+    {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public Nullable<int> AnnualIncomeId { get; set; }
+        public Nullable<int> NetworthId { get; set; }
+        public Nullable<int> InvestmentHorizonId { get; set; }
+        public Nullable<int> ObjectivesId { get; set; }
+        public Nullable<int> InvestmentKnowledgeId { get; set; }
+        public Nullable<int> RiskToleranceId { get; set; }
+        public string OnlineTradingFacility { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+
+        public string ApproximateAnnualIncomeName { get; set; }
+        public string InvestmentHorizonName { get; set; }
+        public string InvestmentKnowledgeName { get; set; }
+        public string NetWorthName { get; set; }
+        public string ObjectiveName { get; set; }
+        public string RiskToleranceName { get; set; }
+
+    }
+
+    public class AccountCustomerDetailsModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string CustodianName { get; set; }
+        public string Telephone { get; set; }
+        public string Address { get; set; }
+        public string Fax { get; set; }
+        public string CashAccountNumber { get; set; }
+        public string SecuritiesAccountNumber { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+
+
+    }
+    public class AccountTradingContactModel {
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public Nullable<int> TitleId { get; set; }
+        public string Name { get; set; }
+        public string Tel { get; set; }
+        public string Mobile { get; set; }
+        public string Fax { get; set; }
+        public string Email { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string TitleName { get; set; }
+    }
+
+    public class AccountSignatoryModel {
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public string SignaturePath { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+    }
+    public class AccountSettlementDetailModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string AccountName { get; set; }
+        public string AccountNumber { get; set; }
+        public Nullable<int> BankId { get; set; }
+        public string BankName { get; set; }
+        public Nullable<int> CorrespondentBankId { get; set; }
+        public string CorrespondentBankName { get; set; }
+        public Nullable<int> IntermediaryBankId { get; set; }
+        public string IntermediaryBankName { get; set; }
+        public string Branch { get; set; }
+        public string SwiftCode { get; set; }
+        public string CorrespondentBankSwiftCode { get; set; }
+        public string IntermediaryBankSwiftCode { get; set; }
+        public string NameOfBeneficiary { get; set; }
+        public string BIC { get; set; }
+        public string MarginTradingOption { get; set; }
+        public string OnlineTradingFacility { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+
+    }
+
+    public class AccountNextOfKinDetailsModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public string Name { get; set; }
+        public string Telephone { get; set; }
+        public string Mobile { get; set; }
+        public string Fax { get; set; }
+        public string Email { get; set; }
+        public string RelationToAccount { get; set; }
+        public string MailingAddress { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+    }
+
+    public class AccountMemberModel {
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public Nullable<int> TitleId { get; set; }
+        public string Fname { get; set; }
+        public string Lname { get; set; }
+        public string Othername { get; set; }
+        public Nullable<int> NationalityId { get; set; }
+        public string NationalityName { get; set; }
+        public string DOB { get; set; }
+        public string PlaceOfBirth { get; set; }
+        public Nullable<int> MaritalStatusId { get; set; }
+        public string MothersMaidenName { get; set; }
+        public string ResidentialAddressFull { get; set; }
+        public string ResidentialCity { get; set; }
+        public string ResidentialZipCode { get; set; }
+        public Nullable<int> ResidentialCountryId { get; set; }
+        public string ResidentialCountryName { get; set; }
+        public string MailingAddressFull { get; set; }
+        public string MailingAddressCity { get; set; }
+        public string MailingAddressZipCode { get; set; }
+        public Nullable<int> MailingAddressCountryId { get; set; }
+        public string MailingAddressCountryName { get; set; }
+        public Nullable<int> SelectWhereApplicableId { get; set; }
+        public string SelectWhereApplicableName { get; set; }
+        public string Telephone { get; set; }
+        public string Mobile { get; set; }
+        public string Fax { get; set; }
+        public string Email { get; set; }
+        public string Occupation { get; set; }
+        public Nullable<int> IdTypeId { get; set; }
+        public string IdTypeName { get; set; }
+        public string IdNumber { get; set; }
+        public string IssuingAuthority { get; set; }
+        public string IdCardIssueDate { get; set; }
+        public string IdCardExpiryDate { get; set; }
+        public string IdPath { get; set; }
+        public string SignaturePath { get; set; }
+        public string MaidenName { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string Gender { get; set; }
+
+      
+        public string  MaritalStatusName { get; set; }
+        public string TitleName { get; set; }
+
+    }
+
+    public class AccountInstructionEmploymentDetailModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public Nullable<int> ModeOfInstructionId { get; set; }
+        public Nullable<int> ModeOfNotificationId { get; set; }
+        public Nullable<int> SourceOfFundId { get; set; }
+        public Nullable<int> EmploymentStatusId { get; set; }
+        public string PrevOccupation { get; set; }
+        public string PrevEmployer { get; set; }
+        public string CurrentOccupation { get; set; }
+        public string CurrentEmployer { get; set; }
+        public string CurrentEmployerAddress { get; set; }
+        public string EmploymentDateFrom { get; set; }
+        public string EmploymentDateTo { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public Nullable<int> YearsOfEmployment { get; set; }
+
+        public string EmploymentStatusName { get; set; }
+        public string ModeOfInstructionName { get; set; }
+        public string ModeOfNotificationName { get; set; }
+        public string SourceOfIncomeName { get; set; }
+
+    }
+}

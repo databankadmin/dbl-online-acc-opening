@@ -1,0 +1,14 @@
+﻿@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bootbox.alert("@ViewBag.Message");
+        });
+    </script>
+}
+
+
+
+<style type="text/css">
+    .bootbox-body{ color:black}
+</style>

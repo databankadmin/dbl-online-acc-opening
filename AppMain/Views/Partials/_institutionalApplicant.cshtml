@@ -6,14 +6,15 @@
 
 <fieldset>
     <h2>Databank Brokerage Form | Institutional</h2>
+    <h4 style="color:red">Required fields are marked with asterisk (*)</h4>
 
 
     <div class="form-row">
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="investmentType" class="form-label">Investment Type</label>
-                <select name="csdResidentialStatus" id="investmentType" style="width:300px;" required>
+                <label for="instInvestmentType" class="form-label">Investment Type *</label>
+                <select name="instInvestmentType" id="instInvestmentType" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.InvestmentTypes.Where(x => x.IsActive))
@@ -25,16 +26,24 @@
 
             </div>
             <div class="form-group">
-                <label for="dblAccNumber" class="form-label">Account Number.</label>
-                <input type="text" name="dblAccNumber" id="dblAccNumber" />
+                <label for="expectedAccountActivityId" class="form-label">Expected Account Activity *</label>
+                <select name="expectedAccountActivityId" id="expectedAccountActivityId" style="width:300px;" required>
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.ExpectedAccountActivities.OrderBy(x => x.Id))
+                        {
+
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
             </div>
 
             <div class="form-group">
-                <label for="dblCsdNumber" class="form-label">CSD Number</label>
-                <input type="text" name="dblCsdNumber" id="dblCsdNumber" />
+                <label for="instNameOfClient" class="form-label">Name of Client *</label>
+                <input type="text" name="instNameOfClient" id="instNameOfClient" required />
             </div>
-
-
+            
         </div>
     </div>
 
@@ -43,29 +52,17 @@
 
     <div class="form-row">
         <div class="form-flex">
+
             <div class="form-group">
-                <label for="instNameOfClient" class="form-label">Name of Client</label>
-                <input type="text" name="instNameOfClient" id="instNameOfClient" required/>
-            </div>
-            <div class="form-group">
-                <label for="instPricipalBroker" class="form-label">Name of Principal Broker</label>
-                <input type="text" name="instPricipalBroker" id="instPricipalBroker" required/>
-            </div>
-            <div class="form-group">
-                <label for="instNatureOfBusiness" class="form-label">Nature of Business</label>
+                <label for="instNatureOfBusiness" class="form-label">Nature of Business *</label>
                 <input type="text" name="instNatureOfBusiness" id="instNatureOfBusiness" required />
             </div>
-
-
-        </div>
-    </div>
-
-
-
-    <div class="form-row">
-        <div class="form-flex">
             <div class="form-group">
-                <label for="instCountryOfResidence" class="form-label">Country of Incorporation</label>
+                <label for="instPricipalBroker" class="form-label">Name of Principal Broker *</label>
+                <input type="text" name="instPricipalBroker" id="instPricipalBroker" required />
+            </div>
+            <div class="form-group">
+                <label for="instCountryOfResidence" class="form-label">Country of Incorporation *</label>
                 <select name="instCountryOfResidence" id="instCountryOfResidence" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -84,26 +81,40 @@
 
             </div>
 
+
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-flex">
             <div class="form-group">
-                <label for="instRegistrationNumber" class="form-label">Registration Number</label>
-                <input type="text" name="instRegistrationNumber" id="instRegistrationNumber" required/>
+                <label for="instRegistrationNumber" class="form-label">Registration Number *</label>
+                <input type="text" name="instRegistrationNumber" id="instRegistrationNumber" required />
             </div>
 
-
+            <div class="form-group">
+                <label for="tin" class="form-label">TIN Number</label>
+                <input type="text" name="tin" id="tin" />
+            </div>
 
         </div>
     </div>
 
 
-    <p>Mailing Address</p>
+    <p>
+        Mailing Address
+
+        <input type="text" style="width:89%;" name="instFullMailingAddress" id="instFullMailingAddress" />
+
+    </p>
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instMailingAddress" class="form-label">City</label>
-                <input type="text" name="instMailingAddress" id="instMailingAddress" />
+                <label for="instMailingAddressCity" class="form-label">City</label>
+                <input type="text" name="instMailingAddressCity" id="instMailingAddressCity" />
             </div>
             <div class="form-group">
-                <label for="instMailAddressCountryOfResidence" class="form-label">Country</label>
+                <label for="instMailAddressCountryOfResidence" class="form-label">Country *</label>
                 <select name="instMailAddressCountryOfResidence" id="instMailAddressCountryOfResidence" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -127,7 +138,11 @@
 
 
 
-    <p>Street Address</p>
+    <p>
+        Street Address
+        <input type="text" style="width:89%;" name="instFullStreetAddress" id="instFullStreetAddress" />
+
+    </p>
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
@@ -136,12 +151,12 @@
             </div>
 
             <div class="form-group">
-                <label for="instSteetAddressZipCode" class="form-label">Zip Code</label>
+                <label for="instSteetAddressZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="instSteetAddressZipCode" id="instSteetAddressZipCode" />
             </div>
 
             <div class="form-group">
-                <label for="instSteetAddressCountry" class="form-label">Country</label>
+                <label for="instSteetAddressCountry" class="form-label">Country *</label>
                 <select name="instSteetAddressCountry" id="instSteetAddressCountry" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -167,16 +182,16 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instTelephone" class="form-label">Telephone</label>
-                <input type="text" name="instTelephone" id="instTelephone" required/>
+                <label for="instTelephone" class="form-label">Telephone *</label>
+                <input type="text" name="instTelephone" id="instTelephone" required />
             </div>
             <div class="form-group">
                 <label for="instFax" class="form-label">Fax</label>
                 <input type="text" name="instFax" id="instFax" />
             </div>
             <div class="form-group">
-                <label for="instEmail" class="form-label">Email</label>
-                <input type="email" name="instEmail" id="instEmail" required/>
+                <label for="instEmail" class="form-label">Email *</label>
+                <input type="email" name="instEmail" id="instEmail" required />
             </div>
 
 
@@ -188,7 +203,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instCompanyType" class="form-label">select where applicable</label>
+                <label for="instCompanyType" class="form-label">Select applicable suffix *</label>
                 <select name="instCompanyType" id="instCompanyType" style="width:200px;" required>
                     <option value="">-select-</option>
                     <option value="LC">Local Company</option>
@@ -198,7 +213,7 @@
 
 
             <div class="form-group">
-                <label for="instRegionalInvestmentId" class="form-label">Regional Investment Interest</label>
+                <label for="instRegionalInvestmentId" class="form-label">Regional Investment Interest *</label>
                 <select name="instRegionalInvestmentId" id="instRegionalInvestmentId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -213,7 +228,7 @@
 
 
             <div class="form-group">
-                <label for="instStatementFreq" class="form-label">Frequency of Account Statements</label>
+                <label for="instStatementFreq" class="form-label">Frequency of Account Statements *</label>
                 <select name="instStatementFreq" id="instStatementFreq" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -235,20 +250,20 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="custodyDetailsName" class="form-label">Custodian Name</label>
+                <label for="custodyDetailsName" class="form-label">Custodian Name *</label>
                 <input type="text" name="custodyDetailsName" id="custodyDetailsName" required />
             </div>
 
 
             <div class="form-group">
-                <label for="custodyDetailsPhone" class="form-label">Telephone</label>
-                <input type="text" name="custodyDetailsPhone" id="custodyDetailsPhone" required/>
+                <label for="custodyDetailsPhone" class="form-label">Telephone *</label>
+                <input type="text" name="custodyDetailsPhone" id="custodyDetailsPhone" required />
             </div>
 
 
             <div class="form-group">
-                <label for="custodyDetailsAddress" class="form-label">Address</label>
-                <input type="text" name="custodyDetailsAddress" id="custodyDetailsAddress" required/>
+                <label for="custodyDetailsAddress" class="form-label">Address *</label>
+                <input type="text" name="custodyDetailsAddress" id="custodyDetailsAddress" required />
             </div>
 
 
@@ -283,7 +298,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intSettlementDetailsCorrespondentBankId" class="form-label">Correspondent Bank</label>
+                <label for="intSettlementDetailsCorrespondentBankId" class="form-label">Correspondent Bank *</label>
                 <select required name="intSettlementDetailsCorrespondentBankId" id="intSettlementDetailsCorrespondentBankId" style="width:350px;">
                     <option value="">-select-</option>
                     @{
@@ -308,7 +323,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intSettlementDetailsIntermediaryBankId" class="form-label">Intermediary Bank</label>
+                <label for="intSettlementDetailsIntermediaryBankId" class="form-label">Intermediary Bank *</label>
                 <select required name="intSettlementDetailsIntermediaryBankId" id="intSettlementDetailsIntermediaryBankId" style="width:350px;">
                     <option value="">-select-</option>
                     @{
@@ -334,15 +349,15 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intSettlementDetailsNameOfBeneficiary" class="form-label">Name of Beneficiary</label>
+                <label for="intSettlementDetailsNameOfBeneficiary" class="form-label">Name of Beneficiary *</label>
                 <input type="text" name="intSettlementDetailsNameOfBeneficiary" id="intSettlementDetailsNameOfBeneficiary" required />
             </div>
             <div class="form-group">
                 <label for="intSettlementDetailsBIC" class="form-label">BIC</label>
-                <input type="text" name="intSettlementDetailsBIC" id="intSettlementDetailsBIC" required/>
+                <input type="text" name="intSettlementDetailsBIC" id="intSettlementDetailsBIC" />
             </div>
             <div class="form-group">
-                <label for="intSettlementDetailsAccountNumber" class="form-label">Account Number</label>
+                <label for="intSettlementDetailsAccountNumber" class="form-label">Account Number *</label>
                 <input type="text" name="intSettlementDetailsAccountNumber" id="intSettlementDetailsAccountNumber" required />
             </div>
 
@@ -355,7 +370,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="instMarginTrationOption" class="form-label">Margin Trading Option</label>
+                <label for="instMarginTrationOption" class="form-label">Margin Trading Option *</label>
                 <select name="instMarginTrationOption" id="instMarginTrationOption" style="width:350px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
@@ -364,7 +379,7 @@
             </div>
 
             <div class="form-group">
-                <label for="instOnlineTradingOption" class="form-label">Online Trading Facility</label>
+                <label for="instOnlineTradingOption" class="form-label">Online Trading Facility *</label>
                 <select name="instOnlineTradingOption" id="instOnlineTradingOption" style="width:350px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
@@ -381,7 +396,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intModeOfInstruction" class="form-label">Mode of Instructions</label>
+                <label for="intModeOfInstruction" class="form-label">Mode of Instructions *</label>
                 <select name="intModeOfInstruction" id="intModeOfInstruction" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -394,7 +409,7 @@
             </div>
 
             <div class="form-group">
-                <label for="intModeOfNotification" class="form-label">Mode of Notification</label>
+                <label for="intModeOfNotification" class="form-label">Mode of Notification *</label>
                 <select name="intModeOfNotification" id="intModeOfNotification" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -409,8 +424,16 @@
 
 
             <div class="form-group">
-                <label for="intSourceOfIncome" class="form-label">Source(s) of Income/Funds</label>
-                <input type="text" name="intSourceOfIncome" id="intSourceOfIncome" required/>
+                <label for="intSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
+                <select name="intSourceOfIncome" id="intSourceOfIncome" required>
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
             </div>
 
 
@@ -425,15 +448,15 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer1Name" class="form-label">Name</label>
-                <input type="text" name="intAuthorisedOfficer1Name" id="intAuthorisedOfficer1Name" required/>
+                <label for="intAuthorisedOfficer1Name" class="form-label">Name *</label>
+                <input type="text" name="intAuthorisedOfficer1Name" id="intAuthorisedOfficer1Name" required />
             </div>
             <div class="form-group">
                 <label for="intAuthorisedOfficer1Tel" class="form-label">Telephone (Direct)</label>
                 <input type="text" name="intAuthorisedOfficer1Tel" id="intAuthorisedOfficer1Tel" />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer1Mobile" class="form-label">Telephone (Mobile)</label>
+                <label for="intAuthorisedOfficer1Mobile" class="form-label">Telephone (Mobile) *</label>
                 <input type="text" name="intAuthorisedOfficer1Mobile" id="intAuthorisedOfficer1Mobile" required />
             </div>
             <div class="form-group">
@@ -449,7 +472,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer1Title" class="form-label">Title</label>
+                <label for="intAuthorisedOfficer1Title" class="form-label">Title *</label>
                 <select name="intAuthorisedOfficer1Title" id="intAuthorisedOfficer1Title" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -461,12 +484,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer1Email" class="form-label">Email</label>
-                <input type="email" name="intAuthorisedOfficer1Email" id="intAuthorisedOfficer1Email" required/>
+                <label for="intAuthorisedOfficer1Email" class="form-label">Email *</label>
+                <input type="email" name="intAuthorisedOfficer1Email" id="intAuthorisedOfficer1Email" required />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer1Relation" class="form-label">Relation to the Company</label>
-                <input type="text" name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required/>
+                <label for="intAuthorisedOfficer1Relation" class="form-label">Relation to the Company *</label>
+                <input type="text" name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required />
             </div>
 
 
@@ -486,13 +509,13 @@
                 <input type="text" name="intAuthorisedOfficer1City" id="intAuthorisedOfficer1City" />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer1ZipCode" class="form-label">Zip Code</label>
+                <label for="intAuthorisedOfficer1ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="intAuthorisedOfficer1ZipCode" id="intAuthorisedOfficer1ZipCode" />
             </div>
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer1CountryId" class="form-label">Country</label>
-                <select name="intAuthorisedOfficer1CountryId" id="intAuthorisedOfficer1CountryId" style="width:300px;" required>
+                <label for="intAuthorisedOfficer1CountryId" class="form-label">Country *</label>
+                <select name="intAuthorisedOfficer1CountryId" id="intAuthorisedOfficer1CountryId" style="width:200px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -518,7 +541,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intAuthorisedOfficer1IDType" class="form-label">ID Type</label>
+                <label for="intAuthorisedOfficer1IDType" class="form-label">ID Type *</label>
                 <select name="intAuthorisedOfficer1IDType" id="intAuthorisedOfficer1IDType" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -532,14 +555,14 @@
             </div>
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer1IDNumber" class="form-label">ID Number</label>
-                <input type="email" name="intAuthorisedOfficer1IDNumber" id="intAuthorisedOfficer1IDNumber" required/>
+                <label for="intAuthorisedOfficer1IDNumber" class="form-label">ID Number *</label>
+                <input type="text" name="intAuthorisedOfficer1IDNumber" id="intAuthorisedOfficer1IDNumber" required />
             </div>
 
             <div class="form-group">
                 <div class="dropzone dropzone-previews" id="instAuthorisedOfficer1PhotoId" style="padding-top:2px;">
                     <center style="text-align:center;">
-                        UPLOAD ID
+                        UPLOAD ID *
                     </center>
                 </div>
 
@@ -555,8 +578,8 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intAuthorisedOfficer1IssueAuthority" class="form-label">Issuing Authority</label>
-                <input type="text" name="intAuthorisedOfficer1IssueAuthority" id="intAuthorisedOfficer1IssueAuthority" required/>
+                <label for="intAuthorisedOfficer1IssueAuthority" class="form-label">Issuing Authority *</label>
+                <input type="text" name="intAuthorisedOfficer1IssueAuthority" id="intAuthorisedOfficer1IssueAuthority" required />
             </div>
 
 
@@ -580,7 +603,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer2Name" class="form-label">Name</label>
+                <label for="intAuthorisedOfficer2Name" class="form-label">Name *</label>
                 <input type="text" name="intAuthorisedOfficer2Name" id="intAuthorisedOfficer2Name" required />
             </div>
             <div class="form-group">
@@ -588,8 +611,8 @@
                 <input type="text" name="intAuthorisedOfficer2Tel" id="intAuthorisedOfficer2Tel" />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer2Mobile" class="form-label">Telephone (Mobile)</label>
-                <input type="text" name="intAuthorisedOfficer2Mobile" id="intAuthorisedOfficer2Mobile"  required/>
+                <label for="intAuthorisedOfficer2Mobile" class="form-label">Telephone (Mobile) *</label>
+                <input type="text" name="intAuthorisedOfficer2Mobile" id="intAuthorisedOfficer2Mobile" required />
             </div>
             <div class="form-group">
                 <label for="intAuthorisedOfficer2Fax" class="form-label">Fax</label>
@@ -604,7 +627,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer2Title" class="form-label">Title</label>
+                <label for="intAuthorisedOfficer2Title" class="form-label">Title *</label>
                 <select name="intAuthorisedOfficer2Title" id="intAuthorisedOfficer2Title" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -616,12 +639,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer2Email" class="form-label">Email</label>
-                <input type="email" name="intAuthorisedOfficer2Email" id="intAuthorisedOfficer2Email" required/>
+                <label for="intAuthorisedOfficer2Email" class="form-label">Email *</label>
+                <input type="email" name="intAuthorisedOfficer2Email" id="intAuthorisedOfficer2Email" required />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer2Relation" class="form-label">Relation to the Company</label>
-                <input type="text" name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required/>
+                <label for="intAuthorisedOfficer2Relation" class="form-label">Relation to the Company *</label>
+                <input type="text" name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required />
             </div>
 
 
@@ -641,13 +664,13 @@
                 <input type="text" name="intAuthorisedOfficer2City" id="intAuthorisedOfficer2City" />
             </div>
             <div class="form-group">
-                <label for="intAuthorisedOfficer2ZipCode" class="form-label">Zip Code</label>
+                <label for="intAuthorisedOfficer2ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="intAuthorisedOfficer2ZipCode" id="intAuthorisedOfficer2ZipCode" />
             </div>
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer2CountryId" class="form-label">Country</label>
-                <select name="intAuthorisedOfficer2CountryId" id="intAuthorisedOfficer2CountryId" style="width:300px;" required>
+                <label for="intAuthorisedOfficer2CountryId" class="form-label">Country *</label>
+                <select name="intAuthorisedOfficer2CountryId" id="intAuthorisedOfficer2CountryId" style="width:200px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -673,7 +696,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intAuthorisedOfficer2IDType" class="form-label">ID Type</label>
+                <label for="intAuthorisedOfficer2IDType" class="form-label">ID Type *</label>
                 <select name="intAuthorisedOfficer2IDType" id="intAuthorisedOfficer2IDType" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -687,15 +710,15 @@
             </div>
 
             <div class="form-group">
-                <label for="intAuthorisedOfficer2IDNumber" class="form-label">ID Number</label>
-                <input type="email" name="intAuthorisedOfficer2IDNumber" id="intAuthorisedOfficer2IDNumber" required />
+                <label for="intAuthorisedOfficer2IDNumber" class="form-label">ID Number *</label>
+                <input type="text" name="intAuthorisedOfficer2IDNumber" id="intAuthorisedOfficer2IDNumber" required />
             </div>
 
 
             <div class="form-group">
                 <div class="dropzone dropzone-previews" id="instAuthorisedOfficer2PhotoId" style="padding-top:2px;">
                     <center style="text-align:center;">
-                        UPLOAD ID
+                        UPLOAD ID *
                     </center>
                 </div>
 
@@ -712,7 +735,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="intAuthorisedOfficer2IssueAuthority" class="form-label">Issuing Authority</label>
+                <label for="intAuthorisedOfficer2IssueAuthority" class="form-label">Issuing Authority *</label>
                 <input type="text" name="intAuthorisedOfficer2IssueAuthority" id="intAuthorisedOfficer2IssueAuthority" required />
             </div>
 
@@ -736,7 +759,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="tradingContacts1Title" class="form-label">Title</label>
+                <label for="tradingContacts1Title" class="form-label">Title *</label>
                 <select name="tradingContacts1Title" id="tradingContacts1Title" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -749,8 +772,8 @@
             </div>
 
             <div class="form-group">
-                <label for="tradingContacts1Name" class="form-label">Name</label>
-                <input type="text" name="tradingContacts1Name" id="tradingContacts1Name" required/>
+                <label for="tradingContacts1Name" class="form-label">Name *</label>
+                <input type="text" name="tradingContacts1Name" id="tradingContacts1Name" required />
             </div>
 
             <div class="form-group">
@@ -766,8 +789,8 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="tradingContacts1Mobile" class="form-label">Mobile</label>
-                <input type="text" style="width:300px;" name="tradingContacts1Mobile" id="tradingContacts1Mobile" required/>
+                <label for="tradingContacts1Mobile" class="form-label">Mobile *</label>
+                <input type="text" style="width:300px;" name="tradingContacts1Mobile" id="tradingContacts1Mobile" required />
             </div>
             <div class="form-group">
                 <label for="tradingContacts1Fax" class="form-label">Fax</label>
@@ -837,18 +860,18 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instSignName1" class="form-label">Name</label>
+                <label for="instSignName1" class="form-label">Name *</label>
                 <input type="text" name="instSignName1" id="instSignName1" required />
             </div>
 
             <div class="form-group">
-                <label for="instSignPosition1" class="form-label">Position</label>
-                <input type="text" name="instSignPosition1" id="instSignPosition1" required/>
+                <label for="instSignPosition1" class="form-label">Position *</label>
+                <input type="text" name="instSignPosition1" id="instSignPosition1" required />
             </div>
             <div class="form-group">
                 <div class="dropzone dropzone-previews" id="instSignatory1" style="padding-top:2px;">
                     <center style="text-align:center;">
-                        UPLOAD SIGNATURE
+                        UPLOAD SIGNATURE *
                     </center>
                 </div>
                 <input type="hidden" name="instSignatory1hidden" id="instSignatory1hidden" />
@@ -860,17 +883,17 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instSignName2" class="form-label">Name</label>
-                <input type="text" name="instSignName2" id="instSignName2" required/>
+                <label for="instSignName2" class="form-label">Name *</label>
+                <input type="text" name="instSignName2" id="instSignName2" required />
             </div>
             <div class="form-group">
-                <label for="instSignPosition2" class="form-label">Position</label>
+                <label for="instSignPosition2" class="form-label">Position *</label>
                 <input type="text" name="instSignPosition2" id="instSignPosition2" required />
             </div>
             <div class="form-group">
                 <div class="dropzone dropzone-previews" id="instSignatory2" style="padding-top:2px;">
                     <center style="text-align:center;">
-                        UPLOAD SIGNATURE
+                        UPLOAD SIGNATURE *
                     </center>
                 </div>
                 <input type="hidden" name="instSignatory2hidden" id="instSignatory2hidden" />
@@ -934,8 +957,8 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="numberOfSignatories" class="form-label">Indicate the Number of Signatories</label>
-                <select name="numberOfSignatories" id="numberOfSignatories" style="width:300px;" required>
+                <label for="instnumberOfSignatories" class="form-label">Indicate the Number of Signatories *</label>
+                <select name="instnumberOfSignatories" id="instnumberOfSignatories" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.SignatureTypes.Where(x => x.Id == 3 || x.Id == 4).OrderBy(x => x.Id))
@@ -953,7 +976,7 @@
                 <label for="insOtherDetails" class="form-label">Other Details</label>
                 <input type="text" name="insOtherDetails" id="insOtherDetails" />
             </div>
-            
+
         </div>
     </div>
 

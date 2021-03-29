@@ -14,8 +14,17 @@ namespace DBHelper.Schema
     
     public partial class InvestmentKnowledge
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public InvestmentKnowledge()
+        {
+            this.AccountFinancialInvestmentRiskProfiles = new HashSet<AccountFinancialInvestmentRiskProfile>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountFinancialInvestmentRiskProfile> AccountFinancialInvestmentRiskProfiles { get; set; }
     }
 }

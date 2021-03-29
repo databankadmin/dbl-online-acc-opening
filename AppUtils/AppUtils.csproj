@@ -61,6 +61,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\AppLogger\AppLogger.csproj">
       <Project>{BC0D2FF7-E3F4-4127-B720-DA280B27030D}</Project>
       <Name>AppLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AppModels\AppModels.csproj">
+      <Project>{0F6FD1C9-9C00-46CD-9797-91D0A444EC59}</Project>
+      <Name>AppModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBHelper\DBHelper.csproj">
       <Project>{67694DCF-563E-4B96-9BDF-0258AD1B9352}</Project>

@@ -14,8 +14,17 @@ namespace DBHelper.Schema
     
     public partial class AMLQuestion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AMLQuestion()
+        {
+            this.AccountAMLResponses = new HashSet<AccountAMLRespons>();
+        }
+    
         public int Id { get; set; }
         public string Question { get; set; }
         public bool IsActive { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountAMLRespons> AccountAMLResponses { get; set; }
     }
 }

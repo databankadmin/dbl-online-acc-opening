@@ -52,5 +52,23 @@ namespace DBHelper.Schema
         public virtual DbSet<StatementFrequency> StatementFrequencies { get; set; }
         public virtual DbSet<Title> Titles { get; set; }
         public virtual DbSet<MaritalStatu> MaritalStatus { get; set; }
+        public virtual DbSet<SourceOfIncome> SourceOfIncomes { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountAMLRespons> AccountAMLResponses { get; set; }
+        public virtual DbSet<AccountAuthorisedPerson> AccountAuthorisedPersons { get; set; }
+        public virtual DbSet<AccountETI> AccountETIs { get; set; }
+        public virtual DbSet<AccountFileUpload> AccountFileUploads { get; set; }
+        public virtual DbSet<AccountFinancialInvestmentRiskProfile> AccountFinancialInvestmentRiskProfiles { get; set; }
+        public virtual DbSet<AccountInsCustodyAccountDetail> AccountInsCustodyAccountDetails { get; set; }
+        public virtual DbSet<AccountInsTradingContact> AccountInsTradingContacts { get; set; }
+        public virtual DbSet<AccountInstructionEmploymentDetail> AccountInstructionEmploymentDetails { get; set; }
+        public virtual DbSet<AccountInstSignatoriesMandate> AccountInstSignatoriesMandates { get; set; }
+        public virtual DbSet<AccountMember> AccountMembers { get; set; }
+        public virtual DbSet<AccountNextOfKinDetail> AccountNextOfKinDetails { get; set; }
+        public virtual DbSet<AccountSettlementDetail> AccountSettlementDetails { get; set; }
+        public virtual DbSet<FileUploadType> FileUploadTypes { get; set; }
+        public virtual DbSet<ExpectedAccountActivity> ExpectedAccountActivities { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }

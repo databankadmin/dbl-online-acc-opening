@@ -146,24 +146,26 @@ function markBorderRed(itemId,msg)
             var accType = atob(urlParams.get('acc_type'));
             var accountTypeId = Number(accType);
 
-            if (currentIndex === 0) {//csd form
-                if ($("#csdimagedivhidden").val()==='') {
-                    markBorderRed('csd-image-div','upload photo ID');
-                    return;
-                }
-                form.parent().parent().parent().append('<div class="footer footer-' + currentIndex + '"></div>');
-            }
+           
 
-
-            if (currentIndex === 1) {//DBL  form; individual, joint, itf or institutional
+            if (currentIndex === 0) {//DBL  form; individual, joint, itf or institutional
                
-                if (accountTypeId===1) {//single
+
+                if (accountTypeId === 1) {//single
                     if ($("#firstApplicantIdPhotohidden").val() === '')
                     {
                         markBorderRed('firstApplicantIdPhoto', 'upload photo ID');
                         return;
                     }
+
+                    if ($("#firstApplicantSignaturehidden").val() === '') {
+                        markBorderRed('firstApplicantSignature', 'upload first applicant signature');
+                        return;
+                    }
                 }
+
+
+
 
                 if (accountTypeId === 2) {//joint
 
@@ -171,8 +173,21 @@ function markBorderRed(itemId,msg)
                         markBorderRed('firstApplicantIdPhoto', 'upload first applicant photo ID');
                         return;
                     }
+
+                    if ($("#firstApplicantSignaturehidden").val() === '') {
+                        markBorderRed('firstApplicantSignature', 'upload first applicant signature');
+                        return;
+                    }
+
+
+
                     if ($("#jointApplicantIdPhotohidden").val() === '') {
                         markBorderRed('jointApplicantIdPhoto', 'upload joint photo ID');
+                        return;
+                    }
+
+                    if ($("#jointApplicantSignaturehidden").val() === '') {
+                        markBorderRed('jointApplicantSignature', 'upload joint applicant signature');
                         return;
                     }
                 }
@@ -219,10 +234,10 @@ function markBorderRed(itemId,msg)
 
                 if (accountTypeId === 1 || accountTypeId === 2 || accountTypeId === 3)
                 {
-                    if ($("#firstJointItfAuthorisedPersonhidden").val() === '') {
-                        markBorderRed('firstJointItfAuthorisedPerson', 'upload authorised person photo ID');
-                        return;
-                    }
+                    //if ($("#firstJointItfAuthorisedPersonhidden").val() === '') {
+                    //    markBorderRed('firstJointItfAuthorisedPerson', 'upload authorised person photo ID');
+                    //    return;
+                    //}
                     
                 }
 
@@ -232,11 +247,17 @@ function markBorderRed(itemId,msg)
 
 
 
-            if (currentIndex === 2) {//file uploads
+            if (currentIndex === 1) {//file uploads
                 if ($("#proofOfResidencehidden").val() === '') {
                     markBorderRed('proofOfResidence', 'upload proof of residence');
                     return;
                 }
+
+                if ($("#passportPhotoshidden").val() === '') {
+                    markBorderRed('passportPhotos', 'upload passport photo');
+                    return;
+                }
+
 
                 if (accountTypeId===4) {//inst
                     if ($("#otherBusinessFileshidden").val() === '') {
@@ -250,13 +271,26 @@ function markBorderRed(itemId,msg)
 
 
 
-            if (currentIndex === 3) {
+            if (currentIndex === 2) {
                 form.parent().parent().parent().find('.footer').removeClass('footer-2').addClass('footer-' + currentIndex + '');
             }
 
-            if (currentIndex === 4) {//aml
+            if (currentIndex === 3) {//aml
                 form.parent().parent().parent().find('.footer').removeClass('footer-3').addClass('footer-' + currentIndex + '');
             }
+
+
+            if (currentIndex === 4) {//csd form
+                if ($("#csdCompletedFormhidden").val() === '') {
+                    markBorderRed('csdCompletedForm', 'upload your completed CSD form');
+                    return;
+                }
+                form.parent().parent().parent().append('<div class="footer footer-' + currentIndex + '"></div>');
+            }
+
+
+
+
 
             if (currentIndex === 5) {//indemnity
                 form.parent().parent().parent().find('.footer').removeClass('footer-4').addClass('footer-' + currentIndex + '');
@@ -274,7 +308,7 @@ function markBorderRed(itemId,msg)
         },
         onFinished: function (event, currentIndex) {
             form.submit();
-            alert('Submited');
+           // alert('Submited');
         },
         onStepChanged: function(event, currentIndex, priorIndex) {
 

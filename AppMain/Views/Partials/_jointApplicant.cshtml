@@ -9,7 +9,7 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="jointApplicantTitle" class="form-label">Title</label>
+            <label for="jointApplicantTitle" class="form-label">Title *</label>
             <select name="jointApplicantTitle" id="jointApplicantTitle" style="width:300px;" required>
                 <option value="">-select-</option>
                 @{
@@ -23,13 +23,13 @@
 
 
         <div class="form-group">
-            <label for="jointApplicantSurname" class="form-label">Surname</label>
+            <label for="jointApplicantSurname" class="form-label">Surname *</label>
             <input type="text" name="jointApplicantSurname" id="jointApplicantSurname" required />
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantFname" class="form-label">First Name</label>
-            <input type="text" name="jointApplicantFname" id="jointApplicantFname" required/>
+            <label for="jointApplicantFname" class="form-label">First Name *</label>
+            <input type="text" name="jointApplicantFname" id="jointApplicantFname" required />
         </div>
         <div class="form-group">
             <label for="jointApplicantOname" class="form-label">Other Name</label>
@@ -41,8 +41,19 @@
 
 <div class="form-row">
     <div class="form-flex">
+
         <div class="form-group">
-            <label for="jointApplicantNationality" class="form-label">Nationality</label>
+            <label for="jointApplicantGender" class="form-label">Gender *</label>
+            <select name="jointApplicantGender" id="jointApplicantGender" style="width:200px;" required>
+                <option value="">-select-</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="jointApplicantNationality" class="form-label">Nationality *</label>
             <select name="jointApplicantNationality" id="jointApplicantNationality" style="width:300px;" required>
                 <option value="">-select-</option>
                 @{
@@ -62,18 +73,14 @@
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
-            <input type="date" name="jointApplicantDOB" id="jointApplicantDOB" required/>
+            <label for="jointApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
+            <input type="date" name="jointApplicantDOB" id="jointApplicantDOB" required onchange="javascript:DateChanged(this.value,'jointApplicantDOB')" />
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
-            <input type="text" name="jointApplicantPlaceOfBirth" id="jointApplicantPlaceOfBirth"  required/>
+            <label for="jointApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+            <input type="text" name="jointApplicantPlaceOfBirth" id="jointApplicantPlaceOfBirth" required />
         </div>
-
-
-
-
     </div>
 </div>
 
@@ -88,13 +95,13 @@
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantMobile" class="form-label">Mobile</label>
-            <input type="text" name="jointApplicantMobile" id="jointApplicantMobile" required/>
+            <label for="jointApplicantMobile" class="form-label">Mobile *</label>
+            <input type="text" name="jointApplicantMobile" id="jointApplicantMobile" required />
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantResidentialCountry" class="form-label">Fax</label>
-            <input type="text" name="jointApplicantResidentialCountry" id="jointApplicantResidentialCountry" />
+            <label for="jointApplicantResidentialFax" class="form-label">Fax</label>
+            <input type="text" name="jointApplicantResidentialFax" id="jointApplicantResidentialFax" />
 
         </div>
 
@@ -111,8 +118,8 @@
     <div class="form-flex">
 
         <div class="form-group">
-            <label for="jointApplicantMailingEmail" class="form-label">Email</label>
-            <input type="text" name="jointApplicantMailingEmail" id="jointApplicantMailingEmail" required/>
+            <label for="jointApplicantMailingEmail" class="form-label">Email *</label>
+            <input type="email" name="jointApplicantMailingEmail" id="jointApplicantMailingEmail" required />
         </div>
 
         <div class="form-group">
@@ -121,8 +128,8 @@
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantOccupation" class="form-label">Occupation</label>
-            <input type="text" name="jointApplicantOccupation" id="jointApplicantOccupation" required/>
+            <label for="jointApplicantOccupation" class="form-label">Occupation *</label>
+            <input type="text" name="jointApplicantOccupation" id="jointApplicantOccupation" required />
 
         </div>
 
@@ -140,7 +147,7 @@
 <div class="form-row">
     <div class="form-flex">
         <div class="form-group">
-            <label for="jointApplicantIdType" class="form-label">ID Type</label>
+            <label for="jointApplicantIdType" class="form-label">ID Type *</label>
             <select name="jointApplicantIdType" id="jointApplicantIdType" style="width:250px;" required>
                 <option value="">-select-</option>
                 @{
@@ -154,18 +161,14 @@
         </div>
 
         <div class="form-group">
-            <label for="jointApplicantIdNumber" class="form-label">ID Number</label>
-            <input type="email" name="jointApplicantIdNumber" id="jointApplicantIdNumber" required/>
+            <label for="jointApplicantIdNumber" class="form-label">ID Number *</label>
+            <input type="text" name="jointApplicantIdNumber" id="jointApplicantIdNumber" required />
         </div>
 
-        <div class="form-group">
-            <div class="dropzone dropzone-previews" id="jointApplicantIdPhoto" style="padding-top:2px;">
-                <center style="text-align:center;">
-                    UPLOAD ID
-                </center>
-            </div>
+               <div class="form-group">
+                   <label for="jointApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+            <input type="text" name="jointApplicantIdIssuingAuthority" id="jointApplicantIdIssuingAuthority" required />
         </div>
-        <input type="hidden" name="jointApplicantIdPhotohidden" id="jointApplicantIdPhotohidden" />
 
 
 
@@ -175,11 +178,6 @@
 
 <div class="form-row">
     <div class="form-flex">
-
-        <div class="form-group">
-            <label for="jointApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-            <input type="email" name="jointApplicantIdIssuingAuthority" id="jointApplicantIdIssuingAuthority" required/>
-        </div>
 
 
 
@@ -195,3 +193,30 @@
     </div>
 </div>
 
+
+<div class="form-row">
+    <div class="form-flex">
+
+        <div class="form-group">
+            <div class="dropzone dropzone-previews" id="jointApplicantIdPhoto" style="padding-top:2px;">
+                <center style="text-align:center;">
+                    UPLOAD ID *
+                </center>
+            </div>
+        </div>
+        <input type="hidden" name="jointApplicantIdPhotohidden" id="jointApplicantIdPhotohidden" />
+
+
+
+        <div class="form-group">
+            <div class="dropzone dropzone-previews" id="jointApplicantSignature" style="padding-top:2px;">
+                <center style="text-align:center;">
+                    UPLOAD SIGNATURE *
+                </center>
+            </div>
+        </div>
+        <input type="hidden" name="jointApplicantSignaturehidden" id="jointApplicantSignaturehidden" />
+
+
+    </div>
+</div>

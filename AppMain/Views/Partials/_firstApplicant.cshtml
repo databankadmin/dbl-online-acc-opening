@@ -6,13 +6,14 @@
 
 <fieldset>
     <h2>Databank Brokerage Form | @accountType.Name</h2>
+    <h4 style="color:red">Required fields are marked with asterisk (*)</h4>
 
 
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="investmentType" class="form-label">Investment Type</label>
-                <select name="csdResidentialStatus" id="investmentType" style="width:300px;" required>
+                <label for="investmentType" class="form-label">Investment Type *</label>
+                <select name="investmentType" id="investmentType" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.InvestmentTypes.Where(x => x.IsActive))
@@ -23,15 +24,36 @@
                 </select>
 
             </div>
+
+
             <div class="form-group">
-                <label for="dblAccNumber" class="form-label">Account Number</label>
-                <input type="text" name="dblAccNumber" id="dblAccNumber" pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number" />
+                <label for="expectedAccountActivityId" class="form-label">Expected Account Activity *</label>
+                <select name="expectedAccountActivityId" id="expectedAccountActivityId" style="width:300px;" required>
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.ExpectedAccountActivities.OrderBy(x => x.Id))
+                        {
+
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
             </div>
 
             <div class="form-group">
-                <label for="dblCsdNumber" class="form-label">CSD Number</label>
-                <input type="text" name="dblCsdNumber" id="dblCsdNumber" />
+                <label for="tin" class="form-label">TIN Number</label>
+                <input type="text" name="tin" id="tin" />
             </div>
+
+
+
+
+            @*
+
+        <div class="form-group">
+            <label for="dblCsdNumber" class="form-label">CSD Number</label>
+            <input type="text" name="dblCsdNumber" id="dblCsdNumber" />
+        </div>*@
         </div>
     </div>
 
@@ -41,7 +63,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantTitle" class="form-label">Title</label>
+                <label for="firstApplicantTitle" class="form-label">Title *</label>
                 <select name="firstApplicantTitle" id="firstApplicantTitle" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -55,13 +77,13 @@
 
 
             <div class="form-group">
-                <label for="firstApplicantSurname" class="form-label">Surname</label>
+                <label for="firstApplicantSurname" class="form-label">Surname *</label>
                 <input type="text" name="firstApplicantSurname" id="firstApplicantSurname" required />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantFname" class="form-label">First Name</label>
-                <input type="text" name="firstApplicantFname" id="firstApplicantFname" required/>
+                <label for="firstApplicantFname" class="form-label">First Name *</label>
+                <input type="text" name="firstApplicantFname" id="firstApplicantFname" required />
             </div>
             <div class="form-group">
                 <label for="firstApplicantOname" class="form-label">Other Name</label>
@@ -73,8 +95,21 @@
 
     <div class="form-row">
         <div class="form-flex">
+
+
             <div class="form-group">
-                <label for="firstApplicantNationality" class="form-label">Nationality</label>
+                <label for="firstApplicantGender" class="form-label">Gender *</label>
+                <select name="firstApplicantGender" id="firstApplicantGender" style="width:200px;" required>
+                    <option value="">-select-</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+                <label for="firstApplicantNationality" class="form-label">Nationality *</label>
                 <select name="firstApplicantNationality" id="firstApplicantNationality" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -94,13 +129,13 @@
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth</label>
-                <input type="date" name="firstApplicantDOB" id="firstApplicantDOB" required/>
+                <label for="firstApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
+                <input type="date" name="firstApplicantDOB" id="firstApplicantDOB" required onchange="javascript:DateChanged(this.value,'firstApplicantDOB')" />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantPlaceOfBirth" class="form-label">Place of Birth</label>
-                <input type="text" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" required/>
+                <label for="firstApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+                <input type="text" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" required />
             </div>
 
 
@@ -113,7 +148,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantMaritalStatus" class="form-label">Marital Status</label>
+                <label for="firstApplicantMaritalStatus" class="form-label">Marital Status *</label>
                 <select name="firstApplicantMaritalStatus" id="firstApplicantMaritalStatus" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -126,8 +161,14 @@
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantMotherMaidenName" class="form-label">Mother’s Maiden Name</label>
-                <input type="text" name="firstApplicantMotherMaidenName" id="firstApplicantMotherMaidenName" required/>
+                <label for="firstApplicantMotherMaidenName" class="form-label">Mother’s Maiden Name *</label>
+                <input type="text" name="firstApplicantMotherMaidenName" id="firstApplicantMotherMaidenName" required />
+            </div>
+
+
+            <div class="form-group">
+                <label for="firstApplicantMaidenName" class="form-label">Maiden Name</label>
+                <input type="text" name="firstApplicantMaidenName" id="firstApplicantMaidenName" />
             </div>
 
         </div>
@@ -141,23 +182,26 @@
 
 
 
-    <h4>Residential Address</h4>
+    <h4>
+        Residential Address
+        <input type="text" style="width:89%;" name="firstApplicantFullResidentialAddress" id="firstApplicantFullResidentialAddress" />
+    </h4>
 
     <div class="form-row">
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="firstApplicantResidentialCity" class="form-label">City</label>
+                <label for="firstApplicantResidentialCity" class="form-label">City </label>
                 <input type="text" name="firstApplicantResidentialCity" id="firstApplicantResidentialCity" />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantResidentialZipCode" class="form-label">Zip Code</label>
+                <label for="firstApplicantResidentialZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="firstApplicantResidentialZipCode" id="firstApplicantResidentialZipCode" />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantResidentialCountry" class="form-label">Country</label>
+                <label for="firstApplicantResidentialCountry" class="form-label">Country *</label>
                 <select name="firstApplicantResidentialCountry" id="firstApplicantResidentialCountry" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -183,7 +227,12 @@
 
 
 
-    <h4>Mailing Address</h4>
+    <h4>
+        Mailing Address
+
+        <input type="text" style="width:89%;" name="firstApplicantFullMailingAddress" id="firstApplicantFullMailingAddress" />
+
+    </h4>
 
     <div class="form-row">
         <div class="form-flex">
@@ -194,12 +243,12 @@
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantMailingZipCode" class="form-label">Zip Code</label>
+                <label for="firstApplicantMailingZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="firstApplicantMailingZipCode" id="firstApplicantMailingZipCode" />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantMailingCountry" class="form-label">Country</label>
+                <label for="firstApplicantMailingCountry" class="form-label">Country *</label>
                 <select name="firstApplicantMailingCountry" id="firstApplicantMailingCountry" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -225,9 +274,9 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantTickApplicable" class="form-label">Select where applicable</label>
+                <label for="firstApplicantTickApplicable" class="form-label">Select applicable suffix *</label>
                 <select name="firstApplicantTickApplicable" id="firstApplicantTickApplicable" style="width:300px;" required>
-                    <option value="0">-select-</option>
+                    <option value="">-select-</option>
                     @{
                         foreach (var item in context.CSDDepositoryParticipantOptions.Where(x => x.IsActive).OrderBy(x => x.Id))
                         {
@@ -260,11 +309,11 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantOccupation" class="form-label">Occupation</label>
-                <input type="text" name="firstApplicantOccupation" id="firstApplicantOccupation" required/>
+                <label for="firstApplicantOccupation" class="form-label">Occupation *</label>
+                <input type="text" name="firstApplicantOccupation" id="firstApplicantOccupation" required />
             </div>
             <div class="form-group">
-                <label for="firstApplicantEmail" class="form-label">Email</label>
+                <label for="firstApplicantEmail" class="form-label">Email *</label>
                 <input type="email" name="firstApplicantEmail" id="firstApplicantEmail" required />
             </div>
         </div>
@@ -275,7 +324,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantIdType" class="form-label">ID Type</label>
+                <label for="firstApplicantIdType" class="form-label">ID Type *</label>
                 <select name="firstApplicantIdType" id="firstApplicantIdType" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -289,18 +338,15 @@
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantIdNumber" class="form-label">ID Number</label>
+                <label for="firstApplicantIdNumber" class="form-label">ID Number *</label>
                 <input type="text" name="firstApplicantIdNumber" id="firstApplicantIdNumber" required />
             </div>
-
             <div class="form-group">
-                <div class="dropzone dropzone-previews" id="firstApplicantIdPhoto" style="padding-top:2px;">
-                    <center style="text-align:center;">
-                        UPLOAD ID
-                    </center>
-                </div>
+                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+                <input type="text" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required />
             </div>
-            <input type="hidden" name="firstApplicantIdPhotohidden" id="firstApplicantIdPhotohidden" />
+
+
 
 
         </div>
@@ -310,22 +356,45 @@
     <div class="form-row">
         <div class="form-flex">
 
-            <div class="form-group">
-                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-                <input type="text" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required />
-            </div>
-
 
 
             <div class="form-group">
-                <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date</label>
-                <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" required/>
+                <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date *</label>
+                <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" required />
             </div>
 
             <div class="form-group">
                 <label for="firstApplicantIdCardExpDate" class="form-label">Expiry Date</label>
                 <input type="date" name="firstApplicantIdCardExpDate" id="firstApplicantIdCardExpDate" />
             </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="firstApplicantIdPhoto" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID *
+                    </center>
+                </div>
+            </div>
+            <input type="hidden" name="firstApplicantIdPhotohidden" id="firstApplicantIdPhotohidden" />
+
+
+
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="firstApplicantSignature" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD SIGNATURE *
+                    </center>
+                </div>
+            </div>
+            <input type="hidden" name="firstApplicantSignaturehidden" id="firstApplicantSignaturehidden" />
+
+
+
+
         </div>
     </div>
 
@@ -354,7 +423,7 @@
 
             <div class="form-group">
                 <label for="authorisedPersonName" class="form-label">Name</label>
-                <input type="text" name="authorisedPersonName" id="authorisedPersonName" required />
+                <input type="text" name="authorisedPersonName" id="authorisedPersonName" />
             </div>
 
             <div class="form-group">
@@ -364,7 +433,7 @@
 
             <div class="form-group">
                 <label for="authorisedPersonMobile" class="form-label">Mobile</label>
-                <input type="text" name="authorisedPersonMobile" id="authorisedPersonMobile" required/>
+                <input type="text" name="authorisedPersonMobile" id="authorisedPersonMobile" />
             </div>
             <div class="form-group">
                 <label for="authorisedPersonFax" class="form-label">Fax</label>
@@ -379,7 +448,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="authorisedPersonRelation" class="form-label">Relation to the Account Holder</label>
-                <input type="text" name="authorisedPersonRelation" id="authorisedPersonRelation" required />
+                <input type="text" name="authorisedPersonRelation" id="authorisedPersonRelation" />
             </div>
 
             <div class="form-group">
@@ -405,12 +474,12 @@
             </div>
 
             <div class="form-group">
-                <label for="authorisedPersonZipCode" class="form-label">Zip Code</label>
+                <label for="authorisedPersonZipCode" class="form-label">Zip Code/GhanaPost Code</label>
                 <input type="text" name="authorisedPersonZipCode" id="authorisedPersonZipCode" />
             </div>
             <div class="form-group">
                 <label for="authorisedPersonZipCountryId" class="form-label">Country</label>
-                <select name="authorisedPersonZipCountryId" id="authorisedPersonZipCountryId" style="width:300px;" required>
+                <select name="authorisedPersonZipCountryId" id="authorisedPersonZipCountryId" style="width:300px;">
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
@@ -441,7 +510,7 @@
         <div class="form-flex">
             <div class="form-group">
                 <label for="authorisedPersonApplicantIdType" class="form-label">ID Type</label>
-                <select name="authorisedPersonApplicantIdType" id="authorisedPersonApplicantIdType" style="width:250px;" required>
+                <select name="authorisedPersonApplicantIdType" id="authorisedPersonApplicantIdType" style="width:250px;">
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
@@ -455,7 +524,7 @@
 
             <div class="form-group">
                 <label for="authorisedPersonApplicantIdNumber" class="form-label">ID Number</label>
-                <input type="text" name="authorisedPersonApplicantIdNumber" id="authorisedPersonApplicantIdNumber" required/>
+                <input type="text" name="authorisedPersonApplicantIdNumber" id="authorisedPersonApplicantIdNumber" />
             </div>
 
 
@@ -476,19 +545,19 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority</label>
-                <input type="email" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required />
+                <label for="firstApplicantIdAuthorisedPersonIssuingAuthority" class="form-label">Issuing Authority</label>
+                <input type="text" name="firstApplicantIdAuthorisedPersonIssuingAuthority" id="firstApplicantIdAuthorisedPersonIssuingAuthority" />
             </div>
 
 
             <div class="form-group">
-                <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date</label>
-                <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" />
+                <label for="firstAuthorisedApplicantIdCardIssueDate" class="form-label">Issue Date</label>
+                <input type="date" name="firstAuthorisedApplicantIdCardIssueDate" id="firstAuthorisedApplicantIdCardIssueDate" />
             </div>
 
             <div class="form-group">
-                <label for="firstApplicantIdCardExpDate" class="form-label">Expiry Date</label>
-                <input type="date" name="firstApplicantIdCardExpDate" id="firstApplicantIdCardExpDate" />
+                <label for="firstApplicantIdAuthorisedCardExpDate" class="form-label">Expiry Date</label>
+                <input type="date" name="firstApplicantIdAuthorisedCardExpDate" id="firstApplicantIdAuthorisedCardExpDate" />
             </div>
         </div>
     </div>
@@ -500,15 +569,15 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="settlementDetailsAccountName" class="form-label">Account Name</label>
-                <input type="text" name="settlementDetailsAccountName" id="settlementDetailsAccountName" required/>
+                <label for="settlementDetailsAccountName" class="form-label">Account Name *</label>
+                <input type="text" name="settlementDetailsAccountName" id="settlementDetailsAccountName" required />
             </div>
             <div class="form-group">
-                <label for="settlementDetailsAccountNumber" class="form-label">Account Number</label>
-                <input type="text" name="settlementDetailsAccountNumber" id="settlementDetailsAccountNumber" required  pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number"/>
+                <label for="settlementDetailsAccountNumber" class="form-label">Account Number *</label>
+                <input type="text" name="settlementDetailsAccountNumber" id="settlementDetailsAccountNumber" required pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number" />
             </div>
             <div class="form-group">
-                <label for="settlementDetailsAccountBankId" class="form-label">Bank</label>
+                <label for="settlementDetailsAccountBankId" class="form-label">Bank *</label>
                 <select name="settlementDetailsAccountBankId" id="settlementDetailsAccountBankId" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -528,8 +597,8 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="settlementDetailsAccountBankBranch" class="form-label">Bank Branch</label>
-                <input type="text" name="settlementDetailsAccountBankBranch" id="settlementDetailsAccountBankBranch" required/>
+                <label for="settlementDetailsAccountBankBranch" class="form-label">Bank Branch *</label>
+                <input type="text" name="settlementDetailsAccountBankBranch" id="settlementDetailsAccountBankBranch" required />
             </div>
             <div class="form-group">
                 <label for="settlementDetailsAccountBankSortCode" class="form-label">Swift / Sort Code</label>
@@ -548,7 +617,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsModeOfInstruction" class="form-label">Mode of Instructions</label>
+                <label for="instructionsEmploymentDetailsModeOfInstruction" class="form-label">Mode of Instructions *</label>
                 <select name="instructionsEmploymentDetailsModeOfInstruction" id="instructionsEmploymentDetailsModeOfInstruction" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -561,7 +630,7 @@
             </div>
 
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsModeOfNotification" class="form-label">Mode of Notification</label>
+                <label for="instructionsEmploymentDetailsModeOfNotification" class="form-label">Mode of Notification *</label>
                 <select name="instructionsEmploymentDetailsModeOfNotification" id="instructionsEmploymentDetailsModeOfNotification" style="width:250px;" required>
                     <option value="">-select-</option>
                     @{
@@ -575,8 +644,17 @@
 
 
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsSourceOfIncome" class="form-label">Source(s) of Income/Funds</label>
-                <input type="text" name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" required/>
+                <label for="instructionsEmploymentDetailsSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
+                <select name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" required>
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
             </div>
 
 
@@ -590,7 +668,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsEmploymentStatus" class="form-label">Employment Status</label>
+                <label for="instructionsEmploymentDetailsEmploymentStatus" class="form-label">Employment Status *</label>
                 <select required name="instructionsEmploymentDetailsEmploymentStatus" id="instructionsEmploymentDetailsEmploymentStatus" style="width:250px;">
                     <option value="">-select-</option>
                     @{
@@ -623,15 +701,15 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsCurrentOccupation" class="form-label">Current Occupation</label>
-                <input type="text" name="instructionsEmploymentDetailsCurrentOccupation" id="instructionsEmploymentDetailsCurrentOccupation" required/>
+                <label for="instructionsEmploymentDetailsCurrentOccupation" class="form-label">Current Occupation *</label>
+                <input type="text" name="instructionsEmploymentDetailsCurrentOccupation" id="instructionsEmploymentDetailsCurrentOccupation" required />
             </div>
 
 
 
             <div class="form-group">
-                <label for="instructionsEmploymentDetailsCurrentEmployer" class="form-label">Current Employer</label>
-                <input type="text" name="instructionsEmploymentDetailsCurrentEmployer" id="instructionsEmploymentDetailsCurrentEmployer" required/>
+                <label for="instructionsEmploymentDetailsCurrentEmployer" class="form-label">Current Employer *</label>
+                <input type="text" name="instructionsEmploymentDetailsCurrentEmployer" id="instructionsEmploymentDetailsCurrentEmployer" required />
             </div>
 
             <div class="form-group">
@@ -654,6 +732,13 @@
                 <label for="instructionsEmploymentDetailsCurrentEmployerTo" class="form-label">Employment Dates: (To)</label>
                 <input type="date" name="instructionsEmploymentDetailsCurrentEmployerTo" id="instructionsEmploymentDetailsCurrentEmployerTo" />
             </div>
+
+            <div class="form-group">
+                <label for="yearsOfEmployment" class="form-label">Total years of employment(in years) </label>
+                <input type="number" name="yearsOfEmployment" id="yearsOfEmployment" />
+            </div>
+
+
         </div>
     </div>
 
@@ -665,7 +750,7 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="annualIncomeId" class="form-label">Approximate Annual Income(GHS)</label>
+                <label for="annualIncomeId" class="form-label">Approximate Annual Income(GHS) *</label>
                 <select name="annualIncomeId" id="annualIncomeId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -683,7 +768,7 @@
 
 
             <div class="form-group">
-                <label for="networthId" class="form-label">Net Worth(GHS)</label>
+                <label for="networthId" class="form-label">Net Worth(GHS) *</label>
                 <select required name="networthId" id="networthId" style="width:300px;">
                     <option value="">-select-</option>
                     @{
@@ -698,7 +783,7 @@
             </div>
 
             <div class="form-group">
-                <label for="investmentHorizonId" class="form-label">Investment Horizon</label>
+                <label for="investmentHorizonId" class="form-label">Investment Horizon *</label>
                 <select required name="investmentHorizonId" id="investmentHorizonId" style="width:300px;">
                     <option value="">-select-</option>
                     @{
@@ -723,7 +808,7 @@
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="objectivesId" class="form-label">Objectives</label>
+                <label for="objectivesId" class="form-label">Objectives *</label>
                 <select name="objectivesId" id="objectivesId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -737,7 +822,7 @@
 
             </div>
             <div class="form-group">
-                <label for="investmentKnowledgeId" class="form-label">Investment Knowledge</label>
+                <label for="investmentKnowledgeId" class="form-label">Investment Knowledge *</label>
                 <select name="investmentKnowledgeId" id="investmentKnowledgeId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -752,7 +837,7 @@
             </div>
 
             <div class="form-group">
-                <label for="riskToleranceId" class="form-label">Risk Tolerance</label>
+                <label for="riskToleranceId" class="form-label">Risk Tolerance *</label>
                 <select name="riskToleranceId" id="riskToleranceId" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
@@ -775,16 +860,31 @@
         <div class="form-flex">
 
             <div class="form-group">
-                <label for="onlineTradingFacilityId" class="form-label">Online Trading Facility</label>
-                <select name="onlineTradingFacilityId" id="onlineTradingFacilityId" style="width:300px;" required>
+                <label for="onlineTradingFacility" class="form-label">Online Trading Facility *</label>
+                <select name="onlineTradingFacility" id="onlineTradingFacility" style="width:300px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
                 </select>
             </div>
+       
+            <div class="form-group">
+                <label for="statementFreqId" class="form-label">Frequency of Account Statements *</label>
+                <select name="statementFreqId" id="statementFreqId" style="width:300px;" required>
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.StatementFrequencies.OrderBy(x => x.Id))
+                        {
+
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        
         </div>
     </div>
-
+    
 
 
     <h4 class="myHeader">Declaration by Applicant(s)</h4>
@@ -797,7 +897,7 @@
                     now pending against you which may lead to such a conviction?
                 </label>
                 <select name="declarationHasBeenConvicted" id="declarationHasBeenConvicted" style="width:300px;" required>
-                    <option value="">-select-</option>
+                    <option value="">-select *-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
                 </select>
@@ -821,7 +921,7 @@
                     Are you acting as a nominee in trust for others?
                 </label>
                 <select name="actingAsNominee" id="actingAsNominee" style="width:300px;" required>
-                    <option value="">-select-</option>
+                    <option value="">-select *-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
                 </select>
@@ -840,29 +940,29 @@
 
     <div class="form-row">
         <div class="form-flex">
-            I/We <input type="text" name="singleAccDeclarationFullName" id="singleAccDeclarationFullName" />
+            I/We <input type="text" name="singleAccDeclarationFullName" id="singleAccDeclarationFullName" required />
 
         </div>
     </div>
     <div class="form-row">
         <div class="form-flex">
-            , hereby declare that I/we am/are not involved in or related to any act of or dealing with the tracking of narcotics and dangerous drugs and proceeds of such tracking. I declare that the information provided in this form is true and complete. I undertake to notify Databank Brokerage Limited immediately in writing of any change in particulars or information provided above.
+            , hereby declare that I/we am/are not involved in or related to any act of or dealing with the tracking of narcotics and dangerous drugs and proceeds of such tracking. I declare that the information provided in this form is true and complete. I undertake to notify Databank Brokerage Limited immediately in writing of any change in particulars or information provided above.
 
         </div>
     </div>
 
 
-    <br/>
+    <br />
     <div class="form-row">
         <div class="form-flex">
             <div class="form-group">
-                <label for="numberOfSignatories" class="form-label">Indicate the Number of Signatories</label>
+                <label for="numberOfSignatories" class="form-label">Indicate the Number of Signatories *</label>
                 <select name="numberOfSignatories" id="numberOfSignatories" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.SignatureTypes.OrderBy(x => x.Id).Take(3))
                         {
-                          
+
                             <option value="@item.Id">@item.Name</option>
                         }
                     }
