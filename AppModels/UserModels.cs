@@ -55,8 +55,33 @@ namespace AppModels
         public System.DateTime CreatedDate { get; set; }
         public Nullable<int> InvestmentTypeId { get; set; }
         public string InvestmentTypeName { get; set; }
+        public int StatusId { get; set; }
+        public string StatusName { get; set; }
+        public Nullable<System.DateTime> SuccessfulReviewDate { get; set; }
+        public Nullable<System.Guid> SuccesfulReviewBy { get; set; }
+        public string SuccessfullyReviewwedByName { get; set; }
+        public Nullable<System.DateTime> CancelOrRejectDate { get; set; }
+        public Nullable<System.Guid> CancelOrRejectBy { get; set; }
+        public string CancelOrrejectByName { get; set; }
+        public string CancelOrRejectComment { get; set; }
 
-      
+
+
+    }
+
+    public class AccountAMLReponseModel {
+
+        public System.Guid Id { get; set; }
+        public System.Guid AccountId { get; set; }
+        public int QuestionId { get; set; }
+        public string YesNo { get; set; }
+        public string Rank { get; set; }
+        public string Remark { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public decimal RatingValue { get; set; }
+
+        public string QuestionText { get; set; }
+        public string RatingValueTxt { get; set; }
     }
 
     public class AccountAuthorisedPersonModel {
@@ -85,6 +110,11 @@ namespace AppModels
         public string IdPath { get; set; }
         public string SignaturePath { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public bool IdValidated { get; set; }
+        public Nullable<System.DateTime> IdValidationDate { get; set; }
+        public string IdValidationBy { get; set; }
+        public string IdValidationMode { get; set; }
+        public string IdCardValidationStatus { get; set; }
     }
 
     public class AccountETIModel {
@@ -256,6 +286,13 @@ namespace AppModels
         public string  MaritalStatusName { get; set; }
         public string TitleName { get; set; }
 
+        public bool IdValidated { get; set; }
+        public Nullable<System.DateTime> IdValidationDate { get; set; }
+        public string IdValidationBy { get; set; }
+        public string IdValidationMode { get; set; }
+        public string IdCardValidationStatus { get; set; }
+
+
     }
 
     public class AccountInstructionEmploymentDetailModel {
@@ -282,4 +319,72 @@ namespace AppModels
         public string SourceOfIncomeName { get; set; }
 
     }
+
+
+    public class GviveResponseModel
+    {
+        public int CardTypeId { get; set; }
+        public string ResponseCode { get; set; }
+        public string PassportNo { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Name { get; set; }
+        public string MiddleName { get; set; }
+        public string Nationality { get; set; }
+        public string DateOfBirth { get; set; }
+        public string Gender { get; set; }
+        public string PlaceOfBirth { get; set; }
+        public string PlaceOfIssue { get; set; }
+        public string IssueDate { get; set; }
+        public string ExpiryDate { get; set; }
+        public string Picture { get; set; }
+        public string Signature { get; set; }
+
+        public bool Error { get; set; }
+        public string Message { get; set; }
+
+
+        //voter
+        public string PollingStation { get; set; }
+        public string VoterID { get; set; }
+        public string Age { get; set; }
+        public string Sex { get; set; }
+        public string RegDate { get; set; }
+        public string Fullname { get; set; }
+        public string FathersName { get; set; }
+        public string MothersName { get; set; }
+        public string ResidentialAddress { get; set; }
+
+        //Driver
+        public string SecondName { get; set; }
+        public string ProcessingCenter { get; set; }
+        public string NationIDNo { get; set; }
+        public string ClassOfLicence { get; set; }
+        public string DateOfIssue { get; set; }
+        public string DateOfFirstLicence { get; set; }
+        public string CertificateDate { get; set; }
+        public string CertificateOfCompetence { get; set; }
+        public string DriverImage { get; set; }
+        public string DriverSignature { get; set; }
+        public string PIN { get; set; }
+
+
+
+        //SSNIT
+        public string FSSNo { get; set; }
+        public string FullName { get; set; }
+        public string BirthDate { get; set; }
+        public string CardSerial { get; set; }
+        public string Photo { get; set; }
+
+        public int FirstOrSecond { get; set; }
+
+        public bool IsVerified { get; set; }
+        public string IDNumber { get; set; }
+
+        public string ClientNameCompare { get; set; }
+        public double ComparePcnt { get; set; }
+    }
+
+
 }

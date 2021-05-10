@@ -49,6 +49,11 @@ namespace DBHelper.Schema
         public string MaidenName { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string Gender { get; set; }
+        public bool IdValidated { get; set; }
+        public Nullable<System.DateTime> IdValidationDate { get; set; }
+        public string IdValidationBy { get; set; }
+        public string IdValidationMode { get; set; }
+        public string ManualValidationComment { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Country Country { get; set; }

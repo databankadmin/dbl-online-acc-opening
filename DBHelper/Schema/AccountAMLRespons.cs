@@ -21,6 +21,7 @@ namespace DBHelper.Schema
         public string Rank { get; set; }
         public string Remark { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public decimal RatingValue { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual AMLQuestion AMLQuestion { get; set; }

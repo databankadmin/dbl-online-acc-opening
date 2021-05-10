@@ -90,6 +90,10 @@
         <EntityTypeShape EntityType="DBLAccountOpeningModel.AppUser" Width="1.5" PointX="9.625" PointY="16" />
         <EntityTypeShape EntityType="DBLAccountOpeningModel.Role" Width="1.5" PointX="7.375" PointY="16.5" />
         <AssociationConnector Association="DBLAccountOpeningModel.FK_AppUser_Role" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.AMLQuestionCategory" Width="1.5" PointX="0.75" PointY="16.25" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AMLQuestions_AMLQuestionCategory" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.ApplicationStatu" Width="1.5" PointX="16.375" PointY="16.875" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_Account_ApplicationStatus" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

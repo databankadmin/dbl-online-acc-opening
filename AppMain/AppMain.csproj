@@ -64,6 +64,12 @@
     <Reference Include="Hangfire.SqlServer, Version=1.7.19.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hangfire.SqlServer.1.7.19\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="IronPdf, Version=2021.3.1.0, Culture=neutral, PublicKeyToken=94e1c31412563c75, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPdf.2021.3.1\lib\net45\IronPdf.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPdf.Assets.Rendering.Windows, Version=22.0.0.0, Culture=neutral, PublicKeyToken=94e1c31412563c75, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPdf.Assets.Rendering.Windows.22.0.0\lib\net40\IronPdf.Assets.Rendering.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -165,6 +171,8 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewAccountController.cs" />
+    <Compile Include="Controllers\PdfController.cs" />
+    <Compile Include="Controllers\UtilitiesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -238,6 +246,7 @@
     <Content Include="Assets\backyard\shortcodes.html" />
     <Content Include="Assets\backyard\subscribe.html" />
     <Content Include="Assets\backyard\video.html" />
+    <Content Include="Scripts\appProfile.js" />
     <Content Include="Scripts\dropZoneInit.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -550,12 +559,20 @@
     <Content Include="Views\Shared\_Admin.cshtml" />
     <Content Include="Views\Admin\Applications.cshtml" />
     <Content Include="Views\Admin\ApplicantProfile.cshtml" />
+    <Content Include="Views\Partials\photoIDVerify.cshtml" />
+    <Content Include="Views\Partials\pdfs\dblFormData.cshtml" />
+    <Content Include="Views\Shared\_pdfLayout.cshtml" />
+    <Content Include="Views\Partials\pdfs\amlProfile.cshtml" />
+    <Content Include="Views\Partials\pdfs\etiProfile.cshtml" />
+    <Content Include="Views\Admin\DownloadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\FileUploader\" />
     <Folder Include="Views\FileUpload\" />
+    <Folder Include="Views\Pdf\" />
+    <Folder Include="Views\Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

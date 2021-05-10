@@ -1,0 +1,59 @@
+﻿@model AppModels.AccountBasicModel
+@using AppUtils
+@using AppModels
+@using AppMain.Providers
+@{
+    Layout = "~/Views/Shared/_pdfLayout.cshtml";
+    ViewBag.Title = "Applicant AML Profile | " + Model.AccountName;
+    Guid applicationId = Guid.Parse(ViewBag.applicationId.ToString());
+    var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
+    var context = new DBHelper.Schema.DBLAccountOpeningContext();
+
+}
+
+
+
+<style type="text/css">
+
+    th.theader {
+        color: #fff;
+        background-color: #00a65a !important;
+        font-size: 16px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        page-break-inside: avoid;
+    }
+</style>
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Question</th>
+                    <th>Response</th>
+                    <th>Remark</th>
+                    <th>Rating</th>
+
+                </tr>
+                @{
+                    foreach (var item in accountAmlResponses)
+                    {
+                        <tr>
+                            <td>@item.QuestionText</td>
+                            <td>@item.YesNo</td>
+                            <td>@item.Remark</td>
+                            <td>@item.RatingValueTxt</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <th colspan="2">TOTAL AML SCORE </th>
+                        <th style="border-bottom:double;">@accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue).ToString("N2")</th>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

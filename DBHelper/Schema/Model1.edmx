@@ -45,6 +45,12 @@
           <Property Name="TIN" Type="varchar" MaxLength="500" />
           <Property Name="ExpectedAccountActivityId" Type="int" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="SuccessfulReviewDate" Type="datetime" />
+          <Property Name="SuccesfulReviewBy" Type="uniqueidentifier" />
+          <Property Name="CancelOrRejectDate" Type="datetime" />
+          <Property Name="CancelOrRejectBy" Type="uniqueidentifier" />
+          <Property Name="CancelOrRejectComment" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AccountAMLResponses">
           <Key>
@@ -57,6 +63,7 @@
           <Property Name="Rank" Type="varchar" MaxLength="500" />
           <Property Name="Remark" Type="varchar" MaxLength="500" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="RatingValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountAuthorisedPerson">
           <Key>
@@ -84,6 +91,11 @@
           <Property Name="IdPath" Type="varchar" MaxLength="200" />
           <Property Name="SignaturePath" Type="varchar" MaxLength="200" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="IdValidated" Type="bit" Nullable="false" />
+          <Property Name="IdValidationDate" Type="datetime" />
+          <Property Name="IdValidationBy" Type="varchar" MaxLength="200" />
+          <Property Name="IdValidationMode" Type="varchar" MaxLength="100" />
+          <Property Name="ManualValidationComment" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AccountETI">
           <Key>
@@ -226,6 +238,11 @@
           <Property Name="SignaturePath" Type="varchar" MaxLength="200" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="Gender" Type="varchar" MaxLength="50" />
+          <Property Name="IdValidated" Type="bit" Nullable="false" />
+          <Property Name="IdValidationDate" Type="datetime" />
+          <Property Name="IdValidationBy" Type="varchar" MaxLength="200" />
+          <Property Name="IdValidationMode" Type="varchar" MaxLength="50" />
+          <Property Name="ManualValidationComment" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AccountNextOfKinDetails">
           <Key>
@@ -271,12 +288,32 @@
           <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="AMLQuestionCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="AMLQuestions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Question" Type="varchar(max)" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="YesRating" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NoRating" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="IsDropDown" Type="bit" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApplicationStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ApproximateAnnualIncome">
@@ -550,6 +587,18 @@
             </Principal>
             <Dependent Role="Account">
               <PropertyRef Name="AccountTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_ApplicationStatus">
+          <End Role="ApplicationStatus" Type="Self.ApplicationStatus" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StatusId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1009,6 +1058,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AMLQuestions_AMLQuestionCategory">
+          <End Role="AMLQuestionCategory" Type="Self.AMLQuestionCategory" Multiplicity="1" />
+          <End Role="AMLQuestions" Type="Self.AMLQuestions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AMLQuestionCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AMLQuestions">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_AppUser_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="AppUser" Type="Self.AppUser" Multiplicity="*" />
@@ -1036,7 +1097,9 @@
           <EntitySet Name="AccountNextOfKinDetails" EntityType="Self.AccountNextOfKinDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountSettlementDetails" EntityType="Self.AccountSettlementDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountType" EntityType="Self.AccountType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AMLQuestionCategory" EntityType="Self.AMLQuestionCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AMLQuestions" EntityType="Self.AMLQuestions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApplicationStatus" EntityType="Self.ApplicationStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApproximateAnnualIncome" EntityType="Self.ApproximateAnnualIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppSettings" EntityType="Self.AppSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
@@ -1069,6 +1132,10 @@
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Account_AccountType" Association="Self.FK_Account_AccountType">
             <End Role="AccountType" EntitySet="AccountType" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_ApplicationStatus" Association="Self.FK_Account_ApplicationStatus">
+            <End Role="ApplicationStatus" EntitySet="ApplicationStatus" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
           <AssociationSet Name="FK_Account_Country" Association="Self.FK_Account_Country">
@@ -1223,6 +1290,10 @@
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountSettlementDetails" EntitySet="AccountSettlementDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_AMLQuestions_AMLQuestionCategory" Association="Self.FK_AMLQuestions_AMLQuestionCategory">
+            <End Role="AMLQuestionCategory" EntitySet="AMLQuestionCategory" />
+            <End Role="AMLQuestions" EntitySet="AMLQuestions" />
+          </AssociationSet>
           <AssociationSet Name="FK_AppUser_Role" Association="Self.FK_AppUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AppUser" EntitySet="AppUser" />
@@ -1249,6 +1320,11 @@
           <Property Name="Question" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountAMLResponses" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_AMLQuestions" FromRole="AMLQuestion" ToRole="AccountAMLRespons" />
+          <Property Name="YesRating" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="NoRating" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="IsDropDown" Type="Boolean" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AMLQuestionCategory" Relationship="DBLAccountOpeningModel.FK_AMLQuestions_AMLQuestionCategory" FromRole="AMLQuestion" ToRole="AMLQuestionCategory" />
         </EntityType>
         <EntityType Name="ApproximateAnnualIncome">
           <Key>
@@ -1685,6 +1761,16 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="AppUser" EntitySet="AppUsers" />
           </AssociationSet>
+          <EntitySet Name="AMLQuestionCategories" EntityType="DBLAccountOpeningModel.AMLQuestionCategory" />
+          <AssociationSet Name="FK_AMLQuestions_AMLQuestionCategory" Association="DBLAccountOpeningModel.FK_AMLQuestions_AMLQuestionCategory">
+            <End Role="AMLQuestionCategory" EntitySet="AMLQuestionCategories" />
+            <End Role="AMLQuestion" EntitySet="AMLQuestions" />
+          </AssociationSet>
+          <EntitySet Name="ApplicationStatus" EntityType="DBLAccountOpeningModel.ApplicationStatu" />
+          <AssociationSet Name="FK_Account_ApplicationStatus" Association="DBLAccountOpeningModel.FK_Account_ApplicationStatus">
+            <End Role="ApplicationStatu" EntitySet="ApplicationStatus" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="MaritalStatu">
           <Key>
@@ -1765,6 +1851,13 @@
           <NavigationProperty Name="ExpectedAccountActivity" Relationship="DBLAccountOpeningModel.FK_Account_ExpectedAccountActivity" FromRole="Account" ToRole="ExpectedAccountActivity" />
           <Property Name="InvestmentTypeId" Type="Int32" />
           <NavigationProperty Name="InvestmentType" Relationship="DBLAccountOpeningModel.FK_Account_InvestmentType" FromRole="Account" ToRole="InvestmentType" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="SuccessfulReviewDate" Type="DateTime" Precision="3" />
+          <Property Name="SuccesfulReviewBy" Type="Guid" />
+          <Property Name="CancelOrRejectDate" Type="DateTime" Precision="3" />
+          <Property Name="CancelOrRejectBy" Type="Guid" />
+          <Property Name="CancelOrRejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ApplicationStatu" Relationship="DBLAccountOpeningModel.FK_Account_ApplicationStatus" FromRole="Account" ToRole="ApplicationStatu" />
         </EntityType>
         <EntityType Name="AccountAMLRespons">
           <Key>
@@ -1779,6 +1872,7 @@
           <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_Account" FromRole="AccountAMLRespons" ToRole="Account" />
           <NavigationProperty Name="AMLQuestion" Relationship="DBLAccountOpeningModel.FK_AccountAMLResponses_AMLQuestions" FromRole="AccountAMLRespons" ToRole="AMLQuestion" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RatingValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="AccountAuthorisedPerson">
           <Key>
@@ -1807,6 +1901,11 @@
           <Property Name="SignaturePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountAuthorisedPerson_Account" FromRole="AccountAuthorisedPerson" ToRole="Account" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdValidated" Type="Boolean" Nullable="false" />
+          <Property Name="IdValidationDate" Type="DateTime" Precision="3" />
+          <Property Name="IdValidationBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdValidationMode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ManualValidationComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountETI">
           <Key>
@@ -1974,6 +2073,11 @@
           <Property Name="MaidenName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdValidated" Type="Boolean" Nullable="false" />
+          <Property Name="IdValidationDate" Type="DateTime" Precision="3" />
+          <Property Name="IdValidationBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IdValidationMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ManualValidationComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountNextOfKinDetail">
           <Key>
@@ -2535,6 +2639,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AMLQuestionCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AMLQuestions" Relationship="DBLAccountOpeningModel.FK_AMLQuestions_AMLQuestionCategory" FromRole="AMLQuestionCategory" ToRole="AMLQuestion" />
+        </EntityType>
+        <Association Name="FK_AMLQuestions_AMLQuestionCategory">
+          <End Type="DBLAccountOpeningModel.AMLQuestionCategory" Role="AMLQuestionCategory" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AMLQuestion" Role="AMLQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AMLQuestionCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AMLQuestion">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ApplicationStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_ApplicationStatus" FromRole="ApplicationStatu" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_Account_ApplicationStatus">
+          <End Type="DBLAccountOpeningModel.ApplicationStatu" Role="ApplicationStatu" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2553,6 +2699,10 @@
           <EntitySetMapping Name="AMLQuestions">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AMLQuestion">
               <MappingFragment StoreEntitySet="AMLQuestions">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="IsDropDown" ColumnName="IsDropDown" />
+                <ScalarProperty Name="NoRating" ColumnName="NoRating" />
+                <ScalarProperty Name="YesRating" ColumnName="YesRating" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -2812,6 +2962,12 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="CancelOrRejectComment" ColumnName="CancelOrRejectComment" />
+                <ScalarProperty Name="CancelOrRejectBy" ColumnName="CancelOrRejectBy" />
+                <ScalarProperty Name="CancelOrRejectDate" ColumnName="CancelOrRejectDate" />
+                <ScalarProperty Name="SuccesfulReviewBy" ColumnName="SuccesfulReviewBy" />
+                <ScalarProperty Name="SuccessfulReviewDate" ColumnName="SuccessfulReviewDate" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="InvestmentTypeId" ColumnName="InvestmentTypeId" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="ExpectedAccountActivityId" ColumnName="ExpectedAccountActivityId" />
@@ -2854,6 +3010,7 @@
           <EntitySetMapping Name="AccountAMLResponses">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountAMLRespons">
               <MappingFragment StoreEntitySet="AccountAMLResponses">
+                <ScalarProperty Name="RatingValue" ColumnName="RatingValue" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Rank" ColumnName="Rank" />
@@ -2867,6 +3024,11 @@
           <EntitySetMapping Name="AccountAuthorisedPersons">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountAuthorisedPerson">
               <MappingFragment StoreEntitySet="AccountAuthorisedPerson">
+                <ScalarProperty Name="ManualValidationComment" ColumnName="ManualValidationComment" />
+                <ScalarProperty Name="IdValidationMode" ColumnName="IdValidationMode" />
+                <ScalarProperty Name="IdValidationBy" ColumnName="IdValidationBy" />
+                <ScalarProperty Name="IdValidationDate" ColumnName="IdValidationDate" />
+                <ScalarProperty Name="IdValidated" ColumnName="IdValidated" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="SignaturePath" ColumnName="SignaturePath" />
                 <ScalarProperty Name="IdPath" ColumnName="IdPath" />
@@ -3004,6 +3166,11 @@
           <EntitySetMapping Name="AccountMembers">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountMember">
               <MappingFragment StoreEntitySet="AccountMember">
+                <ScalarProperty Name="ManualValidationComment" ColumnName="ManualValidationComment" />
+                <ScalarProperty Name="IdValidationMode" ColumnName="IdValidationMode" />
+                <ScalarProperty Name="IdValidationBy" ColumnName="IdValidationBy" />
+                <ScalarProperty Name="IdValidationDate" ColumnName="IdValidationDate" />
+                <ScalarProperty Name="IdValidated" ColumnName="IdValidated" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="MaidenName" ColumnName="MaidenName" />
@@ -3119,6 +3286,24 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RoleName" ColumnName="RoleName" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AMLQuestionCategories">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AMLQuestionCategory">
+              <MappingFragment StoreEntitySet="AMLQuestionCategory">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationStatus">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.ApplicationStatu">
+              <MappingFragment StoreEntitySet="ApplicationStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

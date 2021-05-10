@@ -1,0 +1,193 @@
+﻿@using AppUtils
+@model AppModels.GviveResponseModel
+
+@{
+
+    if (Model.Error)
+    {
+        <h4>@Model.Message</h4>
+        if (Model.FirstOrSecond == 1)
+        {
+            <script type="text/javascript">
+                $("#photoId1Status").val("failed");
+            </script>
+        }
+
+        else if (Model.FirstOrSecond == 2)
+        {
+            <script type="text/javascript">
+                $("#photoId2Status").val("failed");
+            </script>
+        }
+    }
+
+    else
+    {
+        double comparePcnt = 0;
+        string imgPath = string.Empty;
+        <div class="row" style="padding:5%;">
+
+            @{
+                if (Model.CardTypeId == 1)
+                {
+                    //Drivers
+                    comparePcnt = 100; //Utilities.CompareEquarePercentage(Model.ClientNameCompare, Model.Name);
+                    imgPath = Model.DriverImage;
+                    <div class="col-md-6">
+                        <p>Certificate Of Competence : @Model.CertificateOfCompetence</p>
+
+                        <p>Name : @Model.Name</p>
+                        <p>DateOfBirth : @Model.DateOfBirth</p>
+                        <p>Processing Center : @Model.ProcessingCenter</p>
+                        <p>Nationality : @Model.Nationality</p>
+                        <p>Class Of License : @Model.ClassOfLicence</p>
+                        <p>PIN : @Model.PIN</p>
+                        <p>Issue Date : @Model.DateOfIssue</p>
+                        <p>Expiry Date : @Model.ExpiryDate</p>
+                      
+
+                    </div>
+
+                    <div class="col-md-6">
+
+
+                        <img style="width: 150px; height:200px; margin: 5px;" src="data:image/bmp;base64,@Model.DriverImage" style="width: 50%; height: 50%">
+                    
+
+                    </div>
+
+
+                }
+
+                else if (Model.CardTypeId == 2)
+                {
+                    //ssnit
+                    comparePcnt = 100;// Utilities.CompareEquarePercentage(Model.ClientNameCompare, Model.FullName);
+                    imgPath = Model.Photo;
+                    <div class="col-md-6">
+
+                        <p>Full name : @Model.FullName</p>
+                        <p>DateOfBirth : @Model.BirthDate</p>
+                        <p>FSSNo : @Model.FSSNo</p>
+                        <p>Sex : @Model.Sex</p>
+                        <p>Card Serial : @Model.CardSerial</p>
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <img style="width: 150px; height:200px; margin: 5px;" src="data:image/bmp;base64,@Model.Photo" style="width: 50%; height: 50%">
+
+
+                    </div>
+
+
+                }
+
+                else if (Model.CardTypeId == 3)
+                {
+                    //voter
+                    comparePcnt = 100;// Utilities.CompareEquarePercentage(Model.ClientNameCompare, Model.Fullname);
+                    imgPath = Model.Picture;
+                    <div class="col-md-6">
+                        <p>Full name: @Model.Fullname</p>
+                        <p>Polling Station : @Model.PollingStation</p>
+                        <p>Voter ID : @Model.VoterID</p>
+                        <p>Age : @Model.Age</p>
+                        <p>Sex : @Model.Sex</p>
+                        <p>Residential Address : @Model.ResidentialAddress</p>
+                        <p>DateOfBirth : @Model.DateOfBirth</p>
+                        <p>Fathers Name : @Model.FathersName</p>
+                        <p>Mothers Name : @Model.MothersName</p>
+
+
+
+                        <p>Registration Date : @Model.RegDate</p>
+
+
+                        <p>ExpiryDate : @Model.ExpiryDate</p>
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <img style="width: 150px; height:200px; margin: 5px;" src="data:image/bmp;base64,@Model.Picture" style="width: 50%; height: 50%">
+                    </div>
+
+                }
+
+
+
+
+
+
+
+                else if (Model.CardTypeId == 4)
+                {
+                    string _fullName = Model.FirstName + " " + Model.LastName;
+                    //passport
+                    comparePcnt = 100;// Utilities.CompareEquarePercentage(Model.ClientNameCompare, _fullName);
+                    imgPath = Model.Picture;
+                    <div class="col-md-6">
+
+                        <p>PassportNo : @Model.PassportNo</p>
+
+
+                        <p>FirstName : @Model.FirstName</p>
+
+
+                        <p>LastName : @Model.LastName</p>
+
+
+                        <p>MiddleName : @Model.MiddleName</p>
+
+
+                        <p>Nationality : @Model.Nationality</p>
+
+
+                        <p>DateOfBirth : @Model.DateOfBirth</p>
+
+
+                        <p>Gender : @Model.Gender</p>
+
+
+                        <p>IssueDate : @Model.IssueDate</p>
+
+
+                        <p>ExpiryDate : @Model.ExpiryDate</p>
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+
+                        <img style="width: 150px; height:200px; margin: 5px;" src="data:image/bmp;base64,@Model.Picture" style="width: 50%; height: 50%">
+                        <img style="width: 150px; height:200px; margin: 5px;" src="data:image/bmp;base64,@Model.Signature" style="width: 50%; height: 50%">
+
+
+                    </div>
+
+                }
+
+
+                Model.ComparePcnt = comparePcnt;
+                double minPcnt = 100;// Utilities.GetMinGViveComparePercentage();
+                <input type="hidden" name="ComparePcnt" id="ComparePcnt" value="@comparePcnt"/>
+                <input type="hidden" name="minPcnt" id="minPcnt" value="@minPcnt"/>
+                <input type="hidden" name="img_path" id="img_path" value="@imgPath"/>
+
+            }
+
+
+
+
+        </div>
+
+                }
+}
+
+

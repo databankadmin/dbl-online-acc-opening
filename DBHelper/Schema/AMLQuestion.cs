@@ -23,8 +23,13 @@ namespace DBHelper.Schema
         public int Id { get; set; }
         public string Question { get; set; }
         public bool IsActive { get; set; }
+        public decimal YesRating { get; set; }
+        public decimal NoRating { get; set; }
+        public bool IsDropDown { get; set; }
+        public int CategoryId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountAMLRespons> AccountAMLResponses { get; set; }
+        public virtual AMLQuestionCategory AMLQuestionCategory { get; set; }
     }
 }

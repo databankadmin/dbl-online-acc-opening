@@ -29,13 +29,101 @@ namespace AppMain.Controllers
             var model = Utilities.GetApplications();
             return View(model);
         }
-
-        public ActionResult ApplicantProfile(string _refNumber)
+        public ActionResult DownloadFile(string path, string _refNumber)
         {
+            ViewBag.path = path;
+            ViewBag._refNumber = _refNumber;
+            return View();
+        }
+
+
+        public ActionResult ApplicantProfile(string _refNumber, string message = null)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                ViewBag.Message = message.Decrypt();
+            }
             Guid applicationId = Guid.Parse(_refNumber.Decrypt());
             ViewBag.applicationId = applicationId;
             var model = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
             return View(model);
         }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult CancelOrRejectApplication(Guid applicationId,string action, string comments, string notifyApplicant)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var application = context.Accounts.Find(applicationId);
+                application.CancelOrRejectComment = comments;
+                application.StatusId = action == "R" ? 3 : 4;
+                application.CancelOrRejectDate = DateTime.Now;
+                application.CancelOrRejectBy = CurrentUser.Id;
+
+                context.SaveChanges();
+                if (!string.IsNullOrEmpty(notifyApplicant) && string.Equals(notifyApplicant, "on", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    //send message
+                }
+                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("action completed successfully").Encrypt() });
+
+            }
+
+        }
+
+
+        public ActionResult ReviewSuccessfully(Guid _ref)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var application = context.Accounts.Find(_ref);
+                application.SuccesfulReviewBy = CurrentUser.Id;
+                application.SuccessfulReviewDate = DateTime.Now;
+                application.StatusId = 2;
+                context.SaveChanges();
+                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("application successfully reviewed").Encrypt() });
+
+            }
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult ManualCardValidation(Guid applicationId, string recordId, string objectType, string comments)
+        {
+            using (var context = new DBLAccountOpeningContext())
+            {
+                var application = context.Accounts.Find(applicationId);
+
+                if (objectType == "AccMember")
+                {
+                    var model = context.AccountMembers.FirstOrDefault(x => x.Id.ToString() == recordId);
+                    if (model != null && !model.IdValidated)
+                    {
+                        model.IdValidated = true;
+                        model.IdValidationDate = DateTime.Now;
+                        model.IdValidationBy = (Utilities.GetSessionUser() as AppUser).Email;
+                        model.IdValidationMode = "MANUAL";
+                        model.ManualValidationComment = comments;
+
+                    }
+                }
+                else if (objectType == "AuthPerson")
+                {
+                    var model = context.AccountAuthorisedPersons.FirstOrDefault(x => x.Id.ToString() == recordId);
+                    if (model != null && !model.IdValidated)
+                    {
+                        model.IdValidated = true;
+                        model.IdValidationDate = DateTime.Now;
+                        model.IdValidationBy = (Utilities.GetSessionUser() as AppUser).Email;
+                        model.IdValidationMode = "MANUAL";
+                        model.ManualValidationComment = comments;
+                    }
+                }
+                context.SaveChanges();
+                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message=("Id verification successful.").Encrypt() });
+            }
+
+        }
+
+
     }
 }

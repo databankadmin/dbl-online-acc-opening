@@ -70,5 +70,7 @@ namespace DBHelper.Schema
         public virtual DbSet<ExpectedAccountActivity> ExpectedAccountActivities { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<AMLQuestionCategory> AMLQuestionCategories { get; set; }
+        public virtual DbSet<ApplicationStatu> ApplicationStatus { get; set; }
     }
 }

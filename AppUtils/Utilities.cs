@@ -76,6 +76,38 @@ namespace AppUtils
         }
 
 
+
+        public static void MarkIdCardAsValidated(string recordId,string objectType)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                if (objectType=="AccMember")
+                {
+                    var model = context.AccountMembers.FirstOrDefault(x=>x.Id.ToString()==recordId);
+                    if (model!=null && !model.IdValidated)
+                    {
+                        model.IdValidated = true;
+                        model.IdValidationDate = DateTime.Now;
+                        model.IdValidationBy = (GetSessionUser() as AppUser).Email;
+                        model.IdValidationMode = "GVIVE";
+                   
+                    }
+                }
+                else if (objectType=="AuthPerson")
+                {
+                    var model = context.AccountAuthorisedPersons.FirstOrDefault(x => x.Id.ToString() == recordId);
+                    if (model != null && !model.IdValidated)
+                    {
+                        model.IdValidated = true;
+                        model.IdValidationDate = DateTime.Now;
+                        model.IdValidationBy = (GetSessionUser() as AppUser).Email;
+                        model.IdValidationMode = "GVIVE";
+                    }
+                }
+                context.SaveChanges();
+            }
+        }
+
         public static List<AccountBasicModel> GetApplications(int accountType=0, int  investmentTypeId=0,string dates=null, string applicantionId=null)
         {
             try
@@ -148,7 +180,19 @@ namespace AppUtils
                             SignatureTypeName = item.SignatureTypeId.HasValue ? GetSignatureType(item.SignatureTypeId.Value).Name : string.Empty,
                             StreetAddressFull = item.StreetAddressFull,
                             TIN = item.TIN,
-                            YearsOfWorkExperience = item.YearsOfWorkExperience
+                            YearsOfWorkExperience = item.YearsOfWorkExperience,
+                            StatusId=item.StatusId,
+                            StatusName=item.ApplicationStatu.Name,
+                            SuccesfulReviewBy=item.SuccesfulReviewBy,
+                            SuccessfullyReviewwedByName=item.SuccesfulReviewBy.HasValue?context.AppUsers.Find(item.SuccesfulReviewBy.Value).Name:string.Empty,
+                            SuccessfulReviewDate=item.SuccessfulReviewDate,
+                            CancelOrRejectBy=item.CancelOrRejectBy,
+                            CancelOrrejectByName=item.CancelOrRejectBy.HasValue?context.AppUsers.Find(item.CancelOrRejectBy.Value).Name:string.Empty,
+                            CancelOrRejectComment=item.CancelOrRejectComment,
+                            CancelOrRejectDate=item.CancelOrRejectDate
+
+
+
                         });
                     }
                 }
@@ -160,6 +204,16 @@ namespace AppUtils
                 Logger.Instance.logError(ex);
                 return null;
             }
+        }
+
+        public static bool IsFilePdf(string fileName)
+        {
+            fileName = fileName.Trim().ToLower();
+            if (fileName.EndsWith(".pdf"))
+            {
+                return true;
+            }
+            return false;
         }
 
 
@@ -271,6 +325,46 @@ namespace AppUtils
             }
         }
 
+
+        public static List<AccountAMLReponseModel> GetAccountAMlReponses(Guid accountId)
+        {
+
+            var model=new List<AccountAMLReponseModel>();
+            using (var context=new DBLAccountOpeningContext())
+            {
+                foreach (var item in context.AccountAMLResponses.Where(x=>x.AccountId==accountId).OrderBy(x=>x.QuestionId))
+                {
+                    model.Add(new AccountAMLReponseModel {
+                        AccountId=item.AccountId,
+                        CreatedDate=item.CreatedDate,
+                        Id=item.Id,
+                        QuestionId=item.QuestionId,
+                        QuestionText=item.AMLQuestion.Question,
+                        Rank=item.Rank,
+                        RatingValue=item.RatingValue,
+                        Remark=item.Remark,
+                        YesNo=item.YesNo,
+                        RatingValueTxt=item.RatingValue>=0?item.RatingValue.ToString():"N/A"
+                        
+                    });
+                }
+            }
+            return model;
+        }
+
+        public static bool HasUnverifiedIds(Guid accountId)
+        {
+            bool hasUnverifiedId = false;
+            var members = GetAccountMembers(accountId);
+            var authorisedPersons = GetAccountAuthorisedPersons(accountId);
+            if (members.Any(x=>!x.IdValidated) || authorisedPersons.Any(x=>!x.IdValidated))
+            {
+                hasUnverifiedId = true;
+            }
+            return hasUnverifiedId;
+        }
+
+
         public static List<AccountAuthorisedPersonModel> GetAccountAuthorisedPersons(Guid accountId)
         {
             var model = new List<AccountAuthorisedPersonModel>();
@@ -306,7 +400,12 @@ namespace AppUtils
                             Tel = item.Tel,
                             Title = item.TitleId.HasValue ? GetTitle(item.TitleId.Value).Name : string.Empty,
                             TitleId = item.TitleId,
-                            ZipCode = item.ZipCode
+                            ZipCode = item.ZipCode,
+                            IdValidated=item.IdValidated,
+                            IdValidationBy=item.IdValidationBy,
+                            IdValidationDate=item.IdValidationDate,
+                            IdValidationMode=item.IdValidationMode,
+                            IdCardValidationStatus = item.IdValidated ? "Verified-" + item.IdValidationMode : "Not Verified"
                         });
                     }
                     return model;
@@ -429,6 +528,7 @@ namespace AppUtils
                         OnlineTradingFacility = item.OnlineTradingFacility,
                         RiskToleranceId = item.RiskToleranceId,
                         RiskToleranceName = item.RiskToleranceId.HasValue ? GetRiskTolerance(item.RiskToleranceId.Value).Name : string.Empty,
+                        
                     };
                     return model;
                 }
@@ -701,6 +801,12 @@ namespace AppUtils
                             Telephone = item.Telephone,
                             TitleId = item.TitleId,
                             TitleName = item.TitleId.HasValue ? GetTitle(item.TitleId.Value).Name : string.Empty,
+
+                            IdValidated = item.IdValidated,
+                            IdValidationBy = item.IdValidationBy,
+                            IdValidationDate = item.IdValidationDate,
+                            IdValidationMode = item.IdValidationMode,
+                            IdCardValidationStatus=item.IdValidated?"Verified-"+item.IdValidationMode:"Not Verified"
                         });
                     }
                 }

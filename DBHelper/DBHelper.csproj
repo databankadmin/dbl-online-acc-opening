@@ -96,6 +96,12 @@
     <Compile Include="Schema\AMLQuestion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Schema\AMLQuestionCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\ApplicationStatu.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Schema\ApproximateAnnualIncome.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

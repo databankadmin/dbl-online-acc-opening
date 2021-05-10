@@ -25,6 +25,7 @@
                                 <th>Name</th>
                                 <th>Account Type</th>
                                 <th>Investment Type</th>
+                                <th>Status</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -36,7 +37,7 @@
                                         <td><a style="color: #0000ff" href="@Url.Action("ApplicantProfile", new {_refNumber=item.Id.ToString().Encrypt()})">@item.AccountName</a></td>
                                         <td>@item.AccountTypeName</td>
                                         <td>@item.InvestmentTypeName</td>
-                                        
+                                        <td>@item.StatusName</td>
                                         <td data-sort="@item.CreatedDate.ToString("O")">@item.CreatedDate.ToString()</td>
 
                                     </tr>
@@ -64,7 +65,7 @@
             "ordering": true,
             "info": true,
             "autoWidth": false,
-            "aaSorting": [[3, "desc"]]
+            "aaSorting": [[4, "desc"]]
         });
     });
 </script>

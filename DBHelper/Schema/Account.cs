@@ -67,6 +67,12 @@ namespace DBHelper.Schema
         public Nullable<int> ExpectedAccountActivityId { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<int> InvestmentTypeId { get; set; }
+        public int StatusId { get; set; }
+        public Nullable<System.DateTime> SuccessfulReviewDate { get; set; }
+        public Nullable<System.Guid> SuccesfulReviewBy { get; set; }
+        public Nullable<System.DateTime> CancelOrRejectDate { get; set; }
+        public Nullable<System.Guid> CancelOrRejectBy { get; set; }
+        public string CancelOrRejectComment { get; set; }
     
         public virtual AccountType AccountType { get; set; }
         public virtual Country Country { get; set; }
@@ -101,5 +107,6 @@ namespace DBHelper.Schema
         public virtual ICollection<AccountSettlementDetail> AccountSettlementDetails { get; set; }
         public virtual ExpectedAccountActivity ExpectedAccountActivity { get; set; }
         public virtual InvestmentType InvestmentType { get; set; }
+        public virtual ApplicationStatu ApplicationStatu { get; set; }
     }
 }

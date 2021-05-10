@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AppLogger;
+using AppMain.Providers;
 using AppUtils;
 using DBHelper.Schema;
 
@@ -100,9 +101,11 @@ namespace AppMain.Controllers
             string tradingContacts1Email=null,int tradingContacts2Title=0,string tradingContacts2Fax=null, string tradingContacts2Name=null,string tradingContacts2Telephone=null,string tradingContacts2Mobile=null,string tradingContacts2Email=null,
             string instSignName1=null,string instSignPosition1=null,string instSignName2=null,string instSignPosition2=null,string instSignName3=null,string instSignPosition3=null,string instSignName4=null,string instSignPosition4=null,
             int instnumberOfSignatories = 0,string insOtherDetails = null, 
-            string q1Option=null,string q2Option=null,string q3Option=null,int q5Option=0,string q6Option=null,string q8Option=null,
+            
             string indemnityTxt1=null,string indemnityTxt2=null,string indemnityTxt3=null,string indemnityTxt4=null, string indemnityName1=null,string indemnityName2=null,string indemnityEmail1=null,string indemnityEmail2=null,
-            int yearsOfEmployment=0,string tin=null,string firstApplicantMaidenName=null,int statementFreqId = 0,int expectedAccountActivityId=0, string firstApplicantGender=null,string jointApplicantGender=null, string itfApplicantGender=null
+            int yearsOfEmployment=0,string tin=null,string firstApplicantMaidenName=null,int statementFreqId = 0,int expectedAccountActivityId=0, string firstApplicantGender=null,string jointApplicantGender=null, string itfApplicantGender=null,
+            List<string> remark=null
+
             )
 
         {
@@ -680,62 +683,47 @@ namespace AppMain.Controllers
                 context.SaveChanges();
 
                 //aml questions
-                context.AccountAMLResponses.Add(new AccountAMLRespons {
-                    AccountId=Guid.Parse(accountId),
-                    CreatedDate=DateTime.Now,
-                    Id=Guid.NewGuid(),
-                    QuestionId=1,
-                    YesNo= q1Option,
-                });
-                context.AccountAMLResponses.Add(new AccountAMLRespons
+                var aml = context.AMLQuestions.Where(x => x.IsActive).OrderBy(x=>x.Id).ToList();
+                for (int i = 0; i < aml.Count(); i++)
                 {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 2,
-                    YesNo = q2Option,
-                });
-                context.AccountAMLResponses.Add(new AccountAMLRespons
-                {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 3,
-                    YesNo = q3Option,
-                });
-                context.AccountAMLResponses.Add(new AccountAMLRespons
-                {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 5,
-                    YesNo = q5Option.ToString(),
-                });
-                context.AccountAMLResponses.Add(new AccountAMLRespons
-                {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 6,
-                    YesNo = q6Option
-                });
-
-                context.AccountAMLResponses.Add(new AccountAMLRespons
-                {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 7,
-                    YesNo = "Yes"
-                });
-                context.AccountAMLResponses.Add(new AccountAMLRespons
-                {
-                    AccountId = Guid.Parse(accountId),
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                    QuestionId = 8,
-                    YesNo = q8Option
-                });
+                    int sum = i + 1;
+                    string paramString = "amlQues_" + sum;
+                    if (i<=9 && i!=9)
+                    {
+                        paramString = paramString.Replace("0", "");
+                    }
+                    string value= Request[paramString];
+                    var amlItem = aml[i];
+                    if (value== "Yes" || value=="No")
+                    {
+                        context.AccountAMLResponses.Add(new AccountAMLRespons
+                        {
+                            AccountId = Guid.Parse(accountId),
+                            CreatedDate = DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            QuestionId = amlItem.Id,
+                            YesNo = value,
+                            RatingValue = value == "Yes" ? amlItem.YesRating : amlItem.NoRating,
+                            Remark = remark != null && remark.Any() ? remark[i]:string.Empty,
+                            
+                        });
+                    }
+                    else
+                    {
+                        context.AccountAMLResponses.Add(new AccountAMLRespons
+                        {
+                            AccountId = Guid.Parse(accountId),
+                            CreatedDate = DateTime.Now,
+                            Id = Guid.NewGuid(),
+                            QuestionId = amlItem.Id,
+                            YesNo = value,
+                            RatingValue = -1,
+                            Remark = remark != null && remark.Any() ? remark[i] : string.Empty
+                        });
+                    }
+                }
+               
+             
 
                 context.SaveChanges();
                 //eti
