@@ -64,6 +64,7 @@ namespace AppModels
         public Nullable<System.Guid> CancelOrRejectBy { get; set; }
         public string CancelOrrejectByName { get; set; }
         public string CancelOrRejectComment { get; set; }
+        public string RefNo { get; set; }
 
 
 

@@ -108,7 +108,27 @@ namespace AppUtils
             }
         }
 
-        public static List<AccountBasicModel> GetApplications(int accountType=0, int  investmentTypeId=0,string dates=null, string applicantionId=null)
+
+        public static string GenerateApplicationReference()
+        {
+            using (var context = new DBLAccountOpeningContext())
+            {
+                string _ref = string.Empty;
+                var rand = new Random();
+                while (true)
+                {
+                    _ref = rand.Next(10000000, 99999999).ToString();
+                    if (!context.Accounts.Any(x=>x.ReferenceNo==_ref))
+                    {
+                        break;
+                    }
+                }
+                return _ref;
+            }
+
+        }
+
+        public static List<AccountBasicModel> GetApplications(int accountType=0, int  investmentTypeId=0,string dates=null, string applicantionId=null,int statusId=0,string key=null)
         {
             try
             {
@@ -126,9 +146,27 @@ namespace AppUtils
                     {
                         applications = applications.Where(x => x.InvestmentTypeId == investmentTypeId);
                     }
+                    if (statusId>0)
+                    {
+                        applications = applications.Where(x => x.StatusId == statusId);
+                    }
+                   
+                    if (!string.IsNullOrEmpty(dates))
+                    {
+                        string[] dateArr = dates.Split(new char[] { '-' });
+
+                                    var startDate = DateTime.Parse(string.Concat(dateArr[0], " 00:00:00"));
+                                   var endDate = DateTime.Parse(string.Concat(dateArr[1], " 23:59:59"));
+                        applications = applications.Where(x => x.CreatedDate >= startDate && x.CreatedDate <= endDate).AsEnumerable();
+
+                    }
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        applications = applications.Where(x => x.ReferenceNo == key);
+                    }
                     if (!string.IsNullOrEmpty(applicantionId))
                     {
-                        applications = applications.Where(x => x.Id.ToString() == applicantionId);
+                        applications = context.Accounts.Where(x => x.Id.ToString() == applicantionId);
                     }
                     foreach (var item in applications)
                     {
@@ -147,7 +185,7 @@ namespace AppUtils
                             DeclarationConvictedOfLawDetails = item.DeclarationConvictedOfLawDetails,
                             DeclarationIWe = item.DeclarationIWe,
                             ExpectedAccountActivityId = item.ExpectedAccountActivityId,
-                            ExpectedAccountActivityName=item.ExpectedAccountActivityId.HasValue? GetExpectedAccountActivity(item.ExpectedAccountActivityId.Value).Name:string.Empty,
+                            ExpectedAccountActivityName = item.ExpectedAccountActivityId.HasValue ? GetExpectedAccountActivity(item.ExpectedAccountActivityId.Value).Name : string.Empty,
                             FrequencyOfStatementsId = item.FrequencyOfStatementsId,
                             FrequencyOfStatementsName = item.FrequencyOfStatementsId.HasValue ? context.StatementFrequencies.Find(item.FrequencyOfStatementsId).Name : string.Empty,
                             Id = item.Id,
@@ -181,15 +219,16 @@ namespace AppUtils
                             StreetAddressFull = item.StreetAddressFull,
                             TIN = item.TIN,
                             YearsOfWorkExperience = item.YearsOfWorkExperience,
-                            StatusId=item.StatusId,
-                            StatusName=item.ApplicationStatu.Name,
-                            SuccesfulReviewBy=item.SuccesfulReviewBy,
-                            SuccessfullyReviewwedByName=item.SuccesfulReviewBy.HasValue?context.AppUsers.Find(item.SuccesfulReviewBy.Value).Name:string.Empty,
-                            SuccessfulReviewDate=item.SuccessfulReviewDate,
-                            CancelOrRejectBy=item.CancelOrRejectBy,
-                            CancelOrrejectByName=item.CancelOrRejectBy.HasValue?context.AppUsers.Find(item.CancelOrRejectBy.Value).Name:string.Empty,
-                            CancelOrRejectComment=item.CancelOrRejectComment,
-                            CancelOrRejectDate=item.CancelOrRejectDate
+                            StatusId = item.StatusId,
+                            StatusName = item.ApplicationStatu.Name,
+                            SuccesfulReviewBy = item.SuccesfulReviewBy,
+                            SuccessfullyReviewwedByName = item.SuccesfulReviewBy.HasValue ? context.AppUsers.Find(item.SuccesfulReviewBy.Value).Name : string.Empty,
+                            SuccessfulReviewDate = item.SuccessfulReviewDate,
+                            CancelOrRejectBy = item.CancelOrRejectBy,
+                            CancelOrrejectByName = item.CancelOrRejectBy.HasValue ? context.AppUsers.Find(item.CancelOrRejectBy.Value).Name : string.Empty,
+                            CancelOrRejectComment = item.CancelOrRejectComment,
+                            CancelOrRejectDate = item.CancelOrRejectDate,
+                            RefNo = item.ReferenceNo
 
 
 

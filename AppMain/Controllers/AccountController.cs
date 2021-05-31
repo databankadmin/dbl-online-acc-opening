@@ -44,8 +44,21 @@ namespace AppMain.Controllers
                         Phone = "0302610610",
                         RoleId = 1,
                     });
-                    context.SaveChanges();
                 }
+                foreach (var item in context.Accounts.Where(x => x.ReferenceNo == null))
+                {
+                    SetRef(item.Id, Utilities.GenerateApplicationReference());
+                }
+                context.SaveChanges();
+            }
+        }
+        public void SetRef(Guid accountId,string _ref)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var model = context.Accounts.Find(accountId);
+                model.ReferenceNo = _ref;
+                context.SaveChanges();
             }
         }
 

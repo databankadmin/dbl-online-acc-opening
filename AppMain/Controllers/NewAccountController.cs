@@ -116,7 +116,7 @@ namespace AppMain.Controllers
                 string accountId = string.Empty;
                 if (accountType <= 3)
                 {
-                   // var _csd = _CsdCompletedForm;
+                    // var _csd = _CsdCompletedForm;
                     //single,joint,itf
                     var account = new Account
                     {
@@ -137,6 +137,8 @@ namespace AppMain.Controllers
                         Id = Guid.NewGuid(),
                         SelectApplicableId = firstApplicantTickApplicable,
                         CSDFormPath = SaveFileUpload(_CsdCompletedForm),
+                        ReferenceNo = Utilities.GenerateApplicationReference(),
+                        StatusId=1
                     };
                     if (yearsOfEmployment > 0)
                     {
@@ -298,7 +300,10 @@ namespace AppMain.Controllers
                             StreetAddress=null,
                             SignaturePath=null,
                         };
-
+                        if (authorisedPersonApplicantIdType==0)
+                        {
+                            authorisedPersonApplicantIdType = 1;
+                        }
                         if (authorisedPersonZipCountryId>0)
                         {
                             authorisedPerson.CountryId = authorisedPersonZipCountryId;
@@ -406,6 +411,7 @@ namespace AppMain.Controllers
                         CreatedDate=DateTime.Now,
                         SignatureTypeId= instnumberOfSignatories,
                         InstOtherDetails= insOtherDetails,
+                        StatusId=1
                     };
                     if (instSteetAddressCountry>0)
                     {

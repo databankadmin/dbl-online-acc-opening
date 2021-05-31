@@ -51,6 +51,7 @@
           <Property Name="CancelOrRejectDate" Type="datetime" />
           <Property Name="CancelOrRejectBy" Type="uniqueidentifier" />
           <Property Name="CancelOrRejectComment" Type="varchar(max)" />
+          <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AccountAMLResponses">
           <Key>
@@ -1858,6 +1859,7 @@
           <Property Name="CancelOrRejectBy" Type="Guid" />
           <Property Name="CancelOrRejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ApplicationStatu" Relationship="DBLAccountOpeningModel.FK_Account_ApplicationStatus" FromRole="Account" ToRole="ApplicationStatu" />
+          <Property Name="ReferenceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountAMLRespons">
           <Key>
@@ -2962,6 +2964,7 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
                 <ScalarProperty Name="CancelOrRejectComment" ColumnName="CancelOrRejectComment" />
                 <ScalarProperty Name="CancelOrRejectBy" ColumnName="CancelOrRejectBy" />
                 <ScalarProperty Name="CancelOrRejectDate" ColumnName="CancelOrRejectDate" />

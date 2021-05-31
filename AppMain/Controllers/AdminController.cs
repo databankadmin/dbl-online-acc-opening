@@ -24,9 +24,23 @@ namespace AppMain.Controllers
             }
         }
         // GET: Admin
-        public ActionResult Applications(int accountType = 0, int investmentTypeId = 0, string dates = null)
+        public ActionResult Applications(int accountType = 0, int investmentTypeId = 0, int statusId=0,string key=null, string from = null, string to=null)
         {
-            var model = Utilities.GetApplications();
+
+
+            string  dates = DateTime.Now.AddDays(-90).ToString("MM/dd/yyyy") + "-" + DateTime.Now.ToString("MM/dd/yyyy");
+            if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+            {
+                dates = from + "-" + to;
+            }
+
+            var model = Utilities.GetApplications(accountType,investmentTypeId,dates,null,statusId,key);
+            ViewBag.accountType = accountType;
+            ViewBag.investmentTypeId = investmentTypeId;
+            ViewBag.from = string.IsNullOrEmpty(from) ? DateTime.Now.AddDays(-90).ToShortDateString() : from;
+            ViewBag.to = string.IsNullOrEmpty(to) ? DateTime.Now.ToShortDateString() : to;
+            ViewBag.statusId = statusId;
+            ViewBag.key = key;
             return View(model);
         }
         public ActionResult DownloadFile(string path, string _refNumber)

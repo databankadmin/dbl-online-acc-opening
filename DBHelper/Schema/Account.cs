@@ -73,6 +73,7 @@ namespace DBHelper.Schema
         public Nullable<System.DateTime> CancelOrRejectDate { get; set; }
         public Nullable<System.Guid> CancelOrRejectBy { get; set; }
         public string CancelOrRejectComment { get; set; }
+        public string ReferenceNo { get; set; }
     
         public virtual AccountType AccountType { get; set; }
         public virtual Country Country { get; set; }
