@@ -23,7 +23,7 @@
     var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
     var context = new DBHelper.Schema.DBLAccountOpeningContext();
     // var accountActivity = context.ExpectedAccountActivities.Find(Model.ExpectedAccountActivityId.Value);
-
+   // var acc = context.Accounts.Find(Model.Id);
 }
 <script src="~/Scripts/appProfile.js"></script>
 
@@ -62,6 +62,11 @@
                     {
                         <span class="badge badge-danger">@Model.StatusName</span>
                     }
+
+                    if (!string.IsNullOrEmpty(Model.BackConnectAccountNumber))
+                    {
+                        <span> | @Model.BackConnectAccountNumber</span>
+                    }
                 }
 
             </h3>
@@ -74,7 +79,7 @@
 
                 <li class="nav-item"><a class="nav-link" href="#aml" data-toggle="tab">AML Profile</a></li>
 
-                <li class="nav-item"><a class="nav-link" href="#eti" data-toggle="tab">ETI Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#eti" data-toggle="tab">Email Indemnity</a></li>
 
 
             </ul>
@@ -482,16 +487,21 @@
                                                     <th>Mailing Address</th>
                                                     <td colspan="5">@nextOfKin2.MailingAddress</td>
                                                 </tr>
-                                            }
+                                                            }
 
-                                            if (accountAuthorisedPersons.Any())
-                                            {
+
+
+                                                            if (accountAuthorisedPersons != null)
+                                                            {
+
+                                                                if (accountAuthorisedPersons != null && accountAuthorisedPersons.Any())
+                                                                {
                                                 <tr>
                                                     <th class="theader" colspan="6">
                                                         Authorised Person other than Account Holder(s) to Deal on the Account
                                                     </th>
                                                 </tr>
-                                                var authorisedPerson = accountAuthorisedPersons.FirstOrDefault();
+                                                                    var authorisedPerson = accountAuthorisedPersons.FirstOrDefault();
                                                 <tr>
                                                     <th>Name</th>
                                                     <td>@authorisedPerson.Name</td>
@@ -576,9 +586,9 @@
 
                                                 </tr>
 
-                                            }
+                                                                }
 
-
+                                                            }
                                             <tr>
                                                 <th class="theader" colspan="6">
                                                     Settlement Details
@@ -712,6 +722,14 @@
                                             <tr>
                                                 <th colspan="2">Number of Signatories</th>
                                                 <td>@Model.SignatureTypeName</td>
+
+                                                @{ 
+                                                    if (Model.StaffRefCode.HasValue)
+                                                    {
+                                                        <th>Staff Referral</th>
+                                                        <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
+                                                    }
+                                                }
                                             </tr>
                                         }
                                     </table>
@@ -1160,13 +1178,21 @@
                                                 </tr>
                                             }
 
-                                            <tr>
-                                                <th colspan="2">Number of Signatories</th>
-                                                <td>@Model.SignatureTypeName</td>
+                                                <tr>
+                                                    <th colspan="2">Number of Signatories</th>
+                                                    <td>@Model.SignatureTypeName</td>
 
-                                                <th>Other Details</th>
-                                                <td>@Model.InstOtherDetails</td>
-                                            </tr>
+                                                    <th>Other Details</th>
+                                                    <td>@Model.InstOtherDetails</td>
+
+                                                    @{
+                                                        if (Model.StaffRefCode.HasValue)
+                                                        {
+                                                            <th>Staff Referral</th>
+                                                            <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
+                                                        }
+                                                    }
+                                                </tr>
 
                                         }
 
@@ -1269,6 +1295,14 @@
                                     <td></td>
                                     <th colspan="2">TOTAL AML SCORE </th>
                                     <th style="border-bottom:double;">@accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue).ToString("N2")</th>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <th colspan="2">AML RATING</th>
+                                    <th style="border-bottom:double">@Utilities.GetAMLRating(accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue))
+
+                                    </th>
                                 </tr>
                             }
                         </table>

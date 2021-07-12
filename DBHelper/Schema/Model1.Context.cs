@@ -72,5 +72,8 @@ namespace DBHelper.Schema
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<AMLQuestionCategory> AMLQuestionCategories { get; set; }
         public virtual DbSet<ApplicationStatu> ApplicationStatus { get; set; }
+        public virtual DbSet<ForgottenAccountDetail> ForgottenAccountDetails { get; set; }
+        public virtual DbSet<StaffRefList> StaffRefLists { get; set; }
+        public virtual DbSet<Branch> Branches { get; set; }
     }
 }

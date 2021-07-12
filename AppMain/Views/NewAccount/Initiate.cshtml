@@ -23,33 +23,51 @@
     <link rel="icon" href="~/images/databank.png" type="image/x-icon">
 
     <link rel="stylesheet" href="~/wizardFiles/css/style.css">
-    <script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    @*<script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
     <style>
         body, #main {
             border-bottom: thin gold;
-            background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);
+            /*background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);*/
             padding-top: 1%;
             padding-bottom: 1%;
             height: auto;
             min-height: 5px;
         }
+
+        .question {
+            color: darkgreen;
+            font-weight: bold;
+        }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.js"></script>
+
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/Scripts/bootbox.min.js"></script>*@
+
 
 </head>
 
 <body>
-    @Html.Partial("~/Views/Partials/_header.cshtml")
+    @*@Html.Partial("~/Views/Partials/_header.cshtml")*@
     <div class="main" style="padding:0;">
 
         <div class="container">
+            <img src="~/Images/brokerage_header.jpg" />
+
             <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data" action="@Url.Action("Initiate")">
                 <div>
 
@@ -113,6 +131,123 @@
         </div>
 
     </div>
+
+    <div id="dialog" title="Let's get started with some basic questions!">
+
+
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                
+                <div class="modal-body" style="text-align:justify">
+                    <div class="card-body" style="overflow:auto">
+                        <div id="clientTypeModalDiv">
+                            <p>
+                                <label class="question">What type of client are you?</label>
+                                <select name="" class="form-control" style="width:200px;" onchange="javascript:clientTypeChanged(this.value)">
+                                    <option value="">-select-</option>
+                                    <option value="New">New Client</option>
+                                    <option value="Existing">Existing Client</option>
+                                </select>
+                            </p>
+                        </div>
+
+                        <div id="newClientTypeModalDiv" style="display:none;">
+                            <form id="newClientForm">
+                                <label class="question">Which of the following best describes you?</label><br />
+                                <label>
+                                    <input type="radio" name="group1" value="1" style="width:15px; height:15px;display:inline;"/> I have never previously opened a Databank account
+
+                                </label>
+                              
+                                <br/>
+                                
+                                <label>
+                                    <input type="radio" name="group1" value="2" style="width:15px; height:15px;display:inline;" /> I want to make general enquiries
+                                </label>
+                                
+                            </form>
+                        </div>
+
+
+                        <div id="existingClientTypeModalDiv" style="display:none;">
+
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                  <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color:#1f2222; font-size:16px; font-weight:bold;">
+                                                I would like to have a different investment package (Equities or Fixed income)
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body" style="font-style:italic;">
+
+                                            Please note that this is for account holders who wish to invest in a different investment vehicle (Equities or Fixed income),  You will be required complete an account opening form.<br/>
+
+                                            @*<a href="https://onlineservice.databankgroup.com/portal/" target="_blank"><i class="fa fa-hand-o-right"></i> Proceed to deposit</a><br />*@
+                                            <a href="#" onclick="javascript:existingClientOptionsHandler('1')"><i class="fa fa-hand-o-right"></i> Yes, continue</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color:#1f2222; font-size:16px; font-weight:bold;">
+                                                I’ve forgotten my account details
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div class="panel-body" style="font-style:italic">
+                                            <h3>Please provide the following details about your account</h3>
+                                            <form method="post" action="@Url.Action("ForgottenAccount")" enctype="multipart/form-data">
+                                              @Html.AntiForgeryToken()
+                                                <table>
+                                                    <tr>
+                                                        <td><input type="text" placeholder="Name(*)" name="name" required class="form-control" style="width:320px;"/></td>
+                                                        <td><input type="text" placeholder="Postal Address(*)" name="address" required class="form-control"  style="width:320px;"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="email" placeholder="Email" class="form-control" name="email"  style="width:320px;"/></td>
+                                                        <td><input type="text" placeholder="Telephone Number(*)" name="phone" required class="form-control" style="width:320px;" /></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th colspan="2" style="align-content:center; text-align:center;">
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                              
+                                                    <input type="submit" value="Submit" style="color:white; background-color: #00a65a !important; width:300px; margin-left:24%;" />
+
+                                                
+                                               
+
+                                            </form>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+
+
+    </div>
+
+   
+
 
     <!-- JS -->
     <script src="~/wizardFiles/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -213,28 +348,30 @@
 
 
         /*.dz-upload,.dz-progress {
-            display: block;
-            background-color: red;
-            height: 10px;
-            width: 0%;
-        }
-        .dropzone .dz-preview .dz-progress .dz-upload {
-            display: block;
-            background-color: red;
-            height: 10px;
-            width: 0%;
-        }*/
+                display: block;
+                background-color: red;
+                height: 10px;
+                width: 0%;
+            }
+            .dropzone .dz-preview .dz-progress .dz-upload {
+                display: block;
+                background-color: red;
+                height: 10px;
+                width: 0%;
+            }*/
 
 
         /*.dropzone .dz-preview .dz-progress {
-            opacity: 0;
-        }*/
+                opacity: 0;
+            }*/
         .dropzone .dz-message {
-        margin-top:5px;
+            margin-top: 5px;
         }
     </style>
 
     <script type="text/javascript">
+        hasAnsweredModal = false;
+
         function setZoom() {
             document.body.style.zoom = "95%";
         }
@@ -319,15 +456,13 @@
         });
 
 
-        function resetIDDropDownToPassportOnly(ctrlId)
-        {
+        function resetIDDropDownToPassportOnly(ctrlId) {
             $('#' + ctrlId + ' option').remove();
             $('#' + ctrlId).append('<option value="">-select-</option>');
             $('#' + ctrlId).append('<option value="' + 4 + '">' + 'Passport' + '</option>');
         }
 
-        function getDropDownItems(ctrlId)
-        {
+        function getDropDownItems(ctrlId) {
             var oldValuesArray = new Array();
             $('#' + ctrlId + ' option').each(function () {
                 if ($(this).val() != "") {
@@ -352,16 +487,16 @@
             //jointApplicantDOB
             minAge = 18;
             age = computeAge(new Date(dob));
-            if (Number(age)<0) {
+            if (Number(age) < 0) {
                 age = 0;
             }
             if (ctrl === "firstApplicantDOB" || "jointApplicantDOB") {
                 if (age < minAge) {
-                  swal("Applicant MUST NOT be less than " + minAge + " years.\nAge is: " + age);
+                    swal("Applicant MUST NOT be less than " + minAge + " years.\nAge is: " + age);
                     $("#" + ctrl).val("");
                 }
             }
-           
+
         }
 
 
@@ -390,9 +525,77 @@
 
         }
 
-       
+        function showMainForm() {
+            $("#dialog").dialog("close");
+            $("#signup-form :input").removeAttr("disabled");
 
+        }
+        $(document).ready(function () {
+            $("#signup-form :input").prop("disabled", true);
+            $("#dialog").dialog({
+                width: 800,
+                height:600,
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+
+            $("#dialog").dialog("open");
+
+        });
+
+
+        function clientTypeChanged(value) {
+            if (value === "New") {
+               // $("#existingClientTypeModalDiv").slideUp();
+                hasAnsweredModal = true;
+                showMainForm();
+                $("#newClientTypeModalDiv").slideDown();
+            }
+
+            else if (value === "Existing") {
+                $("#newClientTypeModalDiv").slideUp();
+                $("#existingClientTypeModalDiv").slideDown();
+            }
+        }
+
+
+
+
+        function existingClientOptionsHandler(index) {
+            var number = Number(index);
+            hasAnsweredModal = true;
+            if (number === 1) {
+                showMainForm();
+            }
+            else if (number === 2) {
+                showMainForm();
+            }
+            
+        }
+
+        $("#dialog").dialog({
+            beforeClose: function (event, ui)
+            {
+                if (hasAnsweredModal) {
+                    return true;
+                }
+                else {
+                    return false;
+
+                }
+            }
+});
     </script>
+
+
+
 
 </body>
 

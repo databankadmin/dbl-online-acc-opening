@@ -109,6 +109,7 @@
                                 <th>Account Type</th>
                                 <th>Investment Type</th>
                                 <th>Status</th>
+                                <th>Back Connect Accn.</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -124,6 +125,7 @@
 
                                 <td>@item.InvestmentTypeName</td>
                                 <td>@item.StatusName</td>
+                                <td>@item.BackConnectAccountNumber</td>
                                 <td data-sort="@item.CreatedDate.ToString("O")">@item.CreatedDate.ToString()</td>
 
                             </tr>
@@ -164,7 +166,7 @@
             "ordering": true,
             "info": true,
             "autoWidth": false,
-            "aaSorting": [[5, "desc"]],
+            "aaSorting": [[6, "desc"]],
             dom: 'Bfrtlp',
             buttons: [
                 {

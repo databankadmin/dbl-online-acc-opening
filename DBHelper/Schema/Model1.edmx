@@ -52,6 +52,9 @@
           <Property Name="CancelOrRejectBy" Type="uniqueidentifier" />
           <Property Name="CancelOrRejectComment" Type="varchar(max)" />
           <Property Name="ReferenceNo" Type="varchar" MaxLength="50" />
+          <Property Name="StaffRefCode" Type="float" />
+          <Property Name="BranchCode" Type="nvarchar" MaxLength="500" />
+          <Property Name="BackConnectAccountNumber" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="AccountAMLResponses">
           <Key>
@@ -361,6 +364,21 @@
           <Property Name="IsCollectionBank" Type="bit" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Branches">
+          <Key>
+            <PropertyRef Name="BRANCH_CODE" />
+          </Key>
+          <Property Name="BRANCH_CODE" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="BRANCH_NAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="CITY_CODE" Type="nvarchar" MaxLength="255" />
+          <Property Name="BRANCH_ADDRESS" Type="nvarchar" MaxLength="255" />
+          <Property Name="FAX_ONE" Type="nvarchar" MaxLength="255" />
+          <Property Name="FAX_TWO" Type="nvarchar" MaxLength="255" />
+          <Property Name="PHONE_ONE" Type="nvarchar" MaxLength="255" />
+          <Property Name="PHONE_TWO" Type="nvarchar" MaxLength="255" />
+          <Property Name="POST" Type="float" />
+          <Property Name="LOG_ID" Type="float" />
+        </EntityType>
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="ID" />
@@ -408,6 +426,17 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ForgottenAccountDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="200" />
+          <Property Name="Phone" Type="varchar" MaxLength="100" />
+          <Property Name="Address" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="IDCardType">
           <Key>
@@ -564,6 +593,14 @@
           <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="StaffRefList">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="float" Nullable="false" />
+          <Property Name="Email Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Staff Name" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="StatementFrequency">
           <Key>
             <PropertyRef Name="Id" />
@@ -684,6 +721,18 @@
             </Principal>
             <Dependent Role="Account">
               <PropertyRef Name="RegionalInvestmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_StaffRefList">
+          <End Role="StaffRefList" Type="Self.StaffRefList" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StaffRefList">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StaffRefCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1105,12 +1154,14 @@
           <EntitySet Name="AppSettings" EntityType="Self.AppSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSDDepositoryParticipantOption" EntityType="Self.CSDDepositoryParticipantOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocTypes" EntityType="Self.DocTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmploymentStatus" EntityType="Self.EmploymentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpectedAccountActivity" EntityType="Self.ExpectedAccountActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileUploadTypes" EntityType="Self.FileUploadTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ForgottenAccountDetails" EntityType="Self.ForgottenAccountDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IDCardType" EntityType="Self.IDCardType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentHorizon" EntityType="Self.InvestmentHorizon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentKnowledge" EntityType="Self.InvestmentKnowledge" Schema="dbo" store:Type="Tables" />
@@ -1129,6 +1180,7 @@
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SignatureTypes" EntityType="Self.SignatureTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceOfIncome" EntityType="Self.SourceOfIncome" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StaffRefList" EntityType="Self.StaffRefList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatementFrequency" EntityType="Self.StatementFrequency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Account_AccountType" Association="Self.FK_Account_AccountType">
@@ -1165,6 +1217,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Account_RegionalInvesmentInterest" Association="Self.FK_Account_RegionalInvesmentInterest">
             <End Role="RegionalInvesmentInterest" EntitySet="RegionalInvesmentInterest" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_StaffRefList" Association="Self.FK_Account_StaffRefList">
+            <End Role="StaffRefList" EntitySet="StaffRefList" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
           <AssociationSet Name="FK_Account_StatementFrequency" Association="Self.FK_Account_StatementFrequency">
@@ -1772,6 +1828,13 @@
             <End Role="ApplicationStatu" EntitySet="ApplicationStatus" />
             <End Role="Account" EntitySet="Accounts" />
           </AssociationSet>
+          <EntitySet Name="ForgottenAccountDetails" EntityType="DBLAccountOpeningModel.ForgottenAccountDetail" />
+          <EntitySet Name="StaffRefLists" EntityType="DBLAccountOpeningModel.StaffRefList" />
+          <AssociationSet Name="FK_Account_StaffRefList" Association="DBLAccountOpeningModel.FK_Account_StaffRefList">
+            <End Role="StaffRefList" EntitySet="StaffRefLists" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <EntitySet Name="Branches" EntityType="DBLAccountOpeningModel.Branch" />
         </EntityContainer>
         <EntityType Name="MaritalStatu">
           <Key>
@@ -1860,6 +1923,10 @@
           <Property Name="CancelOrRejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ApplicationStatu" Relationship="DBLAccountOpeningModel.FK_Account_ApplicationStatus" FromRole="Account" ToRole="ApplicationStatu" />
           <Property Name="ReferenceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StaffRefCode" Type="Double" />
+          <NavigationProperty Name="StaffRefList" Relationship="DBLAccountOpeningModel.FK_Account_StaffRefList" FromRole="Account" ToRole="StaffRefList" />
+          <Property Name="BranchCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BackConnectAccountNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountAMLRespons">
           <Key>
@@ -2683,6 +2750,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ForgottenAccountDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="StaffRefList">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Double" Nullable="false" />
+          <Property Name="Email_Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Staff_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_StaffRefList" FromRole="StaffRefList" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_Account_StaffRefList">
+          <End Type="DBLAccountOpeningModel.StaffRefList" Role="StaffRefList" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StaffRefList">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="StaffRefCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="BRANCH_CODE" />
+          </Key>
+          <Property Name="BRANCH_CODE" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BRANCH_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CITY_CODE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BRANCH_ADDRESS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FAX_ONE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FAX_TWO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PHONE_ONE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PHONE_TWO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="POST" Type="Double" />
+          <Property Name="LOG_ID" Type="Double" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2964,6 +3078,9 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="BackConnectAccountNumber" ColumnName="BackConnectAccountNumber" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="StaffRefCode" ColumnName="StaffRefCode" />
                 <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
                 <ScalarProperty Name="CancelOrRejectComment" ColumnName="CancelOrRejectComment" />
                 <ScalarProperty Name="CancelOrRejectBy" ColumnName="CancelOrRejectBy" />
@@ -3307,6 +3424,43 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForgottenAccountDetails">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.ForgottenAccountDetail">
+              <MappingFragment StoreEntitySet="ForgottenAccountDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StaffRefLists">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.StaffRefList">
+              <MappingFragment StoreEntitySet="StaffRefList">
+                <ScalarProperty Name="Staff_Name" ColumnName="Staff Name" />
+                <ScalarProperty Name="Email_Address" ColumnName="Email Address" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Branches">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Branch">
+              <MappingFragment StoreEntitySet="Branches">
+                <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
+                <ScalarProperty Name="POST" ColumnName="POST" />
+                <ScalarProperty Name="PHONE_TWO" ColumnName="PHONE_TWO" />
+                <ScalarProperty Name="PHONE_ONE" ColumnName="PHONE_ONE" />
+                <ScalarProperty Name="FAX_TWO" ColumnName="FAX_TWO" />
+                <ScalarProperty Name="FAX_ONE" ColumnName="FAX_ONE" />
+                <ScalarProperty Name="BRANCH_ADDRESS" ColumnName="BRANCH_ADDRESS" />
+                <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
+                <ScalarProperty Name="BRANCH_NAME" ColumnName="BRANCH_NAME" />
+                <ScalarProperty Name="BRANCH_CODE" ColumnName="BRANCH_CODE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

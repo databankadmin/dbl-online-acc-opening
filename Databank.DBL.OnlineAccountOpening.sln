@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppUtils", "AppUtils\AppUti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMain", "AppMain\AppMain.csproj", "{C68F97F1-24B2-42CD-BF16-30C604181B54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SofteckSdkSolution", "..\..\..\Desktop\SofteckSdkSolution\SofteckSdkSolution\SofteckSdkSolution\SofteckSdkSolution.csproj", "{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C68F97F1-24B2-42CD-BF16-30C604181B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C68F97F1-24B2-42CD-BF16-30C604181B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C68F97F1-24B2-42CD-BF16-30C604181B54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

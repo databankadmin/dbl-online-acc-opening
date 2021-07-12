@@ -25,6 +25,12 @@
     }
 </style>
 
+<div class="col-md-12">
+    <div class="row" style="padding-left:2%; padding-right:2%;">
+        <img src="~/Images/pdf_header_logo.png" style="width:300px; height:80px; display:inline;" />
+        <img src="~/Images/pdf_header_databank.png" style="width:300px; height:80px; float:right;" />
+    </div>
+</div>
 
 <div class="col-md-12">
     <div class="card">
@@ -52,6 +58,15 @@
                         <th colspan="2">TOTAL AML SCORE </th>
                         <th style="border-bottom:double;">@accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue).ToString("N2")</th>
                     </tr>
+
+                    <tr>
+                        <td></td>
+                        <th colspan="2">AML RATING</th>
+                        <th style="border-bottom:double">
+                            @Utilities.GetAMLRating(accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue))
+
+                    </th>
+                </tr>
                 }
             </table>
         </div>

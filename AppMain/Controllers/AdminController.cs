@@ -1,11 +1,16 @@
 ﻿using AppMain.Providers;
 using AppUtils;
 using DBHelper.Schema;
+using Newtonsoft.Json;
+using SofteckSdkSolution.Models;
+using SofteckSdkSolution.SofteckAofSdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace AppMain.Controllers
 {
@@ -88,14 +93,326 @@ namespace AppMain.Controllers
 
         public ActionResult ReviewSuccessfully(Guid _ref)
         {
-            using (var context=new DBLAccountOpeningContext())
+            //DBLSoftTechServiceReference.ClientOpeningWSClient objPayRef = new DBLSoftTechServiceReference.ClientOpeningWSClient();
+            //objPayRef.Open();
+            //objPayRef.openClient(new DBLSoftTechServiceReference.clientAofApiBean
+            //{
+
+
+            //});
+            //  <return>Client Code IS: 32305-000001</return>
+
+            try
             {
-                var application = context.Accounts.Find(_ref);
-                application.SuccesfulReviewBy = CurrentUser.Id;
-                application.SuccessfulReviewDate = DateTime.Now;
-                application.StatusId = 2;
-                context.SaveChanges();
-                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("application successfully reviewed").Encrypt() });
+                using (var context = new DBLAccountOpeningContext())
+                {
+                    var application = context.Accounts.Find(_ref);
+                    var applicationId = _ref;
+                    var basicProfile = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+
+                    if (application.AccountTypeId <= 3)
+                    {
+                        var accountAuthorisedPerson = Utilities.GetAccountAuthorisedPersons(applicationId).OrderBy(x => x.CreatedDate).FirstOrDefault();
+                        //  var accountETI = Utilities.GetAccountETI(applicationId);
+                        //  var accountUploads = Utilities.GetAccountFilesUploads(applicationId);
+                        var accountFinancialInvestmentRiskProfile = Utilities.GetAccountInvestmentRiskProfile(applicationId);
+                        //  var accountCustodyDetails = Utilities.GetAccountCustodyDetails(applicationId);
+                        //  var accountTradingContacts = Utilities.GetAccountTradingContract(applicationId);
+                        var accountInstructionEmploymentDetails = Utilities.GetAccountInstructionEmploymentDetailModel(applicationId);
+                        // var accountSignatories = Utilities.GetAccountSignatories(applicationId);
+                        var accountMember = Utilities.GetAccountMembers(applicationId).FirstOrDefault();
+                        var accountNextOfKins = Utilities.GetAccountNextOfKins(applicationId);
+                        var accountSettlementDetails = Utilities.GetAccountSettlementDetail(applicationId);
+
+
+                        
+                        //ind, single or itf
+                        using (var client = new AofSdkClient())
+                        {
+                            var result = client.CreateAccount(
+                        new openClientRequest
+                        {
+                            arg0 = new clientAofApiBean
+                            {
+                                accStatmentFreq = basicProfile.FrequencyOfStatementsName,
+                                appId = null,
+                                accountType=basicProfile.AccountTypeName,
+                                applicantObj = null,
+                                approximateAnnualIncome = accountFinancialInvestmentRiskProfile.ApproximateAnnualIncomeName,
+                                authPersonCity = accountAuthorisedPerson != null ? accountAuthorisedPerson.City : accountMember.MailingAddressCity,
+                                authPersonCountry = accountAuthorisedPerson != null ? accountAuthorisedPerson.CountryName : accountMember.NationalityName,
+                                authPersonEmail = accountAuthorisedPerson != null ? accountAuthorisedPerson.Email : accountMember.Email,
+                                authPersonFax = accountAuthorisedPerson != null ? accountAuthorisedPerson.Fax : accountMember.Fax,
+                                authPersonFullName = accountAuthorisedPerson != null ? accountAuthorisedPerson.Name : accountMember.Fname +" "+ accountMember.Lname,
+                                authPersonMailingAdd = accountAuthorisedPerson != null ? accountAuthorisedPerson.MailingAddress : accountMember.MailingAddressFull,
+                                authPersonMob = accountAuthorisedPerson != null ? accountAuthorisedPerson.Mobile : accountMember.Mobile,
+                                authPersonNicExpDate = accountAuthorisedPerson != null && !string.IsNullOrEmpty(accountAuthorisedPerson.IDExpiryDate) ? Utilities.SoftTechDateFormatter(accountAuthorisedPerson.IDExpiryDate) : string.Empty,
+                                authPersonNicIssueAuthority = accountAuthorisedPerson != null ? accountAuthorisedPerson.IdIssueAuthority : accountMember.IssuingAuthority,
+                                authPersonNicIssueDate = accountAuthorisedPerson != null && !string.IsNullOrEmpty(accountAuthorisedPerson.IssueDate) ? Utilities.SoftTechDateFormatter(accountAuthorisedPerson.IssueDate) : string.Empty,
+                                authPersonNicPhotoId = accountAuthorisedPerson != null ? accountAuthorisedPerson.IdNumber : accountMember.IdNumber,
+                                authPersonRelation = accountAuthorisedPerson != null ? accountAuthorisedPerson.RelationToAccountHolder : "Self",
+                                authPersonTel = accountAuthorisedPerson != null ? accountAuthorisedPerson.Tel : accountMember.Mobile,
+                                authPersonUploadNicImgID = null,
+                                authPersonZipCode = accountAuthorisedPerson != null ? accountAuthorisedPerson.ZipCode : accountMember.MailingAddressZipCode,
+                                branch =!string.IsNullOrEmpty(basicProfile.BranchCode)? basicProfile.BranchCode:Utilities.GetRandomBranchCode(),
+                                cityAdd = accountMember.MailingAddressCity,
+                                commBankAccName = accountSettlementDetails.BankName,
+                                commBankAccNo = accountSettlementDetails.AccountNumber,
+                                commBankBranch = accountSettlementDetails.Branch,
+                                commBankSelection = null,
+                                countryAdd = accountMember.NationalityName,
+                                courtConviction = basicProfile.DeclarationConvictedOfLaw,
+                                courtConvictionDetail = basicProfile.DeclarationConvictedOfLawDetails,
+                                currentEmployer = accountInstructionEmploymentDetails.CurrentEmployer,
+                                currentEmployerAdd = accountInstructionEmploymentDetails.CurrentEmployerAddress,
+                                currentOccupation = accountInstructionEmploymentDetails.CurrentOccupation,
+                                declaration = basicProfile.DeclarationIWe,
+                                dob = Utilities.SoftTechDateFormatter(accountMember.DOB), //DateTime.ParseExact(Utilities.SoftTechDateFormatter(accountMember.DOB), "dd-MM-yyyy", null).Date,
+                              //  dobSpecified = true,
+                                email = accountMember.Email,
+                                employmentFromDate = !string.IsNullOrEmpty(accountInstructionEmploymentDetails.EmploymentDateFrom) ? Utilities.SoftTechDateFormatter(accountInstructionEmploymentDetails.EmploymentDateFrom) : string.Empty,
+                                employmentStatus = accountInstructionEmploymentDetails.EmploymentStatusName,
+                                employmentToDate = !string.IsNullOrEmpty(accountInstructionEmploymentDetails.EmploymentDateTo) ? Utilities.SoftTechDateFormatter(accountInstructionEmploymentDetails.EmploymentDateTo) : string.Empty,
+                                expDate = !string.IsNullOrEmpty(accountMember.IdCardExpiryDate) ? Utilities.SoftTechDateFormatter(accountMember.IdCardExpiryDate) : string.Empty,
+                                expectedAccActivity = basicProfile.ExpectedAccountActivityName,
+                                fax = basicProfile.TIN,
+                                firstKinEmail = accountNextOfKins.FirstOrDefault().Email,
+                                firstKinFaxNum = accountNextOfKins.FirstOrDefault().Fax,
+                                firstKinMailingAdd = accountNextOfKins.FirstOrDefault().MailingAddress,
+                                firstKinMobNum = accountNextOfKins.FirstOrDefault().Mobile,
+                                firstKinName = accountNextOfKins.FirstOrDefault().Name,
+                                firstKinRelation = accountNextOfKins.FirstOrDefault().RelationToAccount,
+                                firstKinTelNum = accountNextOfKins.FirstOrDefault().Telephone,
+                                firstName = accountMember.Fname,
+                                gender = accountMember.Gender,
+                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeName,
+                                investmentHorizon = accountFinancialInvestmentRiskProfile.InvestmentHorizonName,
+                                investmentKnowledge = accountFinancialInvestmentRiskProfile.InvestmentKnowledgeName,
+                                investmentType = basicProfile.InvestmentTypeName,
+                                issueDate = !string.IsNullOrEmpty(accountMember.IdCardIssueDate) ? Utilities.SoftTechDateFormatter(accountMember.IdCardIssueDate) : string.Empty,
+                                madenName = accountMember.MaidenName,
+                                mailingAdd =accountMember.NationalityName+"," +accountMember.MailingAddressFull,
+                                mailingAddCity = accountMember.MailingAddressCity,
+                                mailingAddCountry = accountMember.MailingAddressCountryName,
+                                mailingAddZipCode = accountMember.MailingAddressZipCode,
+                                maritialStatus = accountMember.MaritalStatusName,
+                                mobileNum = accountMember.Mobile,
+                                modeOfInstruction = accountInstructionEmploymentDetails.ModeOfInstructionName,
+                                modeOfNotification = accountInstructionEmploymentDetails.ModeOfNotificationName,
+                                motherMadenName = accountMember.MothersMaidenName,
+                                nationality = accountMember.NationalityName,
+                                netWorth = accountFinancialInvestmentRiskProfile.NetWorthName,
+                                nicIssueAuth = accountMember.IssuingAuthority,
+                                nicNum = accountMember.IdNumber,
+                                nicPhotoIdType = accountMember.IdTypeName,
+                                nomineeTrust = basicProfile.DeclarationActingAsNominee,
+                                nomineeTrustName = basicProfile.DeclarationActingAsNomineeName,
+                                occupation = accountMember.Occupation,
+                                onlineTradingFac = accountSettlementDetails.OnlineTradingFacility,
+                                otherName = accountMember.Othername,
+                                previousEmployer = accountInstructionEmploymentDetails.PrevEmployer,
+                                previousOccupation = accountInstructionEmploymentDetails.PrevOccupation,
+                                residentialAdd = accountMember.ResidentialAddressFull,
+                                riskTolerence = accountFinancialInvestmentRiskProfile.RiskToleranceName,
+                                secKinEmail = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().Email : accountNextOfKins.FirstOrDefault().Email,
+                                secKinFax = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().Fax : accountNextOfKins.FirstOrDefault().Fax,
+                                secKinFullName = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().Name : accountNextOfKins.FirstOrDefault().Name,
+                                secKinMailingAdd = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().MailingAddress : accountNextOfKins.FirstOrDefault().MailingAddress,
+                                secKinMobNum = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().Mobile : accountNextOfKins.FirstOrDefault().Mobile,
+                                secKinRelation = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().RelationToAccount : accountNextOfKins.FirstOrDefault().RelationToAccount,
+                                secKinTelNum = accountNextOfKins.Count() > 1 ? accountNextOfKins.LastOrDefault().Telephone : accountNextOfKins.FirstOrDefault().Telephone,
+                                signImgId = null,
+                                signNum = null,
+                                srName = accountMember.Lname,
+                                suffix = accountMember.SelectWhereApplicableName,
+                                swiftSortCode = accountSettlementDetails.SwiftCode,
+                                taxIdNo = null,
+                                tellephoneNum = accountMember.Telephone,
+                                title = accountMember.TitleName,
+                                totEmploymentYear = accountInstructionEmploymentDetails.YearsOfEmployment.HasValue ? accountInstructionEmploymentDetails.YearsOfEmployment.ToString() : string.Empty,
+                                uploadImgId = null,
+                                zipCode = accountMember.ResidentialZipCode,
+                                appLocalForeign=accountMember.NationalityId==81?"0":"1"
+                                
+                                 
+                            }
+                        });
+
+
+                            var response = result.Message;
+                            if (result.Status== "500")
+                            {
+                              //  success
+                              //  var responseArr = response.Split(':');
+                                application.SuccesfulReviewBy = CurrentUser.Id;
+                                application.SuccessfulReviewDate = DateTime.Now;
+                                application.BackConnectAccountNumber = result.Message;
+                                application.StatusId = 2;
+                                context.SaveChanges();
+
+                            }
+                            else
+                            {
+                                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("Error in SoftTech API: "+response).Encrypt() });
+
+                            }
+                        }
+                    }
+
+
+
+                    else if (application.AccountTypeId == 4)
+                    {
+                        ///institutional
+                        var accountAuthorisedPersons = Utilities.GetAccountAuthorisedPersons(applicationId);
+                        var authorsedOfficer1 = accountAuthorisedPersons.FirstOrDefault();
+                        var authorsedOfficer2 = accountAuthorisedPersons.LastOrDefault();
+                        var accountSettlementDetails = Utilities.GetAccountSettlementDetail(applicationId);
+                        var accountTradingContacts = Utilities.GetAccountTradingContract(applicationId);
+                        var tradingContact1 = accountTradingContacts.FirstOrDefault();
+                        var accountInstructionEmploymentDetails = Utilities.GetAccountInstructionEmploymentDetailModel(applicationId);
+
+
+                        using (var client = new AofSdkClient())
+                        {
+                            var result = client.CreateAccount(
+                        new openClientRequest
+                        {
+                            arg0 = new clientAofApiBean
+                            {
+                                accStatmentFreq = basicProfile.FrequencyOfStatementsName,
+                                appId = null,
+                                accountType = "Corporate",// basicProfile.AccountTypeName,
+                                applicantObj = null,
+                                approximateAnnualIncome =context.ApproximateAnnualIncomes.OrderByDescending(x=>x.Id).FirstOrDefault().Name,//null,// accountFinancialInvestmentRiskProfile.ApproximateAnnualIncomeName,
+                                authPersonCity =authorsedOfficer1.CountryName+" " +authorsedOfficer1.City,//accountAuthorisedPerson != null ? accountAuthorisedPerson.City : accountMember.MailingAddressCity,
+                                authPersonCountry = authorsedOfficer1.CountryName,//accountAuthorisedPerson != null ? accountAuthorisedPerson.CountryName : accountMember.NationalityName,
+                                authPersonEmail = authorsedOfficer1.Email,//accountAuthorisedPerson != null ? accountAuthorisedPerson.Email : accountMember.Email,
+                                authPersonFax = authorsedOfficer1.Fax, //accountAuthorisedPerson != null ? accountAuthorisedPerson.Fax : accountMember.Fax,
+                                authPersonFullName = authorsedOfficer1.Name, //accountAuthorisedPerson != null ? accountAuthorisedPerson.Name : accountMember.Fname + " " + accountMember.Lname,
+                                authPersonMailingAdd =string.IsNullOrEmpty(authorsedOfficer1.MailingAddress)?authorsedOfficer1.CountryName:authorsedOfficer1.MailingAddress, //accountAuthorisedPerson != null ? accountAuthorisedPerson.MailingAddress : accountMember.MailingAddressFull,
+                                authPersonMob = authorsedOfficer1.Mobile,//accountAuthorisedPerson != null ? accountAuthorisedPerson.Mobile : accountMember.Mobile,
+                                authPersonNicExpDate = authorsedOfficer1 != null && !string.IsNullOrEmpty(authorsedOfficer1.IDExpiryDate) ? Utilities.SoftTechDateFormatter(authorsedOfficer1.IDExpiryDate) : string.Empty,
+                                authPersonNicIssueAuthority = authorsedOfficer1.IdIssueAuthority,//accountAuthorisedPerson != null ? accountAuthorisedPerson.IdIssueAuthority : accountMember.IssuingAuthority,
+                                authPersonNicIssueDate =authorsedOfficer1 != null && !string.IsNullOrEmpty(authorsedOfficer1.IssueDate) ? Utilities.SoftTechDateFormatter(authorsedOfficer1.IssueDate) : string.Empty,
+                                authPersonNicPhotoId = authorsedOfficer1.IdNumber, //accountAuthorisedPerson != null ? accountAuthorisedPerson.IdNumber : accountMember.IdNumber,
+                                authPersonRelation = authorsedOfficer1.RelationToAccountHolder, //accountAuthorisedPerson != null ? accountAuthorisedPerson.RelationToAccountHolder : "Self",
+                                authPersonTel = authorsedOfficer1.Tel, //accountAuthorisedPerson != null ? accountAuthorisedPerson.Tel : accountMember.Mobile,
+                                authPersonUploadNicImgID = null,
+                                authPersonZipCode = authorsedOfficer1.ZipCode,//accountAuthorisedPerson != null ? accountAuthorisedPerson.ZipCode : accountMember.MailingAddressZipCode,
+                                branch = !string.IsNullOrEmpty(basicProfile.BranchCode) ? basicProfile.BranchCode : Utilities.GetRandomBranchCode(),
+                                cityAdd = authorsedOfficer1.City, //accountMember.MailingAddressCity,
+                                commBankAccName = context.Banks.FirstOrDefault().Name,//accountSettlementDetails.BankName, //accountSettlementDetails.BankName,
+                                commBankAccNo =accountSettlementDetails.AccountNumber,
+                                commBankBranch = accountSettlementDetails.Branch,
+                                commBankSelection = null,
+                                countryAdd = authorsedOfficer1.CountryName,
+                                courtConviction ="NO", //basicProfile.DeclarationConvictedOfLaw,
+                                courtConvictionDetail =null,//"NA", //basicProfile.DeclarationConvictedOfLawDetails,
+                                currentEmployer = "Not Applicable",//accountInstructionEmploymentDetails.CurrentEmployer,
+                                currentEmployerAdd ="Not Available",// accountInstructionEmploymentDetails.CurrentEmployerAddress,
+                                currentOccupation ="None",// accountInstructionEmploymentDetails.CurrentOccupation,
+                                declaration = basicProfile.InstitutionClientName,
+                                dob = Utilities.SoftTechDateFormatter(DateTime.Now.AddYears(-10).Date.ToString("yyyy-MM-dd")),// Utilities.SoftTechDateFormatter(accountMember.DOB), //DateTime.ParseExact(Utilities.SoftTechDateFormatter(accountMember.DOB), "dd-MM-yyyy", null).Date,
+                                                                                          //  dobSpecified = true,
+                                email = basicProfile.InsStreetAddressEmail,
+                                employmentFromDate =null, //!string.IsNullOrEmpty(accountInstructionEmploymentDetails.EmploymentDateFrom) ? Utilities.SoftTechDateFormatter(accountInstructionEmploymentDetails.EmploymentDateFrom) : string.Empty,
+                                employmentStatus = "Salaried", //accountInstructionEmploymentDetails.EmploymentStatusName,
+                                employmentToDate = null,//!string.IsNullOrEmpty(accountInstructionEmploymentDetails.EmploymentDateTo) ? Utilities.SoftTechDateFormatter(accountInstructionEmploymentDetails.EmploymentDateTo) : string.Empty,
+                                expDate = null,//!string.IsNullOrEmpty(accountMember.IdCardExpiryDate) ? Utilities.SoftTechDateFormatter(accountMember.IdCardExpiryDate) : string.Empty,
+                                expectedAccActivity = basicProfile.ExpectedAccountActivityName,
+                                fax = basicProfile.TIN,
+                                firstKinEmail = tradingContact1.Email,//accountNextOfKins.FirstOrDefault().Email,
+                                firstKinFaxNum = tradingContact1.Fax,//tradingContact1.FirstOrDefault().Fax,
+                                firstKinMailingAdd =null,// basicProfile.InstStreetAddressCity, //tradingContact1.FirstOrDefault().MailingAddress,
+                                firstKinMobNum = tradingContact1.Mobile, //accountNextOfKins.FirstOrDefault().Mobile,
+                                firstKinName = tradingContact1.Name,//accountNextOfKins.FirstOrDefault().Name,
+                                firstKinRelation ="Brother", //accountNextOfKins.FirstOrDefault().RelationToAccount,
+                                firstKinTelNum = tradingContact1.Tel, //accountNextOfKins.FirstOrDefault().Telephone,
+                                firstName = basicProfile.InstitutionClientName,//accountMember.Fname,
+                                gender = "Male",//accountMember.Gender,
+                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeName, //accountInstructionEmploymentDetails.SourceOfIncomeName,
+                                investmentHorizon =context.InvestmentHorizons.FirstOrDefault().Name,//null,// accountFinancialInvestmentRiskProfile.InvestmentHorizonName,
+                                investmentKnowledge =context.InvestmentKnowledges.FirstOrDefault().Name,//null, //accountFinancialInvestmentRiskProfile.InvestmentKnowledgeName,
+                                investmentType = basicProfile.InvestmentTypeName,
+                                issueDate = Utilities.SoftTechDateFormatter(DateTime.Now.AddYears(-10).Date.ToString("yyyy-MM-dd")), //!string.IsNullOrEmpty(accountMember.IdCardIssueDate) ? Utilities.SoftTechDateFormatter(accountMember.IdCardIssueDate) : string.Empty,
+                                madenName = null,//accountMember.MaidenName,
+                                mailingAdd = basicProfile.InsstitutionalCountryOfIncorporationName+" "+basicProfile.MailingAddressFull,//accountMember.NationalityName + "," + accountMember.MailingAddressFull,
+                                mailingAddCity = basicProfile.InstStreetAddressCity,//accountMember.MailingAddressCity,
+                                mailingAddCountry =basicProfile.InsstitutionalCountryOfIncorporationName, //accountMember.MailingAddressCountryName,
+                                mailingAddZipCode =basicProfile.InsStreetAddressZipCode, //accountMember.MailingAddressZipCode,
+                                maritialStatus = "Single",//accountMember.MaritalStatusName,
+                                mobileNum = basicProfile.InsStreetAddressTel,//accountMember.Mobile,
+                                modeOfInstruction = accountInstructionEmploymentDetails.ModeOfInstructionName,
+                                modeOfNotification = accountInstructionEmploymentDetails.ModeOfNotificationName,
+                                motherMadenName ="None",// accountMember.MothersMaidenName,
+                                nationality =basicProfile.InsstitutionalCountryOfIncorporationName,// accountMember.NationalityName,
+                                netWorth = context.NetWorths.FirstOrDefault().Name,//accountFinancialInvestmentRiskProfile.NetWorthName,
+                                nicIssueAuth =authorsedOfficer1.IdIssueAuthority, //accountMember.IssuingAuthority,
+                                nicNum =authorsedOfficer1.IdNumber,// accountMember.IdNumber,
+                                nicPhotoIdType =authorsedOfficer1.IdTypeName, //accountMember.IdTypeName,
+                                nomineeTrust = "NO", //basicProfile.DeclarationActingAsNominee,
+                                nomineeTrustName = basicProfile.DeclarationActingAsNomineeName,
+                                occupation ="Not Applicable", //accountMember.Occupation,
+                                onlineTradingFac = accountSettlementDetails.OnlineTradingFacility,
+                                otherName = basicProfile.InstitutionNatureOfBusiness.ToLower(),//accountMember.Othername,
+                                previousEmployer = "Self",//accountInstructionEmploymentDetails.PrevEmployer,
+                                previousOccupation ="Not Applicable",// accountInstructionEmploymentDetails.PrevOccupation,
+                                residentialAdd =basicProfile.InstStreetAddressCity.ToLower(), //accountMember.ResidentialAddressFull,
+                                riskTolerence =context.RiskTolerances.FirstOrDefault().Name, //accountFinancialInvestmentRiskProfile.RiskToleranceName,
+                                secKinEmail = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().Email : accountAuthorisedPersons.FirstOrDefault().Email,
+                                secKinFax = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().Fax : accountAuthorisedPersons.FirstOrDefault().Fax,
+                                secKinFullName = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().Name : accountAuthorisedPersons.FirstOrDefault().Name,
+                                secKinMailingAdd = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().MailingAddress : accountAuthorisedPersons.FirstOrDefault().MailingAddress,
+                                secKinMobNum = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().Mobile : accountAuthorisedPersons.FirstOrDefault().Mobile,
+                                secKinRelation = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().RelationToAccountHolder : accountAuthorisedPersons.FirstOrDefault().RelationToAccountHolder,
+                                secKinTelNum = accountAuthorisedPersons.Count() > 1 ? accountAuthorisedPersons.LastOrDefault().Tel : accountAuthorisedPersons.FirstOrDefault().Tel,
+                                signImgId = null,
+                                signNum = null,
+                                srName = basicProfile.InstitutionClientName,//accountMember.Lname,
+                                suffix = "Local Company (LC)",//basicProfile.InstCompanyType, //accountMember.SelectWhereApplicableName,
+                                swiftSortCode = accountSettlementDetails.SwiftCode,
+                                taxIdNo = null,
+                                tellephoneNum = basicProfile.InsStreetAddressTel,//accountMember.Telephone,
+                                title ="Mr.",// null,//accountMember.TitleName,
+                                totEmploymentYear = null,//accountInstructionEmploymentDetails.YearsOfEmployment.HasValue ? accountInstructionEmploymentDetails.YearsOfEmployment.ToString() : string.Empty,
+                                uploadImgId = null,
+                                zipCode = basicProfile.InsStreetAddressZipCode,
+                                appLocalForeign = basicProfile.InsstitutionalCountryOfIncorporation.Value == 81 ? "0" : "1"
+
+
+                            }
+                        });
+
+
+                            var response = result.Message;
+                            if (result.Status == "500")
+                            {
+                                //  success
+                                //  var responseArr = response.Split(':');
+                                application.SuccesfulReviewBy = CurrentUser.Id;
+                                application.SuccessfulReviewDate = DateTime.Now;
+                                application.BackConnectAccountNumber = result.Message;
+                                application.StatusId = 2;
+                                context.SaveChanges();
+
+                            }
+                            else
+                            {
+                                return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("Error in SoftTech API: " + response).Encrypt() });
+
+                            }
+                        }
+
+                    }
+                    return RedirectToAction("ApplicantProfile", new { _refNumber = application.Id.ToString().Encrypt(), message = ("application successfully reviewed").Encrypt() });
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return RedirectToAction("ApplicantProfile", new { _refNumber = _ref.ToString().Encrypt(), message = ("Error: "+ex.Message).Encrypt() });
 
             }
         }

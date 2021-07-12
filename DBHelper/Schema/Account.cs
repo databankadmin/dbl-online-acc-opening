@@ -74,6 +74,9 @@ namespace DBHelper.Schema
         public Nullable<System.Guid> CancelOrRejectBy { get; set; }
         public string CancelOrRejectComment { get; set; }
         public string ReferenceNo { get; set; }
+        public Nullable<double> StaffRefCode { get; set; }
+        public string BranchCode { get; set; }
+        public string BackConnectAccountNumber { get; set; }
     
         public virtual AccountType AccountType { get; set; }
         public virtual Country Country { get; set; }
@@ -109,5 +112,6 @@ namespace DBHelper.Schema
         public virtual ExpectedAccountActivity ExpectedAccountActivity { get; set; }
         public virtual InvestmentType InvestmentType { get; set; }
         public virtual ApplicationStatu ApplicationStatu { get; set; }
+        public virtual StaffRefList StaffRefList { get; set; }
     }
 }

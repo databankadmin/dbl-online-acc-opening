@@ -50,6 +50,15 @@ namespace AppMain.Controllers
                     SetRef(item.Id, Utilities.GenerateApplicationReference());
                 }
                 context.SaveChanges();
+                foreach (var item in context.Accounts)
+                {
+                    if (string.IsNullOrEmpty(item.BranchCode))
+                    {
+                        item.BranchCode = Utilities.GetRandomBranchCode();
+                    }
+
+                }
+                context.SaveChanges();
             }
         }
         public void SetRef(Guid accountId,string _ref)

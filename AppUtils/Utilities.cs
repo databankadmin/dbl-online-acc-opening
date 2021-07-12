@@ -40,6 +40,22 @@ namespace AppUtils
             }
 
         }
+
+        public static string GetAMLRating(decimal amlScore)
+        {
+            if (amlScore<=60)
+            {
+                return "Low";
+            }
+            else if (amlScore<=99)
+            {
+                return "Medium";
+            }
+            else
+            {
+                return "High";
+            }
+        }
         public static string DecodeBase64(string encrypted)
         {
             try
@@ -228,7 +244,11 @@ namespace AppUtils
                             CancelOrrejectByName = item.CancelOrRejectBy.HasValue ? context.AppUsers.Find(item.CancelOrRejectBy.Value).Name : string.Empty,
                             CancelOrRejectComment = item.CancelOrRejectComment,
                             CancelOrRejectDate = item.CancelOrRejectDate,
-                            RefNo = item.ReferenceNo
+                            RefNo = item.ReferenceNo,
+                            StaffRefCode = item.StaffRefCode,
+                            BackConnectAccountNumber=item.BackConnectAccountNumber,
+                            StaffRefName = item.StaffRefCode.HasValue ? context.StaffRefLists.Find(item.StaffRefCode).Staff_Name:string.Empty,
+                            BranchCode=item.BranchCode
 
 
 
@@ -255,6 +275,19 @@ namespace AppUtils
             return false;
         }
 
+
+        public static string GetRandomBranchCode()
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var rnd = new Random();
+                var all = context.Branches.ToList();
+                int index = rnd.Next(0, (all.Count() - 1));
+                var branch= all.ElementAt(index);
+                return branch.BRANCH_CODE;
+            }
+
+        }
 
         public static Country GetCountry(int countryId)
         {
@@ -325,7 +358,7 @@ namespace AppUtils
                     var account = context.Accounts.Find(accountId);
                     if (account.AccountTypeId <= 3)
                     {
-                        var members = account.AccountMembers;
+                        var members = account.AccountMembers.OrderBy(x=>x.CreatedDate);
                         if (account.AccountTypeId == 1)
                         {
                             var first = members.FirstOrDefault();
@@ -463,6 +496,24 @@ namespace AppUtils
             using (var context = new DBLAccountOpeningContext())
             {
                 return context.ApproximateAnnualIncomes.Find(id);
+            }
+        }
+
+
+        public static string SoftTechDateFormatter(string date)
+        {
+            //date: yyyy-MM-dd
+            //return: dd-MM-yyyy
+            try
+            {
+                var arr = date.Split('-');
+                string formattedDate = arr[2] + "-" + arr[1] + "-" + arr[0];
+                return formattedDate;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
             }
         }
 
@@ -794,7 +845,7 @@ namespace AppUtils
                 var model = new List<AccountMemberModel>();
                 using (var context = new DBLAccountOpeningContext())
                 {
-                    foreach (var item in context.AccountMembers.Where(x => x.AccountId == accountId))
+                    foreach (var item in context.AccountMembers.Where(x => x.AccountId == accountId).OrderBy(x => x.CreatedDate))
                     {
                         model.Add(new AccountMemberModel
                         {

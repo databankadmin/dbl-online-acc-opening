@@ -1,4 +1,6 @@
-﻿@using DBHelper.Schema
+﻿
+@model DBHelper.Schema.Account
+@using DBHelper.Schema
 @using AppUtils
 @{
     Layout = null;
@@ -42,21 +44,20 @@
 
 <body>
     @Html.Partial("~/Views/Partials/_header.cshtml")
-    <br/><br/>
+    <br /><br />
     <div class="main" style="padding:0;">
         <center>
             <h2>
-                Success!
-                <br />
-
+                Success! <br/> The Reference number for this application is <b style="color:#157941">@Model.ReferenceNo</b>
+                <br/>
                 Your details have been submitted to the Databank Brokerage Team<br />
-                 Account details will be emailed to you<br/>
+                Account details will be emailed to you<br />
 
                 <a href="@Url.Action("Index","Home")" style="color: #157941; font-size:20px; width:300px;">Home</a>
 
             </h2>
         </center>
-       
+
     </div>
 
 </body>

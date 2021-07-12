@@ -65,6 +65,10 @@ namespace AppModels
         public string CancelOrrejectByName { get; set; }
         public string CancelOrRejectComment { get; set; }
         public string RefNo { get; set; }
+        public double? StaffRefCode { get; set; }
+        public string StaffRefName { get; set; }
+        public string BranchCode { get; set; }
+        public string BackConnectAccountNumber { get; set; }
 
 
 

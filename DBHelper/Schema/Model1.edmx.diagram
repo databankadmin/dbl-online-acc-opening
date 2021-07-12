@@ -94,6 +94,10 @@
         <AssociationConnector Association="DBLAccountOpeningModel.FK_AMLQuestions_AMLQuestionCategory" />
         <EntityTypeShape EntityType="DBLAccountOpeningModel.ApplicationStatu" Width="1.5" PointX="16.375" PointY="16.875" />
         <AssociationConnector Association="DBLAccountOpeningModel.FK_Account_ApplicationStatus" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.ForgottenAccountDetail" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.StaffRefList" Width="1.5" PointX="3.375" PointY="17.875" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_Account_StaffRefList" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Branch" Width="1.5" PointX="12.375" PointY="18.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

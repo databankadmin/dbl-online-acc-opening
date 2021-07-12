@@ -83,9 +83,15 @@ namespace AppMain.Controllers
                 FontSize = 6
             };
 
+
+            
             string result = this.RenderRazorViewToString("~/Views/Partials/pdfs/amlProfile.cshtml", model);
             string fileName = "AML_Profile_" + model.AccountName.Replace(" ", "_") + "_" + DateTime.Now.Ticks.ToString();
             var PDF = Renderer.RenderHtmlAsPdf(result);
+
+            //watermark
+          //  PDF.WatermarkAllPages("<img src='/Images/sw2.jpg'/>", PdfDocument.WaterMarkLocation.MiddleCenter,5,0,null);
+
             var OutputPath = Server.MapPath("~/Images/" + fileName + ".pdf");
             PDF.SaveAs(OutputPath);
             //   System.Diagnostics.Process.Start(OutputPath);

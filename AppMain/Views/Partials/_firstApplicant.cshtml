@@ -50,10 +50,10 @@
 
             @*
 
-        <div class="form-group">
-            <label for="dblCsdNumber" class="form-label">CSD Number</label>
-            <input type="text" name="dblCsdNumber" id="dblCsdNumber" />
-        </div>*@
+                <div class="form-group">
+                    <label for="dblCsdNumber" class="form-label">CSD Number</label>
+                    <input type="text" name="dblCsdNumber" id="dblCsdNumber" />
+                </div>*@
         </div>
     </div>
 
@@ -867,7 +867,7 @@
                     <option value="NO">NO</option>
                 </select>
             </div>
-       
+
             <div class="form-group">
                 <label for="statementFreqId" class="form-label">Frequency of Account Statements *</label>
                 <select name="statementFreqId" id="statementFreqId" style="width:300px;" required>
@@ -881,10 +881,10 @@
                     }
                 </select>
             </div>
-        
+
         </div>
     </div>
-    
+
 
 
     <h4 class="myHeader">Declaration by Applicant(s)</h4>
@@ -969,9 +969,41 @@
                 </select>
 
             </div>
+            <div class="form-group">
+                <label for="staffRefCode" class="form-label">Staff Referral Code <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>
+                <input type="number" name="staffRefCode" id="staffRefCode" maxlength="5" placeholder="****"  style="width:200px"/>
+            </div>
+
         </div>
     </div>
 
 
 
 </fieldset>
+
+
+<div id="refCode" title="Staff Referral Code - Help">
+    <p>
+        If a Databank staff directed you to this application, please enter the staff code here
+    </p>
+</div>
+
+
+<script type="text/javascript">
+    function showReferalHelp() {
+        $("#refCode").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            }
+        });
+
+        $("#refCode").dialog("open");
+
+    }
+</script>

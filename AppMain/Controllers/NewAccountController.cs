@@ -53,6 +53,35 @@ namespace AppMain.Controllers
         }
 
 
+        [HttpPost,ValidateAntiForgeryToken]
+        public ActionResult ForgottenAccount(string name,string address,string email,string phone)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                Guid _ref = Guid.NewGuid();
+                context.ForgottenAccountDetails.Add(new ForgottenAccountDetail {
+                    Address=address,
+                    CreatedDate=DateTime.Now,
+                    Email=email,
+                   Id=_ref,
+                   Name=name,
+                   Phone=phone,
+                });
+                context.SaveChanges();
+                return RedirectToAction("ForgotAccountCompleted",new { reference =_ref});
+
+            }
+
+        }
+        public ActionResult ForgotAccountCompleted(Guid reference)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var model = context.ForgottenAccountDetails.Find(reference);
+                return View(model);
+
+            }
+        }
 
         [HttpPost]
         public ActionResult GetFileUploads(HttpPostedFileBase myPhoto)
@@ -104,7 +133,7 @@ namespace AppMain.Controllers
             
             string indemnityTxt1=null,string indemnityTxt2=null,string indemnityTxt3=null,string indemnityTxt4=null, string indemnityName1=null,string indemnityName2=null,string indemnityEmail1=null,string indemnityEmail2=null,
             int yearsOfEmployment=0,string tin=null,string firstApplicantMaidenName=null,int statementFreqId = 0,int expectedAccountActivityId=0, string firstApplicantGender=null,string jointApplicantGender=null, string itfApplicantGender=null,
-            List<string> remark=null
+            List<string> remark=null, int staffRefCode=0
 
             )
 
@@ -138,7 +167,8 @@ namespace AppMain.Controllers
                         SelectApplicableId = firstApplicantTickApplicable,
                         CSDFormPath = SaveFileUpload(_CsdCompletedForm),
                         ReferenceNo = Utilities.GenerateApplicationReference(),
-                        StatusId=1
+                        StatusId=1,
+                        BranchCode=Utilities.GetRandomBranchCode()
                     };
                     if (yearsOfEmployment > 0)
                     {
@@ -146,6 +176,14 @@ namespace AppMain.Controllers
                     }
                     accountId = account.Id.ToString();
                     context.Accounts.Add(account);
+                    if (staffRefCode>0)
+                    {
+                        var findStaff = context.StaffRefLists.FirstOrDefault(x => x.Code == staffRefCode);
+                        if (findStaff!=null)
+                        {
+                            account.StaffRefCode = findStaff.Code;
+                        }
+                    }
                     //set up first applicant
                     var firstApplicant = new AccountMember
                     {
@@ -411,11 +449,22 @@ namespace AppMain.Controllers
                         CreatedDate=DateTime.Now,
                         SignatureTypeId= instnumberOfSignatories,
                         InstOtherDetails= insOtherDetails,
-                        StatusId=1
+                        StatusId=1,
+                        BranchCode = Utilities.GetRandomBranchCode(),
+                        
                     };
                     if (instSteetAddressCountry>0)
                     {
                         institutionalAccount.InsStreetAddressCountryId = instSteetAddressCountry;
+                    }
+
+                    if (staffRefCode > 0)
+                    {
+                        var findStaff = context.StaffRefLists.FirstOrDefault(x => x.Code == staffRefCode);
+                        if (findStaff != null)
+                        {
+                            institutionalAccount.StaffRefCode = findStaff.Code;
+                        }
                     }
                     accountId = institutionalAccount.Id.ToString();
                     context.Accounts.Add(institutionalAccount);
@@ -750,7 +799,7 @@ namespace AppMain.Controllers
                 });
 
                 context.SaveChanges();
-                return RedirectToAction("AccountCreated");
+                return RedirectToAction("AccountCreated",new { accountId= Guid.Parse(accountId), hkey=Guid.NewGuid().ToString().Encrypt() });
             }
             catch (Exception ex)
             {
@@ -763,9 +812,11 @@ namespace AppMain.Controllers
         }
 
 
-        public ActionResult AccountCreated()
+        public ActionResult AccountCreated(Guid accountId, string hkey)
         {
-            return View();
+            var context = new DBLAccountOpeningContext();
+            var account = context.Accounts.Find(accountId);
+            return View(account);
         }
 
         [HttpPost]

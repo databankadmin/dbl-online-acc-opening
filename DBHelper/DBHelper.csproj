@@ -114,6 +114,9 @@
     <Compile Include="Schema\Bank.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Schema\Branch.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Schema\Country.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -130,6 +133,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Schema\FileUploadType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\ForgottenAccountDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Schema\IDCardType.cs">
@@ -199,6 +205,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Schema\SourceOfIncome.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\StaffRefList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Schema\StatementFrequency.cs">
