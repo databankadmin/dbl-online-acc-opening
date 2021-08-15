@@ -29,6 +29,7 @@ namespace DBHelper.Schema
             this.AccountMembers = new HashSet<AccountMember>();
             this.AccountNextOfKinDetails = new HashSet<AccountNextOfKinDetail>();
             this.AccountSettlementDetails = new HashSet<AccountSettlementDetail>();
+            this.AccountEditRequests = new HashSet<AccountEditRequest>();
         }
     
         public System.Guid Id { get; set; }
@@ -77,6 +78,9 @@ namespace DBHelper.Schema
         public Nullable<double> StaffRefCode { get; set; }
         public string BranchCode { get; set; }
         public string BackConnectAccountNumber { get; set; }
+        public string Reviewer { get; set; }
+        public string CancelledORRejectBy { get; set; }
+        public string Password { get; set; }
     
         public virtual AccountType AccountType { get; set; }
         public virtual Country Country { get; set; }
@@ -113,5 +117,7 @@ namespace DBHelper.Schema
         public virtual InvestmentType InvestmentType { get; set; }
         public virtual ApplicationStatu ApplicationStatu { get; set; }
         public virtual StaffRefList StaffRefList { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountEditRequest> AccountEditRequests { get; set; }
     }
 }

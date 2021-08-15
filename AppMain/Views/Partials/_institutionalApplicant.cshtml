@@ -4,6 +4,119 @@
     var accountType = context.AccountTypes.Find(MvcApplication.AccountType);
 }
 
+
+<style type="text/css">
+    .multi-select-container {
+        display: inline-block;
+        position: relative;
+    }
+
+    .multi-select-menu {
+        position: absolute;
+        left: 0;
+        top: 0.8em;
+        z-index: 1;
+        float: left;
+        min-width: 100%;
+        background: #fff;
+        margin: 1em 0;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+
+    .multi-select-menuitem {
+        display: block;
+        font-size: 0.875em;
+        padding: 0.6em 1em 0.6em 30px;
+        white-space: nowrap;
+    }
+
+    .multi-select-menuitem--titled:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        margin: 0 0 0.25em -20px;
+    }
+
+    .multi-select-menuitem--titledsr:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .multi-select-menuitem + .multi-select-menuitem {
+        padding-top: 0;
+    }
+
+    .multi-select-presets {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .multi-select-menuitem input {
+        position: absolute;
+        margin-top: -15px;
+        margin-left: -25px;
+        width: 20px;
+    }
+
+    .multi-select-button {
+        display: inline-block;
+        font-size: 0.875em;
+        padding: 0.2em 0.6em;
+        max-width: 16em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: -0.5em;
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: default;
+    }
+
+        .multi-select-button:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0.4em 0.4em 0 0.4em;
+            border-color: #999 transparent transparent transparent;
+            margin-left: 0.4em;
+            vertical-align: 0.1em;
+        }
+
+    .multi-select-container--open .multi-select-menu {
+        display: block;
+    }
+
+    .multi-select-container--open .multi-select-button:after {
+        border-width: 0 0.4em 0.4em 0.4em;
+        border-color: transparent transparent #999 transparent;
+    }
+
+    .multi-select-container--positioned .multi-select-menu {
+        /* Avoid border/padding on menu messing with JavaScript width calculation */
+        box-sizing: border-box;
+    }
+
+        .multi-select-container--positioned .multi-select-menu label {
+            /* Allow labels to line wrap when menu is artificially narrowed */
+            white-space: normal;
+        }
+</style>
+
+
 <fieldset>
     <h2>Databank Brokerage Form | Institutional</h2>
     <h4 style="color:red">Required fields are marked with asterisk (*)</h4>
@@ -369,18 +482,19 @@
     <div class="form-row">
         <div class="form-flex">
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <label for="instMarginTrationOption" class="form-label">Margin Trading Option *</label>
                 <select name="instMarginTrationOption" id="instMarginTrationOption" style="width:350px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
                 </select>
-            </div>
+            </div>*@
+            <input type="hidden" name="instMarginTrationOption"  id="instMarginTrationOption" value="NO"/>
 
             <div class="form-group">
                 <label for="instOnlineTradingOption" class="form-label">Online Trading Facility *</label>
-                <select name="instOnlineTradingOption" id="instOnlineTradingOption" style="width:350px;" required>
+                <select name="instOnlineTradingOption" id="instOnlineTradingOption" style="width:280px;" required>
                     <option value="">-select-</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
@@ -423,9 +537,21 @@
 
 
 
-            <div class="form-group">
+            <div class="form-group" id="intSourceOfIncomeDiv">
                 <label for="intSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
-                <select name="intSourceOfIncome" id="intSourceOfIncome" required>
+                @*<select name="intSourceOfIncome" id="intSourceOfIncome" required>
+            <option value="">-select-</option>
+            @{
+                foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+        </select>*@
+
+                <input type="hidden" name="intSourceOfIncome" id="intSourceOfIncome" value="1" />
+
+                <select id="intSourceOfIncomeIds" name="intSourceOfIncomeIds" multiple required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
@@ -434,6 +560,7 @@
                         }
                     }
                 </select>
+
             </div>
 
 
@@ -798,8 +925,8 @@
             </div>
 
             <div class="form-group">
-                <label for="tradingContacts1Email" class="form-label">Email</label>
-                <input type="text" name="tradingContacts1Email" id="tradingContacts1Email" />
+                <label for="tradingContacts1Email" class="form-label">Email *</label>
+                <input type="text" name="tradingContacts1Email" id="tradingContacts1Email" required/>
             </div>
         </div>
     </div>
@@ -868,15 +995,26 @@
                 <label for="instSignPosition1" class="form-label">Position *</label>
                 <input type="text" name="instSignPosition1" id="instSignPosition1" required />
             </div>
+
+
             <div class="form-group">
                 <div class="dropzone dropzone-previews" id="instSignatory1" style="padding-top:2px;">
                     <center style="text-align:center;">
                         UPLOAD SIGNATURE *
                     </center>
                 </div>
+                <a onclick="javascript:showCaptureModal('instSign1Capture','_instSign1Capture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
                 <input type="hidden" name="instSignatory1hidden" id="instSignatory1hidden" />
+                <input type="hidden" name="_instSign1Capture" id="instSignatory1hidden" />
 
             </div>
+
+
+            <div class="form-group">
+                <img src="" name="instSign1Capture" id="instSign1Capture" style="width:200px; height:160px; border:1px groove; display:none;" />
+            </div>
+
 
         </div>
     </div>
@@ -896,9 +1034,20 @@
                         UPLOAD SIGNATURE *
                     </center>
                 </div>
+                <a onclick="javascript:showCaptureModal('instSign2Capture','_instSign2Capture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
                 <input type="hidden" name="instSignatory2hidden" id="instSignatory2hidden" />
 
             </div>
+
+
+            <div class="form-group">
+                <img src="" name="instSign2Capture" id="instSign2Capture" style="width:200px; height:160px; border:1px groove; display:none;" />
+                <input type="hidden" name="_instSign2Capture" id="_instSign2Capture" />
+
+            </div>
+
+
 
         </div>
     </div>
@@ -918,9 +1067,19 @@
                         UPLOAD SIGNATURE
                     </center>
                 </div>
+                <a onclick="javascript:showCaptureModal('instSign3Capture','_instSign3Capture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
                 <input type="hidden" name="instSignatory3hidden" id="instSignatory3hidden" />
 
             </div>
+
+
+            <div class="form-group">
+                <img src="" name="instSign3Capture" id="instSign3Capture" style="width:200px; height:150px; border:1px groove; display:none;" />
+                <input type="hidden" name="_instSign3Capture" id="_instSign3Capture" />
+
+            </div>
+
 
         </div>
     </div>
@@ -943,9 +1102,19 @@
                         UPLOAD SIGNATURE
                     </center>
                 </div>
+                <a onclick="javascript:showCaptureModal('instSign4Capture','_instSign4Capture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
                 <input type="hidden" name="instSignatory4hidden" id="instSignatory4hidden" />
 
             </div>
+
+
+            <div class="form-group">
+                <img src="" name="instSign4Capture" id="instSign4Capture" style="width:200px; height:150px; border:1px groove; display:none;" />
+                <input type="hidden" name="_instSign4Capture" id="_instSign4Capture" />
+
+            </div>
+
 
         </div>
     </div>
@@ -956,9 +1125,9 @@
     <div class="form-row">
         <div class="form-flex">
 
-            <div class="form-group">
-                <label for="instnumberOfSignatories" class="form-label">Indicate the Number of Signatories *</label>
-                <select name="instnumberOfSignatories" id="instnumberOfSignatories" style="width:300px;" required>
+            <div class="form-group" style="width:250px;">
+                <label for="instnumberOfSignatories" class="form-label">No. of Signatories *</label>
+                <select name="instnumberOfSignatories" id="instnumberOfSignatories" style="width:150px;" required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.SignatureTypes.Where(x => x.Id == 3 || x.Id == 4).OrderBy(x => x.Id))
@@ -974,12 +1143,12 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group"  style="width:250px;">
                 <label for="insOtherDetails" class="form-label">Other Details</label>
-                <input type="text" name="insOtherDetails" id="insOtherDetails" />
+                <input type="text" name="insOtherDetails" id="insOtherDetails" style="width:150px;"/>
             </div>
             <div class="form-group">
-                <label for="staffRefCode" class="form-label">Staff Referral Code <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>
+                <label for="staffRefCode" class="form-label">Do you have introducer Code? (optional) <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>
                 <input type="number" name="staffRefCode" id="staffRefCode" maxlength="5" placeholder="****" style="width:200px" />
             </div>
 
@@ -1013,4 +1182,12 @@
         $("#refCode").dialog("open");
 
     }
+
+    $(document).ready(function () {
+        $('#intSourceOfIncomeIds').multiSelect();
+
+    });
+
+
+
 </script>

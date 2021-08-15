@@ -1,0 +1,1239 @@
+﻿@using DBHelper.Schema
+@using AppMain.Providers
+@using AppUtils
+@{
+    var applicationId = MvcApplication.TempAccount.Id;
+    var context = new DBLAccountOpeningContext();
+    var basicProfile= Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+    var accountAuthorisedPersons = Utilities.GetAccountAuthorisedPersons(applicationId);
+  //  var accountETI = Utilities.GetAccountETI(applicationId);
+    var accountUploads = Utilities.GetAccountFilesUploads(applicationId);
+    var accountFinancialInvestmentRiskProfile = Utilities.GetAccountInvestmentRiskProfile(applicationId);
+  //  var accountCustodyDetails = Utilities.GetAccountCustodyDetails(applicationId);
+    var accountTradingContacts = Utilities.GetAccountTradingContract(applicationId);
+    var accountInstructionEmploymentDetails = Utilities.GetAccountInstructionEmploymentDetailModel(applicationId);
+    //var accountSignatories = Utilities.GetAccountSignatories(applicationId);
+    var accountMembers = Utilities.GetAccountMembers(applicationId);
+    var accountNextOfKins = Utilities.GetAccountNextOfKins(applicationId);
+    var accountSettlementDetails = Utilities.GetAccountSettlementDetail(applicationId);
+   // var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
+
+}
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="investmentType">Investment Type</label>
+                    <select name="investmentType" id="investmentType" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.InvestmentTypes.Where(x => x.IsActive))
+                            {
+                                if (item.Id == basicProfile.InvestmentTypeId)
+                                {
+                                    <option  selected value="@item.Id">@item.Name</option>
+                                    continue;
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+
+
+            <td>
+
+
+                <div class="form-group">
+                    <label for="expectedAccountActivityId">Expected Account Activity</label>
+                    <select name="expectedAccountActivityId" id="expectedAccountActivityId" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.ExpectedAccountActivities.OrderBy(x => x.Id))
+                            {
+                                if (item.Id == basicProfile.ExpectedAccountActivityId)
+                                {
+
+                                    <option selected value="@item.Id">@item.Name</option>
+                                    continue;
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <label>TIN Number</label>
+                    <input type="text" name="tin" id="tin" class="form-control" value="@basicProfile.TIN"/>
+
+                </div>
+
+            </td>
+        </tr>
+
+    </table>
+    @{ 
+        var firstApplicant = accountMembers.FirstOrDefault();
+
+    }
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">FIRST APPLICANT</th>
+            </tr>
+        </thead>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantTitle" class="form-label">Title *</label>
+                    <select name="firstApplicantTitle" id="firstApplicantTitle" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Titles)
+                            {
+                                if (item.Id == firstApplicant.TitleId)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                    continue;
+
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+            <td>
+
+                <div class="form-group">
+                    <label for="firstApplicantSurname" class="form-label">Surname *</label>
+                    <input type="text" name="firstApplicantSurname" id="firstApplicantSurname" required class="form-control" value="@firstApplicant.Lname" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantFname" class="form-label">First Name *</label>
+                    <input type="text" name="firstApplicantFname" id="firstApplicantFname" required class="form-control"  value="@firstApplicant.Fname"/>
+                </div>
+            </td>
+            <td>
+
+                <div class="form-group">
+                    <label for="firstApplicantOname" class="form-label">Other Name</label>
+                    <input type="text" name="firstApplicantOname" id="firstApplicantOname" class="form-control" value="@firstApplicant.Othername" />
+                </div>
+            </td>
+
+        </tr>
+
+
+        <tr>
+            <td>
+
+                <div class="form-group">
+                    <label for="firstApplicantGender" class="form-label">Gender *</label>
+                    <select name="firstApplicantGender" id="firstApplicantGender" required class="form-control">
+                        <option value="">-select-</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+
+                </div>
+
+                <script type="text/javascript">
+                    $("#firstApplicantGender").val('@firstApplicant.Gender');
+                </script>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantNationality" class="form-label">Nationality *</label>
+                    <select name="firstApplicantNationality" id="firstApplicantNationality" required class="form-control">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                            {
+                                if (item.ID == firstApplicant.NationalityId)
+                                {
+                                    <option value="@item.ID" selected>@item.CountryName</option>
+                                    continue;
+
+                                }
+                                <option value="@item.ID">@item.CountryName</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
+                    <input type="date"  value="@firstApplicant.DOB" class="form-control" name="firstApplicantDOB" id="firstApplicantDOB" required onchange="javascript:DateChanged(this.value,'firstApplicantDOB')" />
+                </div>
+            </td>
+
+            <td>
+
+                <div class="form-group">
+                    <label for="firstApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+                    <input type="text" value="@firstApplicant.PlaceOfBirth" name="firstApplicantPlaceOfBirth" id="firstApplicantPlaceOfBirth" required class="form-control" />
+                </div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMaritalStatus" class="form-label">Marital Status *</label>
+                    <select name="firstApplicantMaritalStatus" id="firstApplicantMaritalStatus" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.MaritalStatus.Where(x => x.IsActive))
+                            {
+                                if (item.Id == firstApplicant.MaritalStatusId)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                    continue;
+
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMotherMaidenName" class="form-label">Mother’s Maiden Name *</label>
+                    <input type="text" name="firstApplicantMotherMaidenName" id="firstApplicantMotherMaidenName" value="@firstApplicant.MothersMaidenName" required class="form-control" />
+                </div>
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMaidenName" class="form-label">Maiden Name</label>
+                    <input type="text" name="firstApplicantMaidenName" id="firstApplicantMaidenName" class="form-control" value="@firstApplicant.MaidenName" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantEmail" class="form-label">Email *</label>
+                    <input type="email" name="firstApplicantEmail" id="firstApplicantEmail" required class="form-control" value="@firstApplicant.Email" />
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6">
+                <div class="form-group">
+                    <label for="firstApplicantFullResidentialAddress">Residential Address</label>
+                    <input type="text" class="form-control" name="firstApplicantFullResidentialAddress" value="@firstApplicant.ResidentialAddressFull" id="firstApplicantFullResidentialAddress" />
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantResidentialCity" class="form-label">City</label>
+                    <input type="text" name="firstApplicantResidentialCity" id="firstApplicantResidentialCity" class="form-control" value="@firstApplicant.ResidentialCity" />
+                </div>
+
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantResidentialZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                    <input type="text" name="firstApplicantResidentialZipCode" id="firstApplicantResidentialZipCode" class="form-control" value="@firstApplicant.ResidentialZipCode" />
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantResidentialCountry" class="form-label">Country *</label>
+                    <select name="firstApplicantResidentialCountry" id="firstApplicantResidentialCountry" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                            {
+                                if (item.ID == firstApplicant.ResidentialCountryId)
+                                {
+                                    <option value="@item.ID" selected>@item.CountryName</option>
+                                    continue;
+
+                                }
+                                <option value="@item.ID">@item.CountryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantOccupation" class="form-label">Occupation *</label>
+                    <input type="text" name="firstApplicantOccupation" id="firstApplicantOccupation" required class="form-control" value="@firstApplicant.Occupation"/>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td colspan="6">
+                <div class="form-group">
+                    <label for=""> Mailing Address</label>
+                    <input type="text" class="form-control" name="firstApplicantFullMailingAddress" id="firstApplicantFullMailingAddress" value="@firstApplicant.MailingAddressFull"/>
+
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMailingCity" class="form-label">City</label>
+                    <input type="text" name="firstApplicantMailingCity" id="firstApplicantMailingCity" class="form-control" value="@firstApplicant.MailingAddressCity" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMailingZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                    <input type="text" name="firstApplicantMailingZipCode" id="firstApplicantMailingZipCode" class="form-control" value="@firstApplicant.MailingAddressZipCode" />
+                </div>
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMailingCountry" class="form-label">Country *</label>
+                    <select name="firstApplicantMailingCountry" id="firstApplicantMailingCountry" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                            {
+                                if (item.ID == firstApplicant.MailingAddressCountryId)
+                                {
+                                    <option value="@item.ID" selected>@item.CountryName</option>
+                                    continue;
+
+                                }
+                                <option value="@item.ID">@item.CountryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantTickApplicable" class="form-label">Select applicable suffix *</label>
+                    <select name="firstApplicantTickApplicable" id="firstApplicantTickApplicable" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.CSDDepositoryParticipantOptions.Where(x => x.IsActive).OrderBy(x => x.Id))
+                            {
+                                if (item.Id == firstApplicant.SelectWhereApplicableId)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                    continue;
+
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantTel" class="form-label">Telephone</label>
+                    <input type="text" name="firstApplicantTel" id="firstApplicantTel" class="form-control" value="@firstApplicant.Telephone"/>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantMobile" class="form-label">Mobile</label>
+                    <input type="text" name="firstApplicantMobile" id="firstApplicantMobile" class="form-control" value="@firstApplicant.Mobile" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantFax" class="form-label">Fax</label>
+                    <input type="text" name="firstApplicantFax" id="firstApplicantFax" class="form-control" value="@firstApplicant.Fax" />
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantIdType" class="form-label">ID Type *</label>
+                    <select name="firstApplicantIdType" id="firstApplicantIdType" class="form-control" required>
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                            {
+                                if (item.Id == firstApplicant.IdTypeId)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                    continue;
+
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantIdNumber" class="form-label">ID Number *</label>
+                    <input type="text" name="firstApplicantIdNumber" id="firstApplicantIdNumber" required class="form-control" value="@firstApplicant.IdNumber" />
+                </div>
+
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+                    <input type="text" name="firstApplicantIdIssuingAuthority" id="firstApplicantIdIssuingAuthority" required class="form-control" value="@firstApplicant.IssuingAuthority"/>
+                </div>
+
+
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantIdCardIssueDate" class="form-label">Issue Date *</label>
+                    <input type="date" name="firstApplicantIdCardIssueDate" id="firstApplicantIdCardIssueDate" required class="form-control"  value="@firstApplicant.IdCardIssueDate"/>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+                    <label for="firstApplicantIdCardExpDate" class="form-label">Expiry Date</label>
+                    <input type="date" name="firstApplicantIdCardExpDate" id="firstApplicantIdCardExpDate" class="form-control"  value="@firstApplicant.IdCardExpiryDate"/>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <label>Photo ID</label>
+            </td>
+            <td>
+                <label>Signature</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="~/Images/@firstApplicant.IdPath" style="width:180px; height:140px;" /><br />
+                <input type="file" placeholder="new photo" name="firstApplicantPhotoReplace" id="firstApplicantPhotoReplace" onchange="javascript: validateUploadImageOnly('firstApplicantPhotoReplace')" />
+            </td>
+            <td>
+                <img src="~/Images/@firstApplicant.SignaturePath" style="width:180px; height:140px;" /><br />
+                <input type="file" placeholder="new photo" name="firstApplicantSignatureReplace" id="firstApplicantSignatureReplace" onchange="javascript: validateUploadImageOnly('firstApplicantSignatureReplace')" />
+
+
+            </td>
+
+        </tr>
+
+
+    </table>
+    @{
+        // MvcApplication.AccountType = 3;
+        if (MvcApplication.AccountType == 2)
+        {
+            //joint
+            @Html.Partial("~/Views/Partials/client_edits/_editJointApplicant.cshtml")
+
+        }
+        else if (MvcApplication.AccountType == 3)
+        {
+            //itf
+            @Html.Partial("~/Views/Partials/client_edits/_editItfApplicant.cshtml")
+
+        }
+        @Html.Partial("~/Views/Partials/client_edits/_editNextOfKin.cshtml")
+    }
+
+    @{ 
+        var authPerson = new AppModels.AccountAuthorisedPersonModel();
+        if (accountAuthorisedPersons!=null && accountAuthorisedPersons.Any())
+        {
+            authPerson = accountAuthorisedPersons.FirstOrDefault();
+        }
+
+    }
+
+</div>
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Authorised Person other than Account Holder(s) to Deal on the Account</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonName" class="form-label">Name</label>
+                        <input type="text" name="authorisedPersonName" id="authorisedPersonName" class="form-control" value="@authPerson.Name" />
+                    </div>
+
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonTel" class="form-label">Telephone</label>
+                        <input type="text" name="authorisedPersonTel" id="authorisedPersonTel" class="form-control" value="@authPerson.Tel" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonMobile" class="form-label">Mobile</label>
+                        <input type="text" name="authorisedPersonMobile" id="authorisedPersonMobile" class="form-control" value="@authPerson.Mobile" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonFax" class="form-label">Fax</label>
+                        <input type="text" name="authorisedPersonFax" id="authorisedPersonFax" class="form-control" value="@authPerson.Fax" />
+                    </div>
+                </td>
+
+
+            </tr>
+            <tr>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonRelation" class="form-label">Relation to the Account Holder</label>
+                        <input type="text" name="authorisedPersonRelation" id="authorisedPersonRelation" class="form-control"  value="@authPerson.RelationToAccountHolder"/>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        <label for="authorisedPersonEmail" class="form-label">E-mail address</label>
+                        <input type="email" name="authorisedPersonEmail" id="authorisedPersonEmail" class="form-control" value="@authPerson.Email" />
+                    </div>
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        <label for="authorisedPersonMailAddress" class="form-label">Mailing Address</label>
+                        <input type="text" name="authorisedPersonMailAddress" id="authorisedPersonMailAddress" class="form-control" value="@authPerson.MailingAddress" />
+                    </div>
+
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonCity" class="form-label">City</label>
+                        <input type="text" name="authorisedPersonCity" id="authorisedPersonCity" class="form-control" value="@authPerson.City" />
+                    </div>
+                </td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                        <input type="text" name="authorisedPersonZipCode" id="authorisedPersonZipCode" class="form-control" value="@authPerson.ZipCode"/>
+                    </div>
+                </td>
+
+                <td>
+
+                    <div class="form-group">
+                        <label for="authorisedPersonZipCountryId" class="form-label">Country</label>
+                        <select name="authorisedPersonZipCountryId" id="authorisedPersonZipCountryId" class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == authPerson.CountryId)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonApplicantIdType" class="form-label">ID Type</label>
+                        <select name="authorisedPersonApplicantIdType" id="authorisedPersonApplicantIdType" class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                                {
+                                    if (item.Id == authPerson.IdType)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="authorisedPersonApplicantIdNumber" class="form-label">ID Number</label>
+                        <input type="text" value="@authPerson.IdNumber" name="authorisedPersonApplicantIdNumber" id="authorisedPersonApplicantIdNumber" class="form-control" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="firstApplicantIdAuthorisedPersonIssuingAuthority" class="form-label">Issuing Authority</label>
+                        <input type="text"  value="@authPerson.IdIssueAuthority"name="firstApplicantIdAuthorisedPersonIssuingAuthority" id="firstApplicantIdAuthorisedPersonIssuingAuthority" class="form-control" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="firstAuthorisedApplicantIdCardIssueDate" class="form-label">Issue Date</label>
+                        <input type="date" value="@authPerson.IssueDate" name="firstAuthorisedApplicantIdCardIssueDate" id="firstAuthorisedApplicantIdCardIssueDate" class="form-control" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="firstApplicantIdAuthorisedCardExpDate" class="form-label">Expiry Date</label>
+                        <input type="date" value="@authPerson.IDExpiryDate" name="firstApplicantIdAuthorisedCardExpDate" id="firstApplicantIdAuthorisedCardExpDate" class="form-control" />
+                    </div>
+                </td>
+
+                <td>
+                    <img src="~/Images/@authPerson.IdPath" style="width:180px; height:140px;" /><br />
+                    <input type="file" placeholder="new photo" name="firstApplicantAuthPersonIdReplace" id="firstApplicantAuthPersonIdReplace" onchange="javascript: validateUploadImageOnly('firstApplicantAuthPersonIdReplace')" />
+
+
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Settlement Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="settlementDetailsAccountName" class="form-label">Account Name *</label>
+                        <input type="text" value="@accountSettlementDetails.AccountName" name="settlementDetailsAccountName" id="settlementDetailsAccountName" class="form-control" required />
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="settlementDetailsAccountNumber" class="form-label">Account Number *</label>
+                        <input type="text" value="@accountSettlementDetails.AccountNumber" class="form-control" name="settlementDetailsAccountNumber" id="settlementDetailsAccountNumber" required pattern="[-+]?[0-9]*[.,]?[0-9]+" title="must be a valid number" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="settlementDetailsAccountBankId" class="form-label">Bank *</label>
+                        <select name="settlementDetailsAccountBankId" id="settlementDetailsAccountBankId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
+                                {
+                                    if (item.Id == accountSettlementDetails.BankId)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="settlementDetailsAccountBankBranch" class="form-label">Bank Branch *</label>
+                        <input type="text" value="@accountSettlementDetails.Branch" name="settlementDetailsAccountBankBranch" id="settlementDetailsAccountBankBranch" required class="form-control" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="settlementDetailsAccountBankSortCode" class="form-label">Swift / Sort Code</label>
+                        <input type="text" value="@accountSettlementDetails.SwiftCode" name="settlementDetailsAccountBankSortCode" id="settlementDetailsAccountBankSortCode" class="form-control" />
+                    </div>
+
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Instructions and Employment Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsModeOfInstruction" class="form-label">Mode of Instructions *</label>
+                        <select name="instructionsEmploymentDetailsModeOfInstruction" id="instructionsEmploymentDetailsModeOfInstruction" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.ModeOfInstructions.Where(x => x.IsActive))
+                                {
+                                    if (item.Id == accountInstructionEmploymentDetails.ModeOfInstructionId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsModeOfNotification" class="form-label">Mode of Notification *</label>
+                        <select name="instructionsEmploymentDetailsModeOfNotification" id="instructionsEmploymentDetailsModeOfNotification" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.ModeOfNotifications.Where(x => x.IsActive))
+                                {
+                                    if (item.Id == accountInstructionEmploymentDetails.ModeOfNotificationId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsEmploymentStatus" class="form-label">Employment Status *</label>
+                        <select required name="instructionsEmploymentDetailsEmploymentStatus" id="instructionsEmploymentDetailsEmploymentStatus" class="form-control" >
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.EmploymentStatus.Where(x => x.IsActive))
+                                {
+                                    if (item.Id == accountInstructionEmploymentDetails.EmploymentStatusId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <input type="hidden" name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" value="1" />
+
+                </td>
+
+                <td>
+                    <div class="form-group" id="instructionsEmploymentDetailsSourceOfIncomeIdsDiv">
+                        <label for="instructionsEmploymentDetailsSourceOfIncomeIds" class="form-label">Source(s) of Income/Funds *</label>
+                        <br />
+                        <select id="instructionsEmploymentDetailsSourceOfIncomeIds" name="instructionsEmploymentDetailsSourceOfIncomeIds" multiple required>
+                            @{
+                                foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                                {
+                                    if (accountInstructionEmploymentDetails.SourceOfFundsIds.Split(',').Contains(item.Id.ToString()))
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsPreviousOccupation" class="form-label">Previous Occupation</label>
+                        <input type="text" name="instructionsEmploymentDetailsPreviousOccupation" value="@accountInstructionEmploymentDetails.PrevOccupation" class="form-control" id="instructionsEmploymentDetailsPreviousOccupation" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsPreviousEmployer" class="form-label">Previous Employer</label>
+                        <input type="text" name="instructionsEmploymentDetailsPreviousEmployer" value="@accountInstructionEmploymentDetails.PrevEmployer" class="form-control" id="instructionsEmploymentDetailsPreviousEmployer" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsCurrentOccupation" class="form-label">Current Occupation *</label>
+                        <input type="text" name="instructionsEmploymentDetailsCurrentOccupation" value="@accountInstructionEmploymentDetails.CurrentOccupation" class="form-control" id="instructionsEmploymentDetailsCurrentOccupation" required />
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsCurrentEmployer" class="form-label">Current Employer *</label>
+                        <input type="text" name="instructionsEmploymentDetailsCurrentEmployer" value="@accountInstructionEmploymentDetails.CurrentEmployer" class="form-control" id="instructionsEmploymentDetailsCurrentEmployer" required />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsCurrentEmployerAddress" class="form-label">Current Employer’s Address</label>
+                        <input type="text" class="form-control" value="@accountInstructionEmploymentDetails.CurrentEmployerAddress" name="instructionsEmploymentDetailsCurrentEmployerAddress" id="instructionsEmploymentDetailsCurrentEmployerAddress" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsCurrentEmployerFrom" class="form-label">Employment Dates: (From)</label>
+                        <input type="date" @accountInstructionEmploymentDetails.EmploymentDateFrom class="form-control" name="instructionsEmploymentDetailsCurrentEmployerFrom" id="instructionsEmploymentDetailsCurrentEmployerFrom" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instructionsEmploymentDetailsCurrentEmployerTo" class="form-label">Employment Dates: (To)</label>
+                        <input type="date" value="@accountInstructionEmploymentDetails.EmploymentDateTo" class="form-control" name="instructionsEmploymentDetailsCurrentEmployerTo" id="instructionsEmploymentDetailsCurrentEmployerTo" />
+                    </div>
+                    <input type="hidden" name="yearsOfEmployment" id="yearsOfEmployment" value="0" />
+
+
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Financial, Investment and Risk Profile</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+
+                    <div class="form-group">
+                        <label for="annualIncomeId" class="form-label">Approximate Annual Income(GHS) *</label>
+                        <select name="annualIncomeId" id="annualIncomeId" class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.ApproximateAnnualIncomes.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.AnnualIncomeId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
+
+                </td>
+
+                <td>
+
+                    <div class="form-group">
+                        <label for="networthId" class="form-label">Net Worth(GHS) *</label>
+                        <select required name="networthId" id="networthId" class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.NetWorths.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.NetworthId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="investmentHorizonId" class="form-label">Investment Horizon *</label>
+                        <select required name="investmentHorizonId" id="investmentHorizonId" class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.InvestmentHorizons.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.InvestmentHorizonId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="objectivesId" class="form-label">Objectives *</label>
+                        <select name="objectivesId" id="objectivesId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Objectives.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.ObjectivesId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="investmentKnowledgeId" class="form-label">Investment Knowledge *</label>
+                        <select name="investmentKnowledgeId" id="investmentKnowledgeId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.InvestmentKnowledges.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.InvestmentKnowledgeId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="riskToleranceId" class="form-label">Risk Tolerance *</label>
+                        <select name="riskToleranceId" id="riskToleranceId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.RiskTolerances.Where(x => x.IsActive).OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == accountFinancialInvestmentRiskProfile.RiskToleranceId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
+
+
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        <label for="onlineTradingFacility" class="form-label">Online Trading Facility *</label>
+                        <select name="onlineTradingFacility" id="onlineTradingFacility" class="form-control" required>
+                            <option value="">-select-</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        $("#onlineTradingFacility").val('@accountFinancialInvestmentRiskProfile.OnlineTradingFacility');
+                    </script>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="statementFreqId" class="form-label">Frequency of Account Statements *</label>
+                        <select name="statementFreqId" id="statementFreqId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.StatementFrequencies.OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == basicProfile.FrequencyOfStatementsId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Declaration by Applicant(s)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="1">
+                    <div class="form-group">
+                        <label for="declarationHasBeenConvicted" class="form-label">
+                            Have you been convicted in any Court of Law for a criminal<br /> offence or are there any proceedings
+                            now pending against <br />you which may lead to such a conviction?
+                        </label>
+                        <select name="declarationHasBeenConvicted" id="declarationHasBeenConvicted" class="form-control" required style="width:300px;">
+                            <option value="">-select *-</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                        <script type="text/javascript">
+                            $("#declarationHasBeenConvicted").val('@basicProfile.DeclarationConvictedOfLaw');
+                        </script>
+                    </div>
+                </td>
+
+
+
+                <td colspan="2">
+                    <div class="form-group">
+                        <label for="convictionDetails" class="form-label">Provide Details</label>
+                        <textarea type="text" name="convictionDetails"  id="convictionDetails" class="form-control" style="height:100px;">@basicProfile.DeclarationConvictedOfLawDetails</textarea>
+                    </div>
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="1">
+                    <div class="form-group">
+                        <label for="actingAsNominee" class="form-label">
+                            Are you acting as a nominee in trust for others?
+                        </label>
+                        <select name="actingAsNominee" id="actingAsNominee" class="form-control" required style="width:300px">
+                            <option value="">-select *-</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+
+                    <script type="text/javascript">
+                        $("#actingAsNominee").val('@basicProfile.DeclarationActingAsNominee');
+                    </script>
+                </td>
+
+                <td colspan="2">
+                    <div class="form-group">
+                        <label for="actingAsNomineeName" class="form-label">Name</label>
+                        <input type="text" name="actingAsNomineeName" id="actingAsNomineeName" value="@basicProfile.DeclarationActingAsNomineeName" class="form-control" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6">
+                    <div class="form-group">
+                        <label>I/We</label>
+                        <input type="text" class="form-control" value="@basicProfile.DeclarationIWe" name="singleAccDeclarationFullName" id="singleAccDeclarationFullName" required />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="numberOfSignatories" class="form-label">Indicate the Number of Signatories *</label>
+                        <select name="numberOfSignatories" id="numberOfSignatories" class="form-control" style="width:300px;" required>
+                            <option value="">-select-</option>
+                            @{
+                                var signTypes = context.SignatureTypes.OrderBy(x => x.Id).Take(3).ToList();
+                                if (MvcApplication.AccountType == 1)
+                                {
+                                    signTypes = signTypes.Where(x => x.Id == 1).ToList();
+                                }
+                                foreach (var item in signTypes)
+                                {
+                                    if (item.Id == basicProfile.SignatureTypeId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+                @*<td>
+                    <div class="form-group">
+                        <label for="staffRefCode" class="form-label">Do you have introducer Code? (optional) <a style="color:blue;" onclick="javascript: showReferalHelp()">Need help?</a></label>
+                        <input type="number" name="staffRefCode" value="@basicProfile.StaffRefCode" class="form-control" id="staffRefCode" maxlength="5" placeholder="****" style="width:400px" />
+                    </div>
+                </td>*@
+            </tr>
+
+            
+        </tbody>
+    </table>
+
+</div>
+
+
+<style>
+    .multi-select-menuitem input {
+        margin-top: 0;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#instructionsEmploymentDetailsSourceOfIncomeIds').multiSelect();
+
+    });
+
+
+
+
+    function showReferalHelp() {
+        bootbox.alert("If a Databank staff directed you to this application, please enter the staff code here");
+    }
+</script>

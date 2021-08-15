@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBHelper.Schema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,7 @@ namespace AppMain
     public class MvcApplication : System.Web.HttpApplication
     {
         public static int AccountType { get; set; }
+        public static Account TempAccount { get; set; }
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

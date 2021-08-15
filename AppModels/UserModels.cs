@@ -1,11 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AppModels
 {
+    public class ChangePasswordModel
+    {
+        [Compare("NewPassword", ErrorMessage = "Password and confirmation mismatch")]
+        [DataType(DataType.Password)]
+        [DisplayName("Confirm Password")]
+        [Required(ErrorMessage = "Required")]
+        public string ConfirmPassword
+        {
+            get;
+            set;
+        }
+
+        [DataType(DataType.Password)]
+        [DisplayName("New Password")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,12}$", ErrorMessage = "Password must meet requirements")]
+        [Required(ErrorMessage = "Required")]
+        public string NewPassword
+        {
+            get;
+            set;
+        }
+        [DataType(DataType.Password)]
+        [DisplayName("Current Password")]
+        [Required(ErrorMessage = "Required")]
+        public string CurrentPassword { get; set; }
+
+
+
+        public string Fullname { get; set; }
+        public string UserId { get; set; }
+    }
 
     public class AccountBasicModel {
         public System.Guid Id { get; set; }
@@ -69,7 +102,7 @@ namespace AppModels
         public string StaffRefName { get; set; }
         public string BranchCode { get; set; }
         public string BackConnectAccountNumber { get; set; }
-
+        public string Password { get; set; }
 
 
     }
@@ -322,6 +355,8 @@ namespace AppModels
         public string ModeOfInstructionName { get; set; }
         public string ModeOfNotificationName { get; set; }
         public string SourceOfIncomeName { get; set; }
+        public string SourceOfIncomeNamesList { get; set; }
+        public string SourceOfFundsIds { get; set; }
 
     }
 
@@ -391,5 +426,58 @@ namespace AppModels
         public double ComparePcnt { get; set; }
     }
 
+    public class UserAppRole
+    {
+        public string AppCode { get; set; }
+        public string RoleName { get; set; }
+        public string AppName { get; set; }
+    }
+    public class AppRoleModel
+    {
+        public string RoleName { get; set; }
+        public int RoleId { get; set; }
 
+    }
+
+
+    public class UserModel
+    {
+        public string UserId { get; set; }
+
+        [Display(Name = "Official Email(*)"), DataType(DataType.EmailAddress), Required]
+        public string Username { get; set; }
+        [Display(Name = "Phone No.")]
+        [StringLength(20, MinimumLength = 10),
+         DataType(DataType.PhoneNumber, ErrorMessage = "Please enter a valid phone number"),
+         RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,14})$", ErrorMessage = "Please enter a valid phone number. 10-20 digits only")]
+
+        public string Phone { get; set; }
+        [Required]
+        public string Fullname { get; set; }
+        public int? LocationId { get; set; }
+        public string AppName { get; set; }
+        public int RoleId { get; set; }
+        public string AppCode { get; set; }
+
+        public string RoleName { get; set; }
+        public bool IsTeamLeader { get; set; }
+        [Display(Name = "Department(*)")]
+        public string GroupIds { get; set; }
+
+        public bool IsAdmin { get; set; }
+        public bool IsSuperUser { get; set; }
+
+        public bool DefaultPasswordChanged { get; set; }
+        public string DeptName { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+    public class ActivityModel
+    {
+        public string UserId { get; set; }
+        public string Description { get; set; }
+        public bool IsStart { get; set; }
+        public string SessionId { get; set; }
+        public string AppCode { get; set; }
+    }
 }

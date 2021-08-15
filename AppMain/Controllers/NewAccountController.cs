@@ -66,6 +66,7 @@ namespace AppMain.Controllers
                    Id=_ref,
                    Name=name,
                    Phone=phone,
+                   StatusId=1
                 });
                 context.SaveChanges();
                 return RedirectToAction("ForgotAccountCompleted",new { reference =_ref});
@@ -89,7 +90,7 @@ namespace AppMain.Controllers
 
             return Json(new { status = true, Message = "" });
         }
-
+        
         [HttpPost]
         public ActionResult Initiate(int investmentType = 0, int firstApplicantTitle=0,string firstApplicantSurname=null,string firstApplicantFname=null, string firstApplicantOname=null,int firstApplicantNationality=0,
             string firstApplicantDOB=null,string firstApplicantPlaceOfBirth=null,int firstApplicantMaritalStatus=0,string firstApplicantMotherMaidenName=null,string firstApplicantFullResidentialAddress=null,string firstApplicantResidentialCity=null,
@@ -114,7 +115,9 @@ namespace AppMain.Controllers
             string instructionsEmploymentDetailsCurrentOccupation=null,string instructionsEmploymentDetailsCurrentEmployer=null,string instructionsEmploymentDetailsCurrentEmployerAddress=null,string instructionsEmploymentDetailsCurrentEmployerFrom=null,string instructionsEmploymentDetailsCurrentEmployerTo=null,
             int annualIncomeId=0,int networthId=0, int investmentHorizonId=0,int objectivesId=0,int investmentKnowledgeId=0,int riskToleranceId=0,
             string onlineTradingFacility=null,string declarationHasBeenConvicted=null,string convictionDetails=null,string actingAsNominee=null,string singleAccDeclarationFullName=null,
-            int numberOfSignatories=0, int instInvestmentType=0,string instNameOfClient=null,string instPricipalBroker=null,string instNatureOfBusiness=null,int instCountryOfResidence=0,string instRegistrationNumber=null,string instFullMailingAddress=null,string instMailingAddressCity=null,int instMailAddressCountryOfResidence=0,
+            int numberOfSignatories=0, 
+            
+            int instInvestmentType=0,string instNameOfClient=null,string instPricipalBroker=null,string instNatureOfBusiness=null,int instCountryOfResidence=0,string instRegistrationNumber=null,string instFullMailingAddress=null,string instMailingAddressCity=null,int instMailAddressCountryOfResidence=0,
             string instFullStreetAddress=null, string instSteetAddressCity=null,string instSteetAddressZipCode=null,int instSteetAddressCountry=0,string instTelephone=null,string instFax=null,string instEmail=null,string instCompanyType=null,int instRegionalInvestmentId=0,int instStatementFreq=0,
             string custodyDetailsName=null,string custodyDetailsPhone=null,string custodyDetailsAddress=null,string custodyDetailsFax=null,string custodyDetailsCashAccNumber=null,string custodyDetailsSecuritiesAccNumber=null,
             int intSettlementDetailsCorrespondentBankId=0,string intSettlementDetailsCorrespondentBankSwiftNo=null,int intSettlementDetailsIntermediaryBankId=0,string intSettlementDetailsIntermediaryBankSwiftNo=null,
@@ -133,7 +136,9 @@ namespace AppMain.Controllers
             
             string indemnityTxt1=null,string indemnityTxt2=null,string indemnityTxt3=null,string indemnityTxt4=null, string indemnityName1=null,string indemnityName2=null,string indemnityEmail1=null,string indemnityEmail2=null,
             int yearsOfEmployment=0,string tin=null,string firstApplicantMaidenName=null,int statementFreqId = 0,int expectedAccountActivityId=0, string firstApplicantGender=null,string jointApplicantGender=null, string itfApplicantGender=null,
-            List<string> remark=null, int staffRefCode=0
+            List<string> remark=null, int staffRefCode=0,List<int> instructionsEmploymentDetailsSourceOfIncomeIds=null, List<int> intSourceOfIncomeIds=null,
+
+            string _firstApplicantSignatureCapture = null,string _jointApplicantSignatureCapture=null,string _instSign1Capture=null,string _instSign2Capture=null,string _instSign3Capture=null,string _instSign4Capture=null
 
             )
 
@@ -142,6 +147,7 @@ namespace AppMain.Controllers
             {
                 int accountType = MvcApplication.AccountType;
                 var context = new DBLAccountOpeningContext();
+                string password = Utilities.GeneratePassword(8);
                 string accountId = string.Empty;
                 if (accountType <= 3)
                 {
@@ -167,13 +173,22 @@ namespace AppMain.Controllers
                         SelectApplicableId = firstApplicantTickApplicable,
                         CSDFormPath = SaveFileUpload(_CsdCompletedForm),
                         ReferenceNo = Utilities.GenerateApplicationReference(),
-                        StatusId=1,
-                        BranchCode=Utilities.GetRandomBranchCode()
+                        StatusId = 1,
+                        BranchCode = Utilities.GetRandomBranchCode(),
+                        Password = Utilities.EncodeBase64(password)
                     };
-                    if (yearsOfEmployment > 0)
-                    {
-                        account.YearsOfWorkExperience = yearsOfEmployment;
-                    }
+                    
+                        if (!string.IsNullOrEmpty(instructionsEmploymentDetailsCurrentEmployerFrom)  && !string.IsNullOrEmpty(instructionsEmploymentDetailsCurrentEmployerTo))
+                        {
+
+                        int yrs= Utilities.ComputeYears(instructionsEmploymentDetailsCurrentEmployerFrom, instructionsEmploymentDetailsCurrentEmployerTo);
+                        if (yrs>0)
+                        {
+                            account.YearsOfWorkExperience = yrs;
+                            yearsOfEmployment = yrs;
+                        }
+                        }
+                    
                     accountId = account.Id.ToString();
                     context.Accounts.Add(account);
                     if (staffRefCode>0)
@@ -220,7 +235,7 @@ namespace AppMain.Controllers
                         IdCardIssueDate = firstApplicantIdCardIssueDate,
                         IdCardExpiryDate = firstApplicantIdCardExpDate,
                         IdPath = SaveFileUpload(_FirstApplicantIdPhoto),
-                        SignaturePath = SaveFileUpload(_FirstApplicantSignature),
+                        SignaturePath =!string.IsNullOrEmpty(_firstApplicantSignatureCapture)? Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(),"png", _firstApplicantSignatureCapture) : SaveFileUpload(_FirstApplicantSignature),
                         CreatedDate = DateTime.Now
                     };
                     context.AccountMembers.Add(firstApplicant);
@@ -252,7 +267,7 @@ namespace AppMain.Controllers
                             IdCardIssueDate = jointApplicantIdCardIssueDate,
                             IdCardExpiryDate = jointApplicantIdCardExpDate,
                             IdPath = SaveFileUpload(_JointApplicantIdPhoto),
-                            SignaturePath = SaveFileUpload(_JointApplicantSignature),
+                            SignaturePath = !string.IsNullOrEmpty(_jointApplicantSignatureCapture)?Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(), "png", _jointApplicantSignatureCapture) : SaveFileUpload(_JointApplicantSignature),
                             CreatedDate = DateTime.Now
                         };
                         context.AccountMembers.Add(jointApplicant);
@@ -382,7 +397,12 @@ namespace AppMain.Controllers
                         EmploymentDateFrom= instructionsEmploymentDetailsCurrentEmployerFrom,
                         EmploymentDateTo= instructionsEmploymentDetailsCurrentEmployerTo,
                         Id=Guid.NewGuid(),
+                        
                     };
+                    if (instructionsEmploymentDetailsSourceOfIncomeIds!=null && instructionsEmploymentDetailsSourceOfIncomeIds.Any())
+                    {
+                        instructionEmploymentDetails.SourceOfFundsIds = string.Join(",", instructionsEmploymentDetailsSourceOfIncomeIds.Select(x => x.ToString()));
+                    }
                     if (yearsOfEmployment>0)
                     {
                         instructionEmploymentDetails.YearsOfEmployment = yearsOfEmployment;
@@ -409,13 +429,7 @@ namespace AppMain.Controllers
 
                 }
 
-                
-
-
-
-
-
-                else
+                  else
                 {
                     //institutional
                     var institutionalAccount = new Account
@@ -451,7 +465,9 @@ namespace AppMain.Controllers
                         InstOtherDetails= insOtherDetails,
                         StatusId=1,
                         BranchCode = Utilities.GetRandomBranchCode(),
-                        
+                        ReferenceNo=Utilities.GenerateApplicationReference(),
+                        Password = Utilities.EncodeBase64(password)
+
                     };
                     if (instSteetAddressCountry>0)
                     {
@@ -469,6 +485,8 @@ namespace AppMain.Controllers
                     accountId = institutionalAccount.Id.ToString();
                     context.Accounts.Add(institutionalAccount);
                     context.SaveChanges();
+
+
                     context.AccountInsCustodyAccountDetails.Add(new AccountInsCustodyAccountDetail {
 
                         AccountId=institutionalAccount.Id,
@@ -515,9 +533,9 @@ namespace AppMain.Controllers
                         AccountId= institutionalAccount.Id,
                         CreatedDate=DateTime.Now,
                         Id=Guid.NewGuid(),
-                        
-
+                        SourceOfFundsIds= string.Join(",", intSourceOfIncomeIds.Select(x => x.ToString()))
                     });
+                 
 
                     //authosied Officers
                     var authorisedOfficer1 = new AccountAuthorisedPerson
@@ -642,7 +660,11 @@ namespace AppMain.Controllers
                         CreatedDate = DateTime.Now,
                         Name = instSignName1,
                         Position = instSignPosition1,
-                        SignaturePath = _InstSignatory1!=null? SaveFileUpload(_InstSignatory1):null
+                        //SignaturePath = _InstSignatory1!=null? SaveFileUpload(_InstSignatory1):null
+                        SignaturePath = !string.IsNullOrEmpty(_instSign1Capture) ?
+                        Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(), "png", _instSign1Capture) :
+                        SaveFileUpload(_InstSignatory1),
+
                     });
 
                     context.AccountInstSignatoriesMandates.Add(new AccountInstSignatoriesMandate
@@ -653,12 +675,15 @@ namespace AppMain.Controllers
                         CreatedDate = DateTime.Now,
                         Name = instSignName2,
                         Position = instSignPosition2,
-                        SignaturePath = _InstSignatory2 != null ? SaveFileUpload(_InstSignatory2) : null
+                        // SignaturePath = _InstSignatory2 != null ? SaveFileUpload(_InstSignatory2) : null
+                        SignaturePath = !string.IsNullOrEmpty(_instSign2Capture) ?
+                        Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(), "png", _instSign2Capture) :
+                        SaveFileUpload(_InstSignatory2),
                     });
 
                     if (!string.IsNullOrEmpty(instSignName3))
                     {
-                        context.AccountInstSignatoriesMandates.Add(new AccountInstSignatoriesMandate
+                        var sign3=new AccountInstSignatoriesMandate
                         {
 
                             Id = Guid.NewGuid(),
@@ -666,12 +691,20 @@ namespace AppMain.Controllers
                             CreatedDate = DateTime.Now,
                             Name = instSignName3,
                             Position = instSignPosition3,
-                            SignaturePath = _InstSignatory3 != null ? SaveFileUpload(_InstSignatory3) : null
-                        });
+                        };
+                        if (!string.IsNullOrEmpty(_instSign3Capture))
+                        {
+                            sign3.SignaturePath = Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(), "png", _instSign3Capture);
+                        }
+                        else if (_InstSignatory3!=null && sign3.SignaturePath==null)
+                        {
+                            SaveFileUpload(_InstSignatory3);
+                        }
+                        context.AccountInstSignatoriesMandates.Add(sign3);
                     }
                     if (!string.IsNullOrEmpty(instSignName4))
                     {
-                        context.AccountInstSignatoriesMandates.Add(new AccountInstSignatoriesMandate
+                        var sign4=new AccountInstSignatoriesMandate
                         {
 
                             Id = Guid.NewGuid(),
@@ -679,8 +712,16 @@ namespace AppMain.Controllers
                             CreatedDate = DateTime.Now,
                             Name = instSignName4,
                             Position = instSignPosition4,
-                            SignaturePath = _InstSignatory4 != null ? SaveFileUpload(_InstSignatory4) : null
-                        });
+                        };
+                        if (!string.IsNullOrEmpty(_instSign4Capture))
+                        {
+                            sign4.SignaturePath = Utilities.SaveBase64AsImage(Guid.NewGuid().ToString().ToLower(), "png", _instSign4Capture);
+                        }
+                        else if (_InstSignatory4 != null && sign4.SignaturePath == null)
+                        {
+                            SaveFileUpload(_InstSignatory4);
+                        }
+                        context.AccountInstSignatoriesMandates.Add(sign4);
                     }
                     context.SaveChanges();
                 }

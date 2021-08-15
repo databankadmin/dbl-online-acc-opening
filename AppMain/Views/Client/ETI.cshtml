@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "ETI";
+    Layout = "~/Views/Shared/_Client.cshtml";
+
+}
+
+
+@{
+    if (MvcApplication.TempAccount.AccountTypeId <= 3)
+    {
+        @Html.Partial("~/Views/Partials/client_edits/_editIndemnity_individual.cshtml")
+
+    }
+    else
+    {
+        @Html.Partial("~/Views/Partials/client_edits/_editIndemnity_institutional.cshtml")
+
+    }
+}

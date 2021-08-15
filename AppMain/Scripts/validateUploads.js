@@ -1,4 +1,48 @@
 ﻿
+function DateChanged(dob, ctrl) {
+    //jointApplicantDOB
+    minAge = 18;
+    age = computeAge(new Date(dob));
+    if (Number(age) < 0) {
+        age = 0;
+    }
+    if (ctrl === "firstApplicantDOB" || "jointApplicantDOB") {
+        if (age < minAge) {
+            swal("Applicant MUST NOT be less than " + minAge + " years.\nAge is: " + age);
+            $("#" + ctrl).val("");
+        }
+    }
+
+}
+
+
+
+
+
+function computeAge(birth) {
+    var today = new Date();
+    var nowyear = today.getFullYear();
+    var nowmonth = today.getMonth();
+    var nowday = today.getDate();
+
+    var birthyear = birth.getFullYear();
+    var birthmonth = birth.getMonth();
+    var birthday = birth.getDate();
+
+    var age = nowyear - birthyear;
+    var age_month = nowmonth - birthmonth;
+    var age_day = nowday - birthday;
+
+    if (age_month < 0 || (age_month === 0 && age_day < 0)) {
+        age = parseInt(age) - 1;
+    }
+    return parseInt(age);
+
+
+}
+
+
+
 function ValidateUpload(inputId) {
   //  alert("called...");
     
@@ -14,9 +58,9 @@ function ValidateUpload(inputId) {
         case 'image/jpeg':
         case 'image/pjpeg':
         case 'image/x-png':
-        case 'application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        case 'application/vnd.ms-excel':
+      //  case 'application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      //  case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      //  case 'application/vnd.ms-excel':
 
 
 

@@ -1,4 +1,5 @@
 ﻿using AppMain.Providers;
+using AppModels;
 using AppUtils;
 using DBHelper.Schema;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using SofteckSdkSolution.Models;
 using SofteckSdkSolution.SofteckAofSdk;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -19,27 +21,27 @@ namespace AppMain.Controllers
 
     public class AdminController : Controller
     {
-        public AppUser CurrentUser
+        public UserModel CurrentUser
         {
 
             get
             {
 
-                return Utilities.GetSessionUser() as AppUser;
+                return Utilities.GetSessionUser() as UserModel;
             }
         }
         // GET: Admin
-        public ActionResult Applications(int accountType = 0, int investmentTypeId = 0, int statusId=0,string key=null, string from = null, string to=null)
+        public ActionResult Applications(int accountType = 0, int investmentTypeId = 0, int statusId = 0, string key = null, string from = null, string to = null)
         {
 
 
-            string  dates = DateTime.Now.AddDays(-90).ToString("MM/dd/yyyy") + "-" + DateTime.Now.ToString("MM/dd/yyyy");
+            string dates = DateTime.Now.AddDays(-90).ToString("MM/dd/yyyy") + "-" + DateTime.Now.ToString("MM/dd/yyyy");
             if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
             {
                 dates = from + "-" + to;
             }
 
-            var model = Utilities.GetApplications(accountType,investmentTypeId,dates,null,statusId,key);
+            var model = Utilities.GetApplications(accountType, investmentTypeId, dates, null, statusId, key);
             ViewBag.accountType = accountType;
             ViewBag.investmentTypeId = investmentTypeId;
             ViewBag.from = string.IsNullOrEmpty(from) ? DateTime.Now.AddDays(-90).ToShortDateString() : from;
@@ -56,6 +58,119 @@ namespace AppMain.Controllers
         }
 
 
+        public ActionResult ForgottenAccount(string message=null)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                ViewBag.Message = message.Decrypt();
+
+            }
+            using (var context = new DBLAccountOpeningContext())
+            {
+                var model = context.ForgottenAccountDetails.OrderByDescending(x => x.CreatedDate).ToList();
+                return View(model);
+            }
+
+        }
+        public ActionResult ForgottenAccountDetails(Guid itemId)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var model = context.ForgottenAccountDetails.Find(itemId);
+                return View(model);
+            }
+        }
+        [HttpPost,ValidateAntiForgeryToken,ValidateInput(false)]
+        public ActionResult SendAccountDetailsResponse(Guid itemId,int responseType, string response)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                var model = context.ForgottenAccountDetails.Find(itemId);
+                if (model!=null)
+                {
+                    model.StatusId = 2;
+                    context.SaveChanges();
+                    string message = string.Empty;
+                    if (responseType==1)
+                    {
+                        //account found
+                        message = "Dear "+model.Name+ ",<br/>Thank you for getting  in touch with  Databank.<br/>Please below are your brokerage account  details:<br/>"+response+ "<br/><br/>Thank you for choosing  databank.";
+                                           }
+                    else if (responseType==2)
+                    {
+                        message = "Dear "+model.Name+"<br/>"+response+"<br/> Kindly call our team on 0302610610";
+                    }
+                    context.MessageHistories.Add(new MessageHistory
+                    {
+                        CreatedDate = DateTime.UtcNow,
+                        Id = Guid.NewGuid(),
+                        IsSent = false,
+                        MessageContent = message,
+                        SentTo = model.Email,
+                        Type = "EMAIL",
+                        Title = "Account Details".ToUpper()
+
+                    });
+                    model.Response = message + "<br/><br/>Sent On: " + DateTime.UtcNow.ToLongDateString() + "<br/>Sent By: " + CurrentUser.Username;
+
+                    context.SaveChanges();
+                    return RedirectToAction("ForgottenAccount", new { message = ("Account details sent to " + model.Email).Encrypt() });
+
+                }
+                else
+                {
+                    return RedirectToAction("ForgottenAccount");
+                }
+            }
+        }
+
+
+        [HttpPost,ValidateAntiForgeryToken,ValidateInput(false)]
+        public ActionResult SendEditRequest(Guid itemId,string errorList)
+        {
+            var context = new DBLAccountOpeningContext();
+            var accountBasic = Utilities.GetApplications(0, 0, null, itemId.ToString()).FirstOrDefault();
+            context.AccountEditRequests.Add(new AccountEditRequest {
+                AccountId=itemId,
+                CreatedBy=CurrentUser.Username,
+                CreatedDate=DateTime.Now,
+                ErrorList=errorList,
+                Id=Guid.NewGuid(),
+                IsActive=true,
+            });
+            string url = ConfigurationManager.AppSettings["appUrl"].ToString();
+            string sendTo = string.Empty;
+            if (accountBasic.AccountTypeId<=3)
+            {
+                var accountMember = Utilities.GetAccountMembers(itemId).FirstOrDefault();
+                sendTo = accountMember.Email;
+            }
+            else if (accountBasic.AccountTypeId==4)
+            {
+                sendTo = accountBasic.InsStreetAddressEmail;
+            }
+           // sendTo = "fohebenezer@gmail.com";
+            string message = "Hello "+accountBasic.AccountName+"<br/>Thank you for getting in touch with Databank. We have received your request to create a new Brokerage account.<br/>However, the following errors were identified with your entries.<br/>Kindly use the link and credentials below to make the needed corrections and resubmit the application.<br/><br/><b>Error List</b><br/>"+errorList+"<br/> Application Reference/Username: "+accountBasic.RefNo+"<br/>Password: "+accountBasic.Password+"<br/><a href="+ url + "><b>Login to Account</b></a>"+ "<br/><br/>Thank you for choosing  databank.";
+
+            context.MessageHistories.Add(new MessageHistory
+            {
+                CreatedDate = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsSent = false,
+                MessageContent = message,
+                SentTo = sendTo,
+                Type = "EMAIL",
+                Title = "New Account-Request for Edit".ToUpper()
+
+            });
+            var find = context.Accounts.Find(itemId);
+            find.StatusId = 5;
+            context.SaveChanges();
+            return RedirectToAction("ApplicantProfile", new { _refNumber = itemId.ToString().Encrypt(), message = ("client has been notified by mail").Encrypt() });
+
+
+        }
+
         public ActionResult ApplicantProfile(string _refNumber, string message = null)
         {
             if (!string.IsNullOrEmpty(message))
@@ -65,19 +180,22 @@ namespace AppMain.Controllers
             Guid applicationId = Guid.Parse(_refNumber.Decrypt());
             ViewBag.applicationId = applicationId;
             var model = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+            Utilities.LogActivity(CurrentUser.Username, "Viewed application profile - " + model.RefNo);
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult CancelOrRejectApplication(Guid applicationId,string action, string comments, string notifyApplicant)
+        public ActionResult CancelOrRejectApplication(Guid applicationId, string action, string comments, string notifyApplicant)
         {
-            using (var context=new DBLAccountOpeningContext())
+            using (var context = new DBLAccountOpeningContext())
             {
                 var application = context.Accounts.Find(applicationId);
                 application.CancelOrRejectComment = comments;
                 application.StatusId = action == "R" ? 3 : 4;
                 application.CancelOrRejectDate = DateTime.Now;
-                application.CancelOrRejectBy = CurrentUser.Id;
+                application.CancelledORRejectBy = CurrentUser.Username;
+                string msg = action == "R" ? "Rejected application-" + application.ReferenceNo : "Cancelled application-" + application.ReferenceNo;
+                Utilities.LogActivity(CurrentUser.Username, msg + " Message: " + comments);
 
                 context.SaveChanges();
                 if (!string.IsNullOrEmpty(notifyApplicant) && string.Equals(notifyApplicant, "on", StringComparison.CurrentCultureIgnoreCase))
@@ -90,7 +208,79 @@ namespace AppMain.Controllers
 
         }
 
+        public ActionResult Settings(string message = null)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                ViewBag.Message = message.Decrypt();
+            }
+            return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult AddLoopUpItem(int addOrderId, string addName = null, HttpPostedFileBase ImageUrl = null)
+        {
+            using (var context = new DBLAccountOpeningContext())
+            {
+                if (addOrderId == 1)
+                {
+                    //banks
+                    if (context.Banks.Any(x => x.Name.Trim() == addName.Trim() && x.IsActive))
+                    {
+                        return RedirectToAction("Settings", new { message = "Duplicate item".Encrypt(), TabId = 0 });
+                    }
+                    context.Banks.Add(new Bank {
+                        Code = null,
+                        IsActive = true,
+                        IsCollectionBank = false,
+                        Name = addName
+                    });
+                    context.SaveChanges();
+                    return RedirectToAction("Settings", new { message = "New bank added".Encrypt(), TabId = 0 });
 
+                }
+                return RedirectToAction("Settings");
+
+            }
+        }
+
+        public ActionResult DeleteItem(int order, int itemId)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                if (order == 1)
+                {
+                    var bank = context.Banks.Find(itemId);
+                    if (bank != null)
+                    {
+                        bank.IsActive = false;
+                        context.SaveChanges();
+                        return RedirectToAction("Settings", new { message = "bank deleted".Encrypt(), TabId = 0 });
+                    }
+                }
+
+                return RedirectToAction("Settings");
+            }
+        }
+        [HttpPost,ValidateAntiForgeryToken]
+        public ActionResult EditLookUpItem(int editOrderId,int editItemId,string editName=null,HttpPostedFileBase EditImageUrl=null)
+        {
+            using (var context=new DBLAccountOpeningContext())
+            {
+                if (editOrderId == 1)
+                {
+                    var find = context.Banks.Find(editItemId);
+                    if (find!=null)
+                    {
+                        find.Name = editName;
+                    }
+                    context.SaveChanges();
+                    return RedirectToAction("Settings", new { message = "item edited".Encrypt(), TabId = 0 });
+
+                }
+                return RedirectToAction("Settings");
+
+            }
+        }
         public ActionResult ReviewSuccessfully(Guid _ref)
         {
             //DBLSoftTechServiceReference.ClientOpeningWSClient objPayRef = new DBLSoftTechServiceReference.ClientOpeningWSClient();
@@ -185,7 +375,7 @@ namespace AppMain.Controllers
                                 firstKinTelNum = accountNextOfKins.FirstOrDefault().Telephone,
                                 firstName = accountMember.Fname,
                                 gender = accountMember.Gender,
-                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeName,
+                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeNamesList,
                                 investmentHorizon = accountFinancialInvestmentRiskProfile.InvestmentHorizonName,
                                 investmentKnowledge = accountFinancialInvestmentRiskProfile.InvestmentKnowledgeName,
                                 investmentType = basicProfile.InvestmentTypeName,
@@ -234,6 +424,7 @@ namespace AppMain.Controllers
                                 zipCode = accountMember.ResidentialZipCode,
                                 appLocalForeign=accountMember.NationalityId==81?"0":"1"
                                 
+                                
                                  
                             }
                         });
@@ -244,10 +435,11 @@ namespace AppMain.Controllers
                             {
                               //  success
                               //  var responseArr = response.Split(':');
-                                application.SuccesfulReviewBy = CurrentUser.Id;
+                                application.Reviewer = CurrentUser.Username;
                                 application.SuccessfulReviewDate = DateTime.Now;
                                 application.BackConnectAccountNumber = result.Message;
                                 application.StatusId = 2;
+                                Utilities.LogActivity(CurrentUser.Username,"Successful review-"+application.ReferenceNo);
                                 context.SaveChanges();
 
                             }
@@ -331,7 +523,7 @@ namespace AppMain.Controllers
                                 firstKinTelNum = tradingContact1.Tel, //accountNextOfKins.FirstOrDefault().Telephone,
                                 firstName = basicProfile.InstitutionClientName,//accountMember.Fname,
                                 gender = "Male",//accountMember.Gender,
-                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeName, //accountInstructionEmploymentDetails.SourceOfIncomeName,
+                                incomeFundSource = accountInstructionEmploymentDetails.SourceOfIncomeNamesList, //accountInstructionEmploymentDetails.SourceOfIncomeName,
                                 investmentHorizon =context.InvestmentHorizons.FirstOrDefault().Name,//null,// accountFinancialInvestmentRiskProfile.InvestmentHorizonName,
                                 investmentKnowledge =context.InvestmentKnowledges.FirstOrDefault().Name,//null, //accountFinancialInvestmentRiskProfile.InvestmentKnowledgeName,
                                 investmentType = basicProfile.InvestmentTypeName,
@@ -370,7 +562,7 @@ namespace AppMain.Controllers
                                 signImgId = null,
                                 signNum = null,
                                 srName = basicProfile.InstitutionClientName,//accountMember.Lname,
-                                suffix = "Local Company (LC)",//basicProfile.InstCompanyType, //accountMember.SelectWhereApplicableName,
+                                suffix =basicProfile.InstCompanyType, //accountMember.SelectWhereApplicableName,
                                 swiftSortCode = accountSettlementDetails.SwiftCode,
                                 taxIdNo = null,
                                 tellephoneNum = basicProfile.InsStreetAddressTel,//accountMember.Telephone,
@@ -390,10 +582,13 @@ namespace AppMain.Controllers
                             {
                                 //  success
                                 //  var responseArr = response.Split(':');
-                                application.SuccesfulReviewBy = CurrentUser.Id;
+                                // application.SuccesfulReviewBy = CurrentUser.Id;
+                                application.Reviewer = CurrentUser.Username;
                                 application.SuccessfulReviewDate = DateTime.Now;
                                 application.BackConnectAccountNumber = result.Message;
                                 application.StatusId = 2;
+                                Utilities.LogActivity(CurrentUser.Username, "Successful review-" + application.ReferenceNo);
+
                                 context.SaveChanges();
 
                             }

@@ -176,6 +176,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewAccountController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
@@ -185,6 +186,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AppRoleProvider.cs" />
+    <Compile Include="Providers\AppServerHelper.cs" />
     <Compile Include="Providers\AuthenticationAttribute.cs" />
     <Compile Include="Providers\Cryptography.cs" />
     <Compile Include="Startup.cs" />
@@ -1481,6 +1483,23 @@
     <Content Include="Images\sword.png" />
     <Content Include="Images\terms.png" />
     <Content Include="Images\www.png" />
+    <Content Include="multiselect\demo\demo-styles.css" />
+    <Content Include="multiselect\demo\index.html" />
+    <Content Include="multiselect\externs\jquery-1.9.js" />
+    <Content Include="multiselect\LICENSE.txt" />
+    <Content Include="multiselect\src\example-styles.css" />
+    <Content Include="multiselect\src\jquery.multi-select.js" />
+    <Content Include="multiselect\src\jquery.multi-select.min.js" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\boot.js" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\console.js" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\jasmine-html.js" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\jasmine.css" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\jasmine.js" />
+    <Content Include="multiselect\test\lib\jasmine-2.4.1\jasmine_favicon.png" />
+    <Content Include="multiselect\test\lib\jquery-2.2.4.min.js" />
+    <Content Include="multiselect\test\SpecRunner.html" />
+    <Content Include="multiselect\test\spec\MultiSelectSpec.js" />
+    <Content Include="multiselect\test\test-styles.css" />
     <Content Include="Scripts\appProfile.js" />
     <Content Include="Scripts\dropZoneInit.js" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -1505,6 +1524,13 @@
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="signoTec\bluebird.min.js" />
+    <Content Include="signoTec\index.html" />
+    <Content Include="signoTec\Info.html" />
+    <Content Include="signoTec\signotec.gif" />
+    <Content Include="signoTec\STPadServer.html" />
+    <Content Include="signoTec\STPadServerLib-3.2.0.js" />
+    <Content Include="signoTec\White.png" />
     <Content Include="wizardFiles\.sass-cache\0ab8abc0fed2841fc21e545dead228d38843c7ea\main.scssc" />
     <Content Include="wizardFiles\.sass-cache\0ab8abc0fed2841fc21e545dead228d38843c7ea\responsive.scssc" />
     <Content Include="wizardFiles\.sass-cache\11c5c9630c8fb379c36d1e3d5cedae3242345ede\style.scssc" />
@@ -1863,6 +1889,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\DBLSoftTechServiceReference\ClientOpeningWSService.wsdl" />
+    <Content Include="multiselect\Makefile" />
+    <Content Include="multiselect\README.md" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -1917,6 +1945,27 @@
     <Content Include="Views\Partials\pdfs\etiProfile.cshtml" />
     <Content Include="Views\Admin\DownloadFile.cshtml" />
     <Content Include="Views\NewAccount\ForgotAccountCompleted.cshtml" />
+    <Content Include="Views\Admin\ForgottenAccount.cshtml" />
+    <Content Include="Views\Admin\Settings.cshtml" />
+    <Content Include="Views\Shared\_Prompt.cshtml" />
+    <Content Include="Views\Admin\ForgottenAccountDetails.cshtml" />
+    <Content Include="Views\Shared\_Client.cshtml" />
+    <Content Include="Views\Client\DBLForm.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editFirstApplicant.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editJointApplicant.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editItfApplicant.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editInstitutionalApplicant.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editNextOfKin.cshtml" />
+    <Content Include="Views\Client\FileUploads.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editIndemnity_individual.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editIndemnity_institutional.cshtml" />
+    <Content Include="Views\Client\ETI.cshtml" />
+    <Content Include="Views\Client\AML.cshtml" />
+    <Content Include="Views\Partials\client_edits\_editAML.cshtml" />
+    <Content Include="Views\Client\AppProfile.cshtml" />
+    <Content Include="Views\Client\ConfirmSubmit.cshtml" />
+    <Content Include="Views\Client\ChangePassword.cshtml" />
+    <Content Include="Views\Partials\_signnatureCapture.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

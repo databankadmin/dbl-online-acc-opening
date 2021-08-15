@@ -23,10 +23,13 @@
     var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
     var context = new DBHelper.Schema.DBLAccountOpeningContext();
     // var accountActivity = context.ExpectedAccountActivities.Find(Model.ExpectedAccountActivityId.Value);
-   // var acc = context.Accounts.Find(Model.Id);
+    // var acc = context.Accounts.Find(Model.Id);
 }
 <script src="~/Scripts/appProfile.js"></script>
 
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <style type="text/css">
     .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
         color: #fff;
@@ -437,128 +440,138 @@
                                                     <th colspan="6">Next of Kin 1</th>
                                                 </tr>
                                             }
-                                            var nextOfKin1 = accountNextOfKins.FirstOrDefault();
-                                            <tr>
-                                                <th>Name</th>
-                                                <td>@nextOfKin1.Name</td>
-                                                <th>Telephone</th>
-                                                <td>@nextOfKin1.Telephone</td>
-                                                <th>Mobile</th>
-                                                <td>@nextOfKin1.Mobile</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Fax</th>
-                                                <td>@nextOfKin1.Fax</td>
-                                                <th>Relation to the Acc. Holder</th>
-                                                <td>@nextOfKin1.RelationToAccount</td>
-                                                <th>E-mail address</th>
-                                                <td>@nextOfKin1.Email</td>
-                                            </tr>
 
-                                            <tr>
-                                                <th>Mailing Address</th>
-                                                <td colspan="5">@nextOfKin1.MailingAddress</td>
-                                            </tr>
-                                            if (accountNextOfKins.Count > 1)
+
+                                            var nextOfKin1 = accountNextOfKins.FirstOrDefault();
+
+                                            if (accountNextOfKins != null)
                                             {
-                                                var nextOfKin2 = accountNextOfKins.LastOrDefault();
-                                                <tr>
-                                                    <th colspan="6">Next of Kin 2</th>
-                                                </tr>
+
 
                                                 <tr>
                                                     <th>Name</th>
-                                                    <td>@nextOfKin2.Name</td>
+                                                    <td>@nextOfKin1.Name</td>
                                                     <th>Telephone</th>
-                                                    <td>@nextOfKin2.Telephone</td>
+                                                    <td>@nextOfKin1.Telephone</td>
                                                     <th>Mobile</th>
-                                                    <td>@nextOfKin2.Mobile</td>
+                                                    <td>@nextOfKin1.Mobile</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Fax</th>
-                                                    <td>@nextOfKin2.Fax</td>
+                                                    <td>@nextOfKin1.Fax</td>
                                                     <th>Relation to the Acc. Holder</th>
-                                                    <td>@nextOfKin2.RelationToAccount</td>
+                                                    <td>@nextOfKin1.RelationToAccount</td>
                                                     <th>E-mail address</th>
-                                                    <td>@nextOfKin2.Email</td>
+                                                    <td>@nextOfKin1.Email</td>
                                                 </tr>
 
                                                 <tr>
                                                     <th>Mailing Address</th>
-                                                    <td colspan="5">@nextOfKin2.MailingAddress</td>
+                                                    <td colspan="5">@nextOfKin1.MailingAddress</td>
                                                 </tr>
-                                                            }
+                                                if (accountNextOfKins.Count > 1)
+                                                {
+                                                    var nextOfKin2 = accountNextOfKins.LastOrDefault();
+                                                    <tr>
+                                                        <th colspan="6">Next of Kin 2</th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <td>@nextOfKin2.Name</td>
+                                                        <th>Telephone</th>
+                                                        <td>@nextOfKin2.Telephone</td>
+                                                        <th>Mobile</th>
+                                                        <td>@nextOfKin2.Mobile</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Fax</th>
+                                                        <td>@nextOfKin2.Fax</td>
+                                                        <th>Relation to the Acc. Holder</th>
+                                                        <td>@nextOfKin2.RelationToAccount</td>
+                                                        <th>E-mail address</th>
+                                                        <td>@nextOfKin2.Email</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Mailing Address</th>
+                                                        <td colspan="5">@nextOfKin2.MailingAddress</td>
+                                                    </tr>
+                                                }
+                                            }
 
 
 
-                                                            if (accountAuthorisedPersons != null)
-                                                            {
 
-                                                                if (accountAuthorisedPersons != null && accountAuthorisedPersons.Any())
+
+                                            if (accountAuthorisedPersons != null)
+                                            {
+
+                                                if (accountAuthorisedPersons != null && accountAuthorisedPersons.Any())
+                                                {
+                                                    <tr>
+                                                        <th class="theader" colspan="6">
+                                                            Authorised Person other than Account Holder(s) to Deal on the Account
+                                                        </th>
+                                                    </tr>
+                                                    var authorisedPerson = accountAuthorisedPersons.FirstOrDefault();
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <td>@authorisedPerson.Name</td>
+                                                        <th>Telephone</th>
+                                                        <td>@authorisedPerson.Tel</td>
+                                                        <th>Mobile</th>
+                                                        <td>@authorisedPerson.Mobile</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Fax</th>
+                                                        <td>@authorisedPerson.Fax</td>
+                                                        <th>Relation to account holder</th>
+                                                        <td>@authorisedPerson.RelationToAccountHolder</td>
+                                                        <th>Email</th>
+                                                        <td>@authorisedPerson.Email</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Mailing address</th>
+                                                        <td>@authorisedPerson.MailingAddress</td>
+                                                        <th>City</th>
+                                                        <td>@authorisedPerson.City</td>
+                                                        <th>Country</th>
+                                                        <td>@authorisedPerson.CountryName</td>
+                                                    </tr>
+
+
+                                                    <tr>
+                                                        <th>ID Type</th>
+                                                        <td>@authorisedPerson.IdTypeName</td>
+                                                        <th>ID Number</th>
+                                                        <td>@authorisedPerson.IdNumber</td>
+                                                        <th>Issuing Authority </th>
+                                                        <td>@authorisedPerson.IdIssueAuthority</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>ID Issue Date</th>
+                                                        <td>@authorisedPerson.IssueDate</td>
+                                                        <th>ID Expiry Date</th>
+                                                        <td>@authorisedPerson.IDExpiryDate</td>
+                                                        <th>ID Upload</th>
+                                                        <td>
+                                                            @{
+                                                                if (!string.IsNullOrEmpty(authorisedPerson.IdPath))
                                                                 {
-                                                <tr>
-                                                    <th class="theader" colspan="6">
-                                                        Authorised Person other than Account Holder(s) to Deal on the Account
-                                                    </th>
-                                                </tr>
-                                                                    var authorisedPerson = accountAuthorisedPersons.FirstOrDefault();
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <td>@authorisedPerson.Name</td>
-                                                    <th>Telephone</th>
-                                                    <td>@authorisedPerson.Tel</td>
-                                                    <th>Mobile</th>
-                                                    <td>@authorisedPerson.Mobile</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <th>Fax</th>
-                                                    <td>@authorisedPerson.Fax</td>
-                                                    <th>Relation to account holder</th>
-                                                    <td>@authorisedPerson.RelationToAccountHolder</td>
-                                                    <th>Email</th>
-                                                    <td>@authorisedPerson.Email</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <th>Mailing address</th>
-                                                    <td>@authorisedPerson.MailingAddress</td>
-                                                    <th>City</th>
-                                                    <td>@authorisedPerson.City</td>
-                                                    <th>Country</th>
-                                                    <td>@authorisedPerson.CountryName</td>
-                                                </tr>
+                                                                    <img src="~/Images/@authorisedPerson.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
 
 
-                                                <tr>
-                                                    <th>ID Type</th>
-                                                    <td>@authorisedPerson.IdTypeName</td>
-                                                    <th>ID Number</th>
-                                                    <td>@authorisedPerson.IdNumber</td>
-                                                    <th>Issuing Authority </th>
-                                                    <td>@authorisedPerson.IdIssueAuthority</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <th>ID Issue Date</th>
-                                                    <td>@authorisedPerson.IssueDate</td>
-                                                    <th>ID Expiry Date</th>
-                                                    <td>@authorisedPerson.IDExpiryDate</td>
-                                                    <th>ID Upload</th>
-                                                    <td>
-                                                        @{
-                                                            if (!string.IsNullOrEmpty(authorisedPerson.IdPath))
-                                                            {
-                                                                <img src="~/Images/@authorisedPerson.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+                                                                    IdName = authorisedPerson.Name;
 
 
-                                                                IdName = authorisedPerson.Name;
-
-
-                                                                <a class="btn btn-xs btn-success" href="javascript:idLookUp('@authorisedPerson.IdType','@authorisedPerson.IdNumber','@IdName','@authorisedPerson.Id','AuthPerson','loader4','@authorisedPerson.IdTypeName','authPersonIndividualIdStatus')">Lookup</a>
-                                                                <span id="loader4" style="display:none;">
-                                                                    <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
-                                                                </span>
+                                                                    <a class="btn btn-xs btn-success" href="javascript:idLookUp('@authorisedPerson.IdType','@authorisedPerson.IdNumber','@IdName','@authorisedPerson.Id','AuthPerson','loader4','@authorisedPerson.IdTypeName','authPersonIndividualIdStatus')">Lookup</a>
+                                                                    <span id="loader4" style="display:none;">
+                                                                        <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                                    </span>
 
 
 
@@ -566,29 +579,29 @@
 
 
 
-                                                                downloadFileName = "PhotoId_" + authorisedPerson.IdPath;
+                                                                    downloadFileName = "PhotoId_" + authorisedPerson.IdPath;
 
-                                                                <a class="btn btn-success btn-xs" href="~/Images/@authorisedPerson.IdPath" title="download file" download="@downloadFileName">
-                                                                    <i class="fa fa-download" style="color:white !important"></i>
-                                                                </a>
+                                                                    <a class="btn btn-success btn-xs" href="~/Images/@authorisedPerson.IdPath" title="download file" download="@downloadFileName">
+                                                                        <i class="fa fa-download" style="color:white !important"></i>
+                                                                    </a>
 
-
-                                                            }
-                                                        }
-
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="4"></td>
-                                                    <th>ID Verification</th>
-                                                    <td id="authPersonIndividualIdStatus">@authorisedPerson.IdCardValidationStatus</td>
-
-                                                </tr>
 
                                                                 }
-
                                                             }
+
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4"></td>
+                                                        <th>ID Verification</th>
+                                                        <td id="authPersonIndividualIdStatus">@authorisedPerson.IdCardValidationStatus</td>
+
+                                                    </tr>
+
+                                                }
+
+                                            }
                                             <tr>
                                                 <th class="theader" colspan="6">
                                                     Settlement Details
@@ -623,7 +636,7 @@
                                                 <th>Mode of Notifications</th>
                                                 <td>@accountInstructionEmploymentDetails.ModeOfNotificationName</td>
                                                 <th>Source of Funds</th>
-                                                <td>@accountInstructionEmploymentDetails.SourceOfIncomeName</td>
+                                                <td>@accountInstructionEmploymentDetails.SourceOfIncomeNamesList</td>
                                             </tr>
 
 
@@ -723,7 +736,7 @@
                                                 <th colspan="2">Number of Signatories</th>
                                                 <td>@Model.SignatureTypeName</td>
 
-                                                @{ 
+                                                @{
                                                     if (Model.StaffRefCode.HasValue)
                                                     {
                                                         <th>Staff Referral</th>
@@ -1178,21 +1191,21 @@
                                                 </tr>
                                             }
 
-                                                <tr>
-                                                    <th colspan="2">Number of Signatories</th>
-                                                    <td>@Model.SignatureTypeName</td>
+                                            <tr>
+                                                <th colspan="2">Number of Signatories</th>
+                                                <td>@Model.SignatureTypeName</td>
 
-                                                    <th>Other Details</th>
-                                                    <td>@Model.InstOtherDetails</td>
+                                                <th>Other Details</th>
+                                                <td>@Model.InstOtherDetails</td>
 
-                                                    @{
-                                                        if (Model.StaffRefCode.HasValue)
-                                                        {
-                                                            <th>Staff Referral</th>
-                                                            <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
-                                                        }
+                                                @{
+                                                    if (Model.StaffRefCode.HasValue)
+                                                    {
+                                                        <th>Staff Referral</th>
+                                                        <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
                                                     }
-                                                </tr>
+                                                }
+                                            </tr>
 
                                         }
 
@@ -1300,7 +1313,8 @@
                                 <tr>
                                     <td></td>
                                     <th colspan="2">AML RATING</th>
-                                    <th style="border-bottom:double">@Utilities.GetAMLRating(accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue))
+                                    <th style="border-bottom:double">
+                                        @Utilities.GetAMLRating(accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue))
 
                                     </th>
                                 </tr>
@@ -1420,6 +1434,8 @@
                     {
                         <hr />
                         <a href="javascript:confirmReview('@Model.Id')" class="btn btn-success">Approve</a>
+                        <a href="#" style="color:white;" onclick="javascript:requestEdit()" class="btn btn-warning">Request Edit</a>
+
                         <a href="javascript:rejectApplication()" class="btn btn-danger">Reject or Cancel</a>
                     }
                 }
@@ -1442,36 +1458,36 @@
                 <div class="auth-box card-block">
                     <form method="post" action="@Url.Action("CancelOrRejectApplication", "Admin")">
                         @Html.AntiForgeryToken()
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">Cancel or Reject Application</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="card-body">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Cancel or Reject Application</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card-body">
 
-                                        <input type="hidden" name="applicationId" id="applicationId" value="@Model.Id" />
-                                        <select name="action" class="form-control" required>
-                                            <option value="">-choose action-</option>
-                                            <option value="C">Cancel</option>
-                                            <option value="R">Reject</option>
-                                        </select>
-                                        <br />
-                                        <textarea name="comments" id="comments" class="form-control" rows="4" required style="margin-bottom:12px;"></textarea>
-                                     
-                                        <label style="font-weight:normal;">
-                                            <input type="checkbox"  name="notifyApplicant" id="notifyApplicant">Notify Applicant
-                                        </label>
+                                    <input type="hidden" name="applicationId" id="applicationId" value="@Model.Id" />
+                                    <select name="action" class="form-control" required>
+                                        <option value="">-choose action-</option>
+                                        <option value="C">Cancel</option>
+                                        <option value="R">Reject</option>
+                                    </select>
+                                    <br />
+                                    <textarea name="comments" id="comments" class="form-control" rows="4" required style="margin-bottom:12px;"></textarea>
 
-
-                                    </div>
+                                    <label style="font-weight:normal;">
+                                        <input type="checkbox" name="notifyApplicant" id="notifyApplicant">Notify Applicant
+                                    </label>
 
 
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-info">Save</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                </div>
-                            </div><!-- /.modal-content -->
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
 
 
                     </form>
@@ -1501,6 +1517,38 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="requestEditModal">
+    <form method="post" action="@Url.Action("SendEditRequest", "Admin")" enctype="multipart/form-data" onsubmit="javascript:return checkForm()">
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Request for Edit - List identified errors </h4>
+                    <input type="hidden" name="itemId" id="itemId" value="@Model.Id" />
+                </div>
+                <div class="modal-body">
+                <textarea name="errorList" id="errorList" class="form-control" placeholder="error list here"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Send Now" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+
+
+
+    </form>
+
+</div>
+
+
+
 
 
 
@@ -1558,8 +1606,36 @@
         $("#rejectModal").modal();
 
     }
+    function requestEdit()
+    {
+        $("#requestEditModal").modal();
+        $('#errorList').summernote(
+            {
+                height: 200
+              
+            }
+        );
+
+    }
 
 
+    $('#requestEditModal').on('shown.bs.modal',
+        function (e) {
+            $("#errorList").focus();
+            $('#errorList').trigger('focus');
+       //     alert('done');
+
+
+        });
+
+    function checkForm() {
+        if ($('#errorList').summernote('isEmpty')) {
+            alert('error list cannot be empty');
+            $('#errorList').summernote('focus')
+            return false;
+        }
+        return true;
+    }
      function confirmReview(ref) {
             bootbox.dialog(
                 {

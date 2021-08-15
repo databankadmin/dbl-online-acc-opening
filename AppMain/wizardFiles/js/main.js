@@ -150,7 +150,6 @@ function markBorderRed(itemId,msg)
 
             if (currentIndex === 0) {//DBL  form; individual, joint, itf or institutional
                
-
                 if (accountTypeId === 1) {//single
                     if ($("#firstApplicantIdPhotohidden").val() === '')
                     {
@@ -158,8 +157,13 @@ function markBorderRed(itemId,msg)
                         return;
                     }
 
-                    if ($("#firstApplicantSignaturehidden").val() === '') {
+                    if ($("#firstApplicantSignaturehidden").val() === ''  &&  $("#firstApplicantSignatureCapture").attr('src')==='' ) {
                         markBorderRed('firstApplicantSignature', 'upload first applicant signature');
+                        return;
+                    }
+
+                    if ($("#instructionsEmploymentDetailsSourceOfIncomeIds").val() === null) {
+                        markBorderRed('instructionsEmploymentDetailsSourceOfIncomeIdsDiv', 'indicate source of funds');
                         return;
                     }
                 }
@@ -174,7 +178,7 @@ function markBorderRed(itemId,msg)
                         return;
                     }
 
-                    if ($("#firstApplicantSignaturehidden").val() === '') {
+                    if ($("#firstApplicantSignaturehidden").val() === '' && $("#firstApplicantSignatureCapture").attr('src') === '') {
                         markBorderRed('firstApplicantSignature', 'upload first applicant signature');
                         return;
                     }
@@ -186,8 +190,13 @@ function markBorderRed(itemId,msg)
                         return;
                     }
 
-                    if ($("#jointApplicantSignaturehidden").val() === '') {
+                    if ($("#jointApplicantSignaturehidden").val() === '' && $("#jointApplicantSignatureCapture").attr('src') === '') {
                         markBorderRed('jointApplicantSignature', 'upload joint applicant signature');
+                        return;
+                    }
+
+                    if ($("#instructionsEmploymentDetailsSourceOfIncomeIds").val() === null) {
+                        markBorderRed('instructionsEmploymentDetailsSourceOfIncomeIdsDiv', 'indicate source of funds');
                         return;
                     }
                 }
@@ -200,12 +209,20 @@ function markBorderRed(itemId,msg)
                         markBorderRed('firstApplicantIdPhoto', 'upload photo ID');
                         return;
                     }
+
+                    if ($("#firstApplicantSignaturehidden").val() === '' && $("#firstApplicantSignatureCapture").attr('src') === '') {
+                        markBorderRed('firstApplicantSignature', 'upload first applicant signature');
+                        return;
+                    }
                     if ($("#itfApplicantIdPhotohidden").val() === '') {
                         markBorderRed('itfApplicantIdPhoto', 'upload ITF photo ID');
                         return;
                     }
 
-
+                    if ($("#instructionsEmploymentDetailsSourceOfIncomeIds").val() === null) {
+                        markBorderRed('instructionsEmploymentDetailsSourceOfIncomeIdsDiv', 'indicate source of funds');
+                        return;
+                    }
                 }
                 if (accountTypeId === 4) {//inst
 
@@ -217,18 +234,25 @@ function markBorderRed(itemId,msg)
                         markBorderRed('instAuthorisedOfficer2PhotoId', 'upload photo ID');
                         return;
                     }
+
+
+
+
                     if ($("#instSignatory1hidden").val() === '') {
-                        markBorderRed('instSignatory1', 'upload signature 1');
+                        markBorderRed('instSignatory1', 'upload signature 1' && $("#instSign1Capture").attr('src') === '');
                         return;
                     }
 
                     if ($("#instSignatory2hidden").val() === '') {
-                        markBorderRed('instSignatory2', 'upload signature 2');
+                        markBorderRed('instSignatory2', 'upload signature 2' && $("#instSign2Capture").attr('src') === '');
                         return;
                     }
 
 
-
+                    if ($("#intSourceOfIncomeIds").val() === null) {
+                        markBorderRed('intSourceOfIncomeDiv', 'indicate source of funds');
+                        return;
+                    }
                 }
 
 

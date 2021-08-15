@@ -27,6 +27,7 @@
 
     @*<script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -55,13 +56,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.js"></script>
 
     @*<script src="~/Scripts/bootstrap.js"></script>*@
-    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     @*<script src="~/Scripts/bootbox.min.js"></script>*@
 
 
+    <script type="text/javascript" src="~/multiselect/src/jquery.multi-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/multiselect/src/example-styles.css">
+
+    <script src="~/signoTec/bluebird.min.js"></script>
+    <script src="~/signoTec/STPadServerLib-3.2.0.js"></script>
 </head>
 
-<body>
+<body  onload="onMainWindowLoad();" onbeforeunload="onMainWindowBeforeUnload();">
     @*@Html.Partial("~/Views/Partials/_header.cshtml")*@
     <div class="main" style="padding:0;">
 
@@ -133,11 +138,8 @@
     </div>
 
     <div id="dialog" title="Let's get started with some basic questions!">
-
-
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                
                 <div class="modal-body" style="text-align:justify">
                     <div class="card-body" style="overflow:auto">
                         <div id="clientTypeModalDiv">
@@ -155,16 +157,16 @@
                             <form id="newClientForm">
                                 <label class="question">Which of the following best describes you?</label><br />
                                 <label>
-                                    <input type="radio" name="group1" value="1" style="width:15px; height:15px;display:inline;"/> I have never previously opened a Databank account
+                                    <input type="radio" name="group1" value="1" style="width:15px; height:15px;display:inline;" /> I have never previously opened a Databank account
 
                                 </label>
-                              
-                                <br/>
-                                
+
+                                <br />
+
                                 <label>
                                     <input type="radio" name="group1" value="2" style="width:15px; height:15px;display:inline;" /> I want to make general enquiries
                                 </label>
-                                
+
                             </form>
                         </div>
 
@@ -172,7 +174,7 @@
                         <div id="existingClientTypeModalDiv" style="display:none;">
 
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
+                                <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
                                     <div class="panel-heading" role="tab" id="headingTwo">
                                         <h4 class="panel-title">
                                             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color:#1f2222; font-size:16px; font-weight:bold;">
@@ -183,7 +185,7 @@
                                     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                         <div class="panel-body" style="font-style:italic;">
 
-                                            Please note that this is for account holders who wish to invest in a different investment vehicle (Equities or Fixed income),  You will be required complete an account opening form.<br/>
+                                            Please note that this is for account holders who wish to invest in a different investment vehicle (Equities or Fixed income),  You will be required complete an account opening form.<br />
 
                                             @*<a href="https://onlineservice.databankgroup.com/portal/" target="_blank"><i class="fa fa-hand-o-right"></i> Proceed to deposit</a><br />*@
                                             <a href="#" onclick="javascript:existingClientOptionsHandler('1')"><i class="fa fa-hand-o-right"></i> Yes, continue</a>
@@ -203,14 +205,14 @@
                                         <div class="panel-body" style="font-style:italic">
                                             <h3>Please provide the following details about your account</h3>
                                             <form method="post" action="@Url.Action("ForgottenAccount")" enctype="multipart/form-data">
-                                              @Html.AntiForgeryToken()
+                                                @Html.AntiForgeryToken()
                                                 <table>
                                                     <tr>
-                                                        <td><input type="text" placeholder="Name(*)" name="name" required class="form-control" style="width:320px;"/></td>
-                                                        <td><input type="text" placeholder="Postal Address(*)" name="address" required class="form-control"  style="width:320px;"/></td>
+                                                        <td><input type="text" placeholder="Name(*)" name="name" required class="form-control" style="width:320px;" /></td>
+                                                        <td><input type="text" placeholder="Postal Address" name="address" class="form-control" style="width:320px;" /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input type="email" placeholder="Email" class="form-control" name="email"  style="width:320px;"/></td>
+                                                        <td><input type="email" placeholder="Email(*)" class="form-control" required name="email" style="width:320px;" /></td>
                                                         <td><input type="text" placeholder="Telephone Number(*)" name="phone" required class="form-control" style="width:320px;" /></td>
                                                     </tr>
 
@@ -219,11 +221,11 @@
                                                         </th>
                                                     </tr>
                                                 </table>
-                                              
-                                                    <input type="submit" value="Submit" style="color:white; background-color: #00a65a !important; width:300px; margin-left:24%;" />
 
-                                                
-                                               
+                                                <input type="submit" value="Submit" style="color:white; background-color: #00a65a !important; width:300px; margin-left:24%;" />
+
+
+
 
                                             </form>
 
@@ -238,15 +240,29 @@
 
                     </div>
                 </div>
-                
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
+    </div>
+   
 
 
 
+
+    <div id="signDialog" title="Capture client signature">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:justify">
+                    <div class="card-body" style="overflow:auto">
+                        @Html.Partial("~/Views/Partials/_signnatureCapture.cshtml")
+
+
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div>
 
-   
+
 
 
     <!-- JS -->
@@ -370,6 +386,8 @@
     </style>
 
     <script type="text/javascript">
+        captureTarget = "";
+        captureTargetHiddenField = "";
         hasAnsweredModal = false;
 
         function setZoom() {
@@ -530,11 +548,35 @@
             $("#signup-form :input").removeAttr("disabled");
 
         }
+        function showCaptureModal(targetImg, targetHiddenFld) {
+            $("#signDialog").css('display', 'block');
+
+            captureTarget = targetImg;
+            captureTargetHiddenField = targetHiddenFld;
+            $("#signDialog").dialog({
+                width: 1000,
+                height: 700,
+                autoOpen: false,
+                modal:true,
+                show: {
+                    effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+
+            $("#signDialog").dialog("open");
+
+        }
+
         $(document).ready(function () {
             $("#signup-form :input").prop("disabled", true);
             $("#dialog").dialog({
                 width: 800,
-                height:600,
+                height: 600,
                 autoOpen: false,
                 show: {
                     effect: "blind",
@@ -547,13 +589,16 @@
             });
 
             $("#dialog").dialog("open");
-
+            $("#signDialog").css('display', 'none');
         });
+
+
+
 
 
         function clientTypeChanged(value) {
             if (value === "New") {
-               // $("#existingClientTypeModalDiv").slideUp();
+                // $("#existingClientTypeModalDiv").slideUp();
                 hasAnsweredModal = true;
                 showMainForm();
                 $("#newClientTypeModalDiv").slideDown();
@@ -577,12 +622,11 @@
             else if (number === 2) {
                 showMainForm();
             }
-            
+
         }
 
         $("#dialog").dialog({
-            beforeClose: function (event, ui)
-            {
+            beforeClose: function (event, ui) {
                 if (hasAnsweredModal) {
                     return true;
                 }
@@ -591,7 +635,7 @@
 
                 }
             }
-});
+        });
     </script>
 
 

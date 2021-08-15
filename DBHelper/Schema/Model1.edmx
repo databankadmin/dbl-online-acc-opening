@@ -55,6 +55,9 @@
           <Property Name="StaffRefCode" Type="float" />
           <Property Name="BranchCode" Type="nvarchar" MaxLength="500" />
           <Property Name="BackConnectAccountNumber" Type="varchar" MaxLength="500" />
+          <Property Name="Reviewer" Type="varchar" MaxLength="100" />
+          <Property Name="CancelledORRejectBy" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AccountAMLResponses">
           <Key>
@@ -100,6 +103,17 @@
           <Property Name="IdValidationBy" Type="varchar" MaxLength="200" />
           <Property Name="IdValidationMode" Type="varchar" MaxLength="100" />
           <Property Name="ManualValidationComment" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="AccountEditRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ErrorList" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountETI">
           <Key>
@@ -191,6 +205,7 @@
           <Property Name="EmploymentDateTo" Type="varchar" MaxLength="200" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="YearsOfEmployment" Type="int" />
+          <Property Name="SourceOfFundsIds" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AccountInstSignatoriesMandates">
           <Key>
@@ -354,6 +369,15 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="LastLogin" Type="datetime" />
         </EntityType>
+        <EntityType Name="AuditLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Activity" Type="varchar(max)" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bank">
           <Key>
             <PropertyRef Name="Id" />
@@ -437,6 +461,16 @@
           <Property Name="Phone" Type="varchar" MaxLength="100" />
           <Property Name="Address" Type="varchar" MaxLength="500" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="Response" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ForgottenPasswordStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="IDCardType">
           <Key>
@@ -780,6 +814,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AccountAuthorisedPerson">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountEditRequest_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountEditRequest" Type="Self.AccountEditRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountEditRequest">
               <PropertyRef Name="AccountId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1132,10 +1178,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ForgottenAccountDetails_ForgottenPasswordStatus">
+          <End Role="ForgottenPasswordStatus" Type="Self.ForgottenPasswordStatus" Multiplicity="1" />
+          <End Role="ForgottenAccountDetails" Type="Self.ForgottenAccountDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForgottenPasswordStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ForgottenAccountDetails">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBLAccountOpeningModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountAMLResponses" EntityType="Self.AccountAMLResponses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountAuthorisedPerson" EntityType="Self.AccountAuthorisedPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountEditRequest" EntityType="Self.AccountEditRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountETI" EntityType="Self.AccountETI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountFileUploads" EntityType="Self.AccountFileUploads" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountFinancialInvestmentRiskProfile" EntityType="Self.AccountFinancialInvestmentRiskProfile" Schema="dbo" store:Type="Tables" />
@@ -1153,6 +1212,7 @@
           <EntitySet Name="ApproximateAnnualIncome" EntityType="Self.ApproximateAnnualIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppSettings" EntityType="Self.AppSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppUser" EntityType="Self.AppUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuditLog" EntityType="Self.AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
@@ -1162,6 +1222,7 @@
           <EntitySet Name="ExpectedAccountActivity" EntityType="Self.ExpectedAccountActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileUploadTypes" EntityType="Self.FileUploadTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForgottenAccountDetails" EntityType="Self.ForgottenAccountDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ForgottenPasswordStatus" EntityType="Self.ForgottenPasswordStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IDCardType" EntityType="Self.IDCardType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentHorizon" EntityType="Self.InvestmentHorizon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentKnowledge" EntityType="Self.InvestmentKnowledge" Schema="dbo" store:Type="Tables" />
@@ -1238,6 +1299,10 @@
           <AssociationSet Name="FK_AccountAuthorisedPerson_Account" Association="Self.FK_AccountAuthorisedPerson_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountAuthorisedPerson" EntitySet="AccountAuthorisedPerson" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountEditRequest_Account" Association="Self.FK_AccountEditRequest_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountEditRequest" EntitySet="AccountEditRequest" />
           </AssociationSet>
           <AssociationSet Name="FK_AccountETI_Account" Association="Self.FK_AccountETI_Account">
             <End Role="Account" EntitySet="Account" />
@@ -1354,6 +1419,10 @@
           <AssociationSet Name="FK_AppUser_Role" Association="Self.FK_AppUser_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="AppUser" EntitySet="AppUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ForgottenAccountDetails_ForgottenPasswordStatus" Association="Self.FK_ForgottenAccountDetails_ForgottenPasswordStatus">
+            <End Role="ForgottenPasswordStatus" EntitySet="ForgottenPasswordStatus" />
+            <End Role="ForgottenAccountDetails" EntitySet="ForgottenAccountDetails" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -1835,6 +1904,17 @@
             <End Role="Account" EntitySet="Accounts" />
           </AssociationSet>
           <EntitySet Name="Branches" EntityType="DBLAccountOpeningModel.Branch" />
+          <EntitySet Name="AuditLogs" EntityType="DBLAccountOpeningModel.AuditLog" />
+          <EntitySet Name="ForgottenPasswordStatus" EntityType="DBLAccountOpeningModel.ForgottenPasswordStatu" />
+          <AssociationSet Name="FK_ForgottenAccountDetails_ForgottenPasswordStatus" Association="DBLAccountOpeningModel.FK_ForgottenAccountDetails_ForgottenPasswordStatus">
+            <End Role="ForgottenPasswordStatu" EntitySet="ForgottenPasswordStatus" />
+            <End Role="ForgottenAccountDetail" EntitySet="ForgottenAccountDetails" />
+          </AssociationSet>
+          <EntitySet Name="AccountEditRequests" EntityType="DBLAccountOpeningModel.AccountEditRequest" />
+          <AssociationSet Name="FK_AccountEditRequest_Account" Association="DBLAccountOpeningModel.FK_AccountEditRequest_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountEditRequest" EntitySet="AccountEditRequests" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="MaritalStatu">
           <Key>
@@ -1927,6 +2007,10 @@
           <NavigationProperty Name="StaffRefList" Relationship="DBLAccountOpeningModel.FK_Account_StaffRefList" FromRole="Account" ToRole="StaffRefList" />
           <Property Name="BranchCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="BackConnectAccountNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Reviewer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CancelledORRejectBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountEditRequests" Relationship="DBLAccountOpeningModel.FK_AccountEditRequest_Account" FromRole="Account" ToRole="AccountEditRequest" />
         </EntityType>
         <EntityType Name="AccountAMLRespons">
           <Key>
@@ -2084,6 +2168,7 @@
           <NavigationProperty Name="SourceOfIncome" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_SourceOfIncome" FromRole="AccountInstructionEmploymentDetail" ToRole="SourceOfIncome" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="YearsOfEmployment" Type="Int32" />
+          <Property Name="SourceOfFundsIds" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountInstSignatoriesMandate">
           <Key>
@@ -2760,6 +2845,9 @@
           <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="Response" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ForgottenPasswordStatu" Relationship="DBLAccountOpeningModel.FK_ForgottenAccountDetails_ForgottenPasswordStatus" FromRole="ForgottenAccountDetail" ToRole="ForgottenPasswordStatu" />
         </EntityType>
         <EntityType Name="StaffRefList">
           <Key>
@@ -2797,6 +2885,60 @@
           <Property Name="POST" Type="Double" />
           <Property Name="LOG_ID" Type="Double" />
         </EntityType>
+        <EntityType Name="AuditLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Activity" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ForgottenPasswordStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ForgottenAccountDetails" Relationship="DBLAccountOpeningModel.FK_ForgottenAccountDetails_ForgottenPasswordStatus" FromRole="ForgottenPasswordStatu" ToRole="ForgottenAccountDetail" />
+        </EntityType>
+        <Association Name="FK_ForgottenAccountDetails_ForgottenPasswordStatus">
+          <End Type="DBLAccountOpeningModel.ForgottenPasswordStatu" Role="ForgottenPasswordStatu" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.ForgottenAccountDetail" Role="ForgottenAccountDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForgottenPasswordStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ForgottenAccountDetail">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AccountEditRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ErrorList" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountEditRequest_Account" FromRole="AccountEditRequest" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_AccountEditRequest_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountEditRequest" Role="AccountEditRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountEditRequest">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3078,6 +3220,9 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CancelledORRejectBy" ColumnName="CancelledORRejectBy" />
+                <ScalarProperty Name="Reviewer" ColumnName="Reviewer" />
                 <ScalarProperty Name="BackConnectAccountNumber" ColumnName="BackConnectAccountNumber" />
                 <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
                 <ScalarProperty Name="StaffRefCode" ColumnName="StaffRefCode" />
@@ -3253,6 +3398,7 @@
           <EntitySetMapping Name="AccountInstructionEmploymentDetails">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountInstructionEmploymentDetail">
               <MappingFragment StoreEntitySet="AccountInstructionEmploymentDetails">
+                <ScalarProperty Name="SourceOfFundsIds" ColumnName="SourceOfFundsIds" />
                 <ScalarProperty Name="YearsOfEmployment" ColumnName="YearsOfEmployment" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="EmploymentDateTo" ColumnName="EmploymentDateTo" />
@@ -3430,6 +3576,8 @@
           <EntitySetMapping Name="ForgottenAccountDetails">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.ForgottenAccountDetail">
               <MappingFragment StoreEntitySet="ForgottenAccountDetails">
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
@@ -3461,6 +3609,37 @@
                 <ScalarProperty Name="CITY_CODE" ColumnName="CITY_CODE" />
                 <ScalarProperty Name="BRANCH_NAME" ColumnName="BRANCH_NAME" />
                 <ScalarProperty Name="BRANCH_CODE" ColumnName="BRANCH_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuditLogs">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AuditLog">
+              <MappingFragment StoreEntitySet="AuditLog">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Activity" ColumnName="Activity" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForgottenPasswordStatus">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.ForgottenPasswordStatu">
+              <MappingFragment StoreEntitySet="ForgottenPasswordStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountEditRequests">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountEditRequest">
+              <MappingFragment StoreEntitySet="AccountEditRequest">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ErrorList" ColumnName="ErrorList" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

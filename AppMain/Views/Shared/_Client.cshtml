@@ -1,0 +1,433 @@
+﻿@using AppUtils
+@using DBHelper.Schema
+@using AppModels
+
+@{
+    if (!Request.IsAuthenticated)
+    {
+        Response.Redirect(Url.Action("Logout", "Client"));
+    }
+    var currentUser = Utilities.GetSessionUserClient();
+    Account user = null;
+    if (currentUser is Account)
+    {
+        user = currentUser as Account;
+
+    }
+    else
+    {
+        Response.Redirect(Url.Action("Logout", "Client"));
+
+    }
+
+    var context = new DBLAccountOpeningContext();
+    var checkStatus = context.Accounts.Find(MvcApplication.TempAccount.Id).StatusId;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>@Utilities.GetAppSettings().AppName | @ViewBag.Title</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="icon" href="~/images/databank.png" type="image/x-icon">
+    <!-- jQuery -->
+    <script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/validateUploads.js"></script>
+
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/pages/data-table/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
+
+
+    <script type="text/javascript" src="~/multiselect/src/jquery.multi-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/multiselect/src/example-styles.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <style type="text/css">
+        .multi-select-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        .multi-select-menu {
+            position: absolute;
+            left: 0;
+            top: 0.8em;
+            z-index: 1;
+            float: left;
+            min-width: 100%;
+            background: #fff;
+            margin: 1em 0;
+            border: 1px solid #aaa;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .multi-select-menuitem {
+            display: block;
+            font-size: 0.875em;
+            padding: 0.6em 1em 0.6em 30px;
+            white-space: nowrap;
+        }
+
+        .multi-select-menuitem--titled:before {
+            display: block;
+            font-weight: bold;
+            content: attr(data-group-title);
+            margin: 0 0 0.25em -20px;
+        }
+
+        .multi-select-menuitem--titledsr:before {
+            display: block;
+            font-weight: bold;
+            content: attr(data-group-title);
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        .multi-select-menuitem + .multi-select-menuitem {
+            padding-top: 0;
+        }
+
+        .multi-select-presets {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .multi-select-menuitem input {
+            position: absolute;
+            margin-top: -15px;
+            margin-left: -25px;
+            width: 20px;
+        }
+
+        .multi-select-button {
+            display: inline-block;
+            font-size: 0.875em;
+            padding: 0.2em 0.6em;
+            max-width: 16em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: -0.5em;
+            background-color: #fff;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            cursor: default;
+        }
+
+            .multi-select-button:after {
+                content: "";
+                display: inline-block;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0.4em 0.4em 0 0.4em;
+                border-color: #999 transparent transparent transparent;
+                margin-left: 0.4em;
+                vertical-align: 0.1em;
+            }
+
+        .multi-select-container--open .multi-select-menu {
+            display: block;
+        }
+
+        .multi-select-container--open .multi-select-button:after {
+            border-width: 0 0.4em 0.4em 0.4em;
+            border-color: transparent transparent #999 transparent;
+        }
+
+        .multi-select-container--positioned .multi-select-menu {
+            /* Avoid border/padding on menu messing with JavaScript width calculation */
+            box-sizing: border-box;
+        }
+
+            .multi-select-container--positioned .multi-select-menu label {
+                /* Allow labels to line wrap when menu is artificially narrowed */
+                white-space: normal;
+            }
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to to the body tag
+to get the desired effect
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i style="font-weight:bold;">Welcome @user.ReferenceNo </i>
+                        @{
+
+                            <i class="far fa-user fa-2x" style="color: #124830;"></i>
+
+                        }
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        @*<a href="@Url.Action("UserProfile","Admin")" class="dropdown-item">
+                                <i class="fas fa-user mr-2"></i> User Profile
+                            </a>*@
+                        @*<div class="dropdown-divider"></div>*@
+                        <a href="@Url.Action("ChangePassword")" class="dropdown-item">
+                            <i class="fas fa-lock mr-2"></i> Change Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="javascript:confirmLogout()" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+                        </a>
+
+                    </div>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color:#124830;">
+            <!-- Brand Logo -->
+            <a href="" class="brand-link">
+                <span class="brand-text font-weight-light">DBL Online Account Opening</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("AppProfile", "Client")" class="nav-link">
+                                <i class="fa fa-home"></i>
+                                <p>
+                                    Home
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("DBLForm", "Client")" class="nav-link">
+                                <i class="fa fa-link"></i>
+                                <p>
+                                    Databank Brokerage Form
+                                </p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("FileUploads", "Client")" class="nav-link">
+                                <i class="fa fa-file"></i>
+
+                                <p>
+                                    File Uploads
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("AML", "Client")" class="nav-link">
+                                <i class="fa fa-envelope"></i>
+                                <p>
+                                    AML Questionnaire
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ETI", "Client")" class="nav-link">
+                                <i class="fa fa-envelope"></i>
+                                <p>
+                                    Electronic Indemnity
+                                </p>
+                            </a>
+                        </li>
+
+                        @{
+                            if (checkStatus == 5)
+                            {
+                                
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ConfirmSubmit","Client")" class="nav-link">
+                                        <i class="fa fa-save"></i>
+                                        <p>
+                                            Submit Application
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <br />
+                    @RenderBody()
+
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <strong>
+                Copyright © @DateTime.Now.Year Databank
+            </strong>
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.0
+            </div>
+        </footer>
+    </div>
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/AdminLTE/dist/js/adminlte.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+
+
+
+    <script type="text/javascript">
+    function confirmLogout() {
+        bootbox.dialog(
+            {
+                title: "Confirm Action",
+                message:"Logout of session?<br/>",
+
+                buttons: {
+                    success: {
+                        label: "OK",
+                        className: "btn-success",
+                        callback: function () {
+                            document.location.href = "@Url.Action("Logout", "Account")";
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-danger",
+                        callback: function () {
+
+                        }
+                    }
+
+                }
+            });
+
+
+    }
+    </script>
+
+
+
+    @Html.Partial("_Prompt")
+
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            try {
+                //   alert('loaded');
+                $("input,select,textarea").focus(function () {
+                    $("#" + this.name).css("border-color", "#ff0000");
+                });
+
+                $("input,select,textarea").focusout(function () {
+                    $("#" + this.name).css("border-color", "green");
+                });
+
+
+
+
+            } catch (e) {
+
+            }
+        });
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            @{
+
+
+                if (checkStatus != 5)
+                {
+            <text>
+            $("#appForm :input").prop("disabled", true);
+            </text>
+            }
+        }
+        });
+
+
+    </script>
+
+    <style type="text/css">
+        i.fa fa-trash, .fa-trash {
+            color: red;
+        }
+    </style>
+</body>
+</html>

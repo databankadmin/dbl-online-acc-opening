@@ -3,7 +3,11 @@ using AppModels;
 using DBHelper.Schema;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,6 +16,8 @@ namespace AppUtils
 {
     public static class Utilities
     {
+        public static List<UserModel> AppUsers { get; set; }
+
         public static AppSetting GetAppSettings()
         {
             using (var context = new DBLAccountOpeningContext())
@@ -83,12 +89,131 @@ namespace AppUtils
         {
             var context = new DBLAccountOpeningContext();
             string username = HttpContext.Current.User.Identity.Name;
-            var admin = context.AppUsers.FirstOrDefault(x => x.Email == username && x.IsActive);
-            if (admin != null)
+            var selectUser = AppUsers.FirstOrDefault(x => x.Username == username);
+            return selectUser;
+           
+        }
+        public static object GetSessionUserClient()
+        {
+            var context = new DBLAccountOpeningContext();
+            string username = HttpContext.Current.User.Identity.Name;
+            var selectUser = context.Accounts.FirstOrDefault(x => x.ReferenceNo == username);
+            return selectUser;
+
+        }
+
+        public static Account ValidateClientAccountLogin(string username, string password)
+        {
+            var context = new DBLAccountOpeningContext();
+            string encryptedPassword = Utilities.EncodeBase64(password);
+            var account = context.Accounts.FirstOrDefault(x => x.ReferenceNo == username && x.Password == encryptedPassword);
+            return account;
+        }
+        public static void LogActivity(string username, string activity)
+        {
+            using (var context=new DBLAccountOpeningContext())
             {
-                return admin;
+                context.AuditLogs.Add(new AuditLog {
+                    Activity=activity,
+                    CreatedDate=DateTime.Now,
+                    Id=Guid.NewGuid(),
+                    UserId=username
+                });
+                context.SaveChanges();
             }
-            return null;
+        }
+        public static async Task ProcessEmails()
+        {
+            using (var context = new DBLAccountOpeningContext())
+            {
+                context.SaveChanges();
+
+                foreach (var email in context.MessageHistories.Where(x => x.Type == "EMAIL" && x.IsSent == false && !string.IsNullOrEmpty(x.SentTo)).Take(20))
+                {
+                    try
+                    {
+                        string title = !string.IsNullOrEmpty(email.Title) ? email.Title : "ScoreMusGh";
+                        var attachments = new List<string>();
+                        //if (!string.IsNullOrEmpty(email.Attachments))
+                        //{
+                        //    foreach (var file in email.Attachments.Split(','))
+                        //    {
+                        //        attachments.Add(file);
+                        //    }
+                        //}
+
+                        var result = SendMail(email.SentTo, email.MessageContent, title, attachments);
+                        if (result)
+                        {
+                            email.IsSent = true;
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Logger.Instance.logError(ex);
+                    }
+                }
+
+                context.SaveChanges();
+
+            }
+
+
+        }
+
+
+        public static bool SendMail(string recipient, string message, string title, List<string> attachments = null)
+        {
+            bool flag;
+            try
+            {
+                var context = new DBLAccountOpeningContext();
+                var emailSettings = context.MailServerSettings.FirstOrDefault();
+                string smtpAddress = emailSettings.HostName;
+                int portNumber = int.Parse(emailSettings.PortNumber);
+                string emailFromAddress = emailSettings.EmailAddress;
+                string password = emailSettings.Password;
+                string emailToAddress = recipient;
+                string subject = title;
+                string body = message;
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(emailFromAddress);
+                    mail.To.Add(emailToAddress);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    if (attachments?.Count > 0)
+                    {
+                        foreach (var file in attachments)
+                        {
+                            mail.Attachments.Add(new Attachment(file));//--Uncomment this to send any attachment  
+
+                        }
+                    }
+
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    {
+                        smtp.Credentials = new NetworkCredential(emailFromAddress, password);
+                        smtp.EnableSsl = false;
+                        smtp.Send(mail);
+                    }
+
+                    context.SaveChanges();
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Logger.Instance.logError(exception);
+                flag = false;
+                return flag;
+            }
+            flag = true;
+            return flag;
         }
 
 
@@ -248,7 +373,8 @@ namespace AppUtils
                             StaffRefCode = item.StaffRefCode,
                             BackConnectAccountNumber=item.BackConnectAccountNumber,
                             StaffRefName = item.StaffRefCode.HasValue ? context.StaffRefLists.Find(item.StaffRefCode).Staff_Name:string.Empty,
-                            BranchCode=item.BranchCode
+                            BranchCode=item.BranchCode,
+                            Password=!string.IsNullOrEmpty(item.Password)?DecodeBase64(item.Password):string.Empty,
 
 
 
@@ -264,6 +390,27 @@ namespace AppUtils
                 return null;
             }
         }
+
+        public static string SaveBase64AsImage(string FileName, string FileType, string Base64ImageString)
+        {
+            try
+            {
+                Base64ImageString = Base64ImageString.Replace("data:image/png;base64,", "").Trim();
+
+                string folder = System.Web.HttpContext.Current.Server.MapPath("~/Images");
+                
+                string filePath = folder + "/" + FileName + "." + FileType;
+                File.WriteAllBytes(filePath, Convert.FromBase64String(Base64ImageString));
+                string returnFileName= FileName + "." + FileType;
+                return returnFileName;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
 
         public static bool IsFilePdf(string fileName)
         {
@@ -302,6 +449,23 @@ namespace AppUtils
             using (var context = new DBLAccountOpeningContext())
             {
                 return context.ExpectedAccountActivities.Find(id);
+            }
+        }
+
+        public static int ComputeYears(string instructionsEmploymentDetailsCurrentEmployerFrom, string instructionsEmploymentDetailsCurrentEmployerTo)
+        {
+            try
+            {
+                var startDate = DateTime.Parse(instructionsEmploymentDetailsCurrentEmployerFrom);
+                var endDate = DateTime.Parse(instructionsEmploymentDetailsCurrentEmployerTo);
+                var yr = endDate.Year - startDate.Year - 1 +
+             (endDate.Month >= startDate.Month && endDate.Day >= startDate.Day ? 1 : 0);
+                return yr < 0 ? 0 : yr;
+            }
+            catch (Exception)
+            {
+
+                return -1;
             }
         }
 
@@ -919,7 +1083,7 @@ namespace AppUtils
                 using (var context = new DBLAccountOpeningContext())
                 {
                     var model = new List<AccountSignatoryModel>();
-                    foreach (var item in context.AccountInstSignatoriesMandates.Where(x => x.AccountId == accountId))
+                    foreach (var item in context.AccountInstSignatoriesMandates.Where(x => x.AccountId == accountId).OrderBy(x=>x.CreatedDate))
                     {
                         model.Add(new AccountSignatoryModel
                         {
@@ -943,6 +1107,52 @@ namespace AppUtils
             }
         }
 
+
+        public static string GetSourceOfFundsList(string listIds)
+        {
+            try
+            {
+                using (var context = new DBLAccountOpeningContext())
+                {
+                    var names = new List<string>();
+                    var ids = listIds.Split(',');
+                    foreach (var item in ids)
+                    {
+                        int id = int.Parse(item);
+                        var find = context.SourceOfIncomes.Find(id);
+                        names.Add(find.Name);
+                    }
+                    return string.Join(",", names);
+                }
+            }
+            catch (Exception)
+            {
+
+                return string.Empty;
+            }
+        }
+
+        public static string GeneratePassword(int length)
+        {
+            try
+            {
+                string arr = ConfigurationManager.AppSettings["PasswordStringArray"];
+                Random rnd = new Random();
+                string pass = string.Empty;
+                for (int i = 1; i <= length; i++)
+                {
+                    char chr = arr[rnd.Next(0, 54)];
+                    pass = string.Concat(pass, chr.ToString());
+                }
+                return pass.Trim();
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Instance.logError(ex);
+                return string.Empty;
+            }
+        }
 
 
         public static AccountInstructionEmploymentDetailModel GetAccountInstructionEmploymentDetailModel(Guid accountId)
@@ -972,7 +1182,9 @@ namespace AppUtils
                         PrevOccupation = item.PrevOccupation,
                         SourceOfFundId = item.SourceOfFundId,
                         SourceOfIncomeName = item.SourceOfFundId.HasValue ? GetSourceOfIncome(item.SourceOfFundId.Value).Name : string.Empty,
-                        YearsOfEmployment = item.YearsOfEmployment
+                        YearsOfEmployment = item.YearsOfEmployment,
+                        SourceOfIncomeNamesList= GetSourceOfFundsList(item.SourceOfFundsIds),
+                        SourceOfFundsIds=item.SourceOfFundsIds
                     };
                     return model;
                 }

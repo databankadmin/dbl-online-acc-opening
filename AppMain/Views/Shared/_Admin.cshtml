@@ -1,5 +1,6 @@
 ﻿@using AppUtils
 @using DBHelper.Schema
+@using AppModels
 
 @{
     if (!Request.IsAuthenticated)
@@ -7,10 +8,10 @@
         Response.Redirect(Url.Action("Logout", "Account"));
     }
     var currentUser = Utilities.GetSessionUser();
-    AppUser user = null;
-    if (currentUser is AppUser)
+    UserModel user = null;
+    if (currentUser is UserModel)
     {
-        user = currentUser as AppUser;
+        user = currentUser as UserModel;
 
     }
     else
@@ -48,6 +49,9 @@
     <link rel="stylesheet" type="text/css" href="~/files/bower_components/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
 
 
+    <script type="text/javascript" src="~/multiselect/src/jquery.multi-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/multiselect/src/example-styles.css">
+
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -75,7 +79,7 @@ to get the desired effect
 
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i style="font-weight:bold;">Welcome @user.Name </i>
+                        <i style="font-weight:bold;">Welcome @user.Fullname </i>
                         @{
 
                             <i class="far fa-user fa-2x" style="color: #124830;"></i>
@@ -87,10 +91,10 @@ to get the desired effect
                                 <i class="fas fa-user mr-2"></i> User Profile
                             </a>*@
                         @*<div class="dropdown-divider"></div>*@
-                        <a href="" class="dropdown-item">
+                        @*<a href="" class="dropdown-item">
                             <i class="fas fa-lock mr-2"></i> Change Password
                         </a>
-                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>*@
                         <a href="#" onclick="javascript:confirmLogout()" class="dropdown-item">
                             <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
                         </a>
@@ -116,13 +120,23 @@ to get the desired effect
 
 
                         @*<li class="nav-item">
-                            <a href="@Url.Action("Dashboard","Admin")" class="nav-link">
-                                <i class="fa fa-home"></i>
+            <a href="@Url.Action("Dashboard","Admin")" class="nav-link">
+                <i class="fa fa-home"></i>
+                <p>
+                    Dashboard
+                </p>
+            </a>
+        </li>*@
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("Settings","Admin")" class="nav-link">
+                                <i class="fa fa-cogs"></i>
                                 <p>
-                                    Dashboard
+                                    Settings
                                 </p>
                             </a>
-                        </li>*@
+                        </li>
+
 
                         <li class="nav-item">
                             <a href="@Url.Action("Applications","Admin")" class="nav-link">
@@ -132,8 +146,18 @@ to get the desired effect
                                 </p>
                             </a>
                         </li>
-                        
-                      
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ForgottenAccount","Admin")" class="nav-link">
+                                <i class="fa fa-question"></i>
+                                <p>
+                                    Forgotten Account Requests
+                                </p>
+                            </a>
+                        </li>
+
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

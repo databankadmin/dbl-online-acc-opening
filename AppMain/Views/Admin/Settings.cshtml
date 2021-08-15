@@ -1,0 +1,340 @@
+﻿@using DBHelper.Schema
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    var context = new DBLAccountOpeningContext();
+    var banks = context.Banks.Where(x => x.IsActive).ToList();
+}
+
+
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Settings
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Banks</a>
+                </li>
+                @*<li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+                    </li>*@
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+
+                    <div class="table-responsive">
+                        <a class="btn btn-xs btn-primary" title="add" onclick="javascript:add('1')" style="color:white"> <i class="fa fa-plus"></i> New Bank</a>
+
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in banks.OrderBy(x => x.Name))
+                                    {
+                                        string encName = AppUtils.Utilities.EncodeBase64(item.Name);
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td>
+                                                @{
+
+                                                    <a style="color: blue;" title="edit" href="#" onclick="javascript:editItem('@encName','@item.Id','1')"><i class="fa fa-edit"></i></a>
+                                                    <a style="color: red;" title="delete" href="#" onclick="javascript:confirmDelete('1','@encName', '@item.Id')"><i class="fa fa-trash"></i></a>
+
+
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">content 2</div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">content 3</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addModal">
+    <form method="post" action="@Url.Action("AddLoopUpItem", "Admin")" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addMsg"></h4>
+                    <input type="hidden" name="addOrderId" id="addOrderId" />
+                </div>
+                <div class="modal-body">
+
+                    <input type="text" name="addName" id="addName" placeholder="name" required class="form-control" /><br />
+                    <input style="display:none;" type="file" name="ImageUrl" id="ImageUrl" class="btn btn-sm" onchange="javascript: validateUploadImageOnly('staffFile')" />
+
+                    @*<textarea name="desc" id="desc" class="form-control" placeholder="description"></textarea>*@
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Add" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="editModal">
+    <form method="post" action="@Url.Action("EditLookUpItem", "Admin")" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editMsg"></h4>
+                    <input type="hidden" name="editOrderId" id="editOrderId" />
+                    <input type="hidden" name="editItemId" id="editItemId" />
+                </div>
+                <div class="modal-body">
+
+                    <input type="text" name="editName" id="editName" placeholder="name" required class="form-control" /><br />
+                    <input style="display:none;" type="file" name="EditImageUrl" id="EditImageUrl" class="btn btn-sm" onchange="javascript: validateUploadImageOnly('staffFile')" />
+
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </form>
+
+</div>
+
+
+
+
+
+@*@{
+        if (!string.IsNullOrEmpty(Request["TabId"]) && !String.IsNullOrWhiteSpace(Request["TabId"]))
+        {
+
+            int tabId = int.Parse(Request["TabId"].ToString().Trim());
+            <text>
+                <script type="text/javascript">
+                    $('#pills-tab li:eq(' +@tabId +') a').tab('show')
+                </script>
+            </text>
+
+        }
+    }*@
+
+
+
+<script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+
+<script src="~/files/bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="~/files/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="~/files/assets/pages/data-table/js/jszip.min.js" type="text/javascript"></script>
+<script src="~/files/assets/pages/data-table/js/pdfmake.min.js" type="text/javascript"></script>
+<script src="~/files/assets/pages/data-table/js/vfs_fonts.js" type="text/javascript"></script>
+<script src="~/files/bower_components/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+<script src="~/files/bower_components/datatables.net-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+<script src="~/files/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+<script src="~/files/bower_components/datatables.net-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+
+
+
+
+<script>
+    $(function () {
+        $('table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "aaSorting": [[0, "asc"]],
+            //  dom: 'Bfrtlp',
+            //buttons: [
+            //    {
+            //        extend: 'excel',
+
+            //    }
+
+            //]
+
+        });
+    });
+
+    function add(order) {
+        id = Number(order);
+        if (id === 1) {
+            //bank
+            $("#addName").attr({ "type": "text", "placeholder": "name" });
+            $("#addMsg").text("Add Bank");
+            $("#ImageUrl").slideUp().removeAttr("required");;
+
+        }
+        //else if (id === 2) {
+        //    $("#addName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#addMsg").text("Add score format");
+        //    $("#ImageUrl").slideUp().removeAttr("required");;
+        //}
+        //else if (id === 3) {
+        //    $("#addName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#addMsg").text("Add Difficulty level");
+        //    $("#ImageUrl").slideUp().removeAttr("required");;
+        //}
+        //else if (id === 4) {
+        //    $("#addName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#addMsg").text("Music level");
+        //    $("#ImageUrl").slideUp().removeAttr("required");;
+        //}
+        //else if (id === 5) {
+        //    $("#addName").attr("type", "number").attr({ "min": "0", "placeholder": "price", "step": "0.01" });
+        //    $("#addMsg").text("Add pricing");
+        //    $("#ImageUrl").slideUp().removeAttr("required");
+        //}
+        //else if (id === 6) {
+        //    $("#addName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#addMsg").text("Add Transcription Type");
+        //    $("#ImageUrl").slideUp().removeAttr("required");
+        //}
+        //else if (id === 7) {
+        //    $("#addName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#addMsg").text("Add Theme");
+        //    $("#ImageUrl").slideUp().removeAttr("required");
+        //}
+        $("#addOrderId").val(order);
+        $("#addModal").modal();
+
+    }
+    $('#addModal').on('shown.bs.modal',
+        function (e) {
+            $("#addName").focus();
+        });
+
+
+
+    function editItem(value, id, order) {
+        //  alert('called
+        orderId = Number(order);
+        if (orderId === 1) {
+            $("#editName").attr({ "type": "text", "placeholder": "name" });
+            $("#editMsg").text("edit bank");
+         //   $("#EditImageUrl").slideDown().attr("required", "required");
+        }
+        //if (orderId === 2) {
+        //    $("#editName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#editMsg").text("edit score format");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");
+        //}
+        //if (orderId === 3) {
+        //    $("#editName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#editMsg").text("edit difficulty level");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");;
+        //}
+        //if (orderId === 4) {
+        //    $("#editName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#editMsg").text("edit music level");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");;
+        //}
+        //if (orderId === 5) {
+        //    $("#editName").attr("type", "number").attr({ "min": "0", "placeholder": "price", "step": "0.01" });
+        //    $("#editMsg").text("edit price");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");
+        //}
+
+        //if (orderId === 6) {
+        //    $("#editName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#editMsg").text("edit transcription type");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");;
+        //}
+        //if (orderId === 7) {
+        //    $("#editName").attr({ "type": "text", "placeholder": "name" });
+        //    $("#editMsg").text("edit theme");
+        //    $("#EditImageUrl").slideUp().removeAttr("required");;
+        //}
+        $("#editOrderId").val(order);
+        $("#editItemId").val(id);
+        $("#editName").val(atob(value));
+        $("#editModal").modal();
+
+    }
+
+    $('#editModal').on('shown.bs.modal',
+        function (e) {
+            $("#editName").focus();
+        })
+
+
+
+     function confirmDelete(order,accNum, accId) {
+        bootbox.dialog(
+            {
+                title: "Confirm Action",
+                message: "Delete record?<br/>" +atob(accNum),
+                buttons: {
+                    success: {
+                        label: "OK",
+                        className: "btn-success",
+                        callback: function () {
+                            document.location.href = "@Url.Action("DeleteItem", "Admin")?order=" + order + "&itemId=" + accId;
+                        }
+                    },
+                    main: {
+                        label: "Cancel",
+                        className: "btn-danger",
+                        callback: function() {
+
+                        }
+                    }
+
+                }
+            });
+    }
+
+
+</script>
+
+
+
+
+
+

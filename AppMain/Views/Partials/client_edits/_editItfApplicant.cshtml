@@ -1,0 +1,161 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@{
+    var context = new DBLAccountOpeningContext();
+    var idCards = context.IDCardTypes.Where(x => x.Id == 4 || x.Id == 5 || x.Id == 9);
+    var applicationId = MvcApplication.TempAccount.Id;
+    var accountMembers = Utilities.GetAccountMembers(applicationId);
+    var itfApplicant = accountMembers.LastOrDefault();
+}
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">ITF APPLICANT</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantSurname" class="form-label">Surname *</label>
+                        <input type="text" name="itfApplicantSurname" id="itfApplicantSurname" required class="form-control" value="@itfApplicant.Lname"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantFname" class="form-label">First Name *</label>
+                        <input type="text" name="itfApplicantFname" id="itfApplicantFname" required class="form-control" value="@itfApplicant.Fname"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantOname" class="form-label">Other Name</label>
+                        <input type="text" name="itfApplicantOname" id="itfApplicantOname" class="form-control" value="@itfApplicant.Othername" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantGender" class="form-label">Gender *</label>
+                        <select name="itfApplicantGender" id="itfApplicantGender" class="form-control" required>
+                            <option value="">-select-</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        $("#itfApplicantGender").val('@itfApplicant.Gender');
+                    </script>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantNationality" class="form-label">Nationality *</label>
+                        <select name="itfApplicantNationality" id="itfApplicantNationality" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == itfApplicant.NationalityId)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
+                        <input type="date" value="@itfApplicant.DOB" name="itfApplicantDOB" id="itfApplicantDOB" required  class="form-control"/>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+                        <input type="text" value="@itfApplicant.PlaceOfBirth" name="itfApplicantPlaceOfBirth" id="itfApplicantPlaceOfBirth" required class="form-control" />
+                    </div>
+
+
+
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantIdType" class="form-label">ID Type *</label>
+                        <select name="itfApplicantIdType" id="itfApplicantIdType" required class="form-control">
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in idCards.Where(x => x.IsActive).OrderBy(x => x.Name))
+                                {
+                                    if (item.Id == itfApplicant.IdTypeId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantIdNumber" class="form-label">ID Number *</label>
+                        <input type="text" name="itfApplicantIdNumber" id="itfApplicantIdNumber" required  class="form-control" value="@itfApplicant.IdNumber"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+                        <input type="text" name="itfApplicantIdIssuingAuthority" id="itfApplicantIdIssuingAuthority" required class="form-control" value="@itfApplicant.IssuingAuthority"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantIdCardIssueDate" class="form-label">Issue Date</label>
+                        <input type="date" name="itfApplicantIdCardIssueDate" id="itfApplicantIdCardIssueDate" class="form-control" value="@itfApplicant.IdCardIssueDate"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="itfApplicantIdCardExpDate" class="form-label">Expiry Date</label>
+                        <input type="date" name="itfApplicantIdCardExpDate" id="itfApplicantIdCardExpDate" class="form-control" value="@itfApplicant.IdCardExpiryDate" />
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <label>Photo ID</label>
+                </td>
+                
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Images/@itfApplicant.IdPath" style="width:180px; height:140px;" /><br />
+                    <input type="file" placeholder="new photo" name="itfApplicantPhotoReplace" id="itfApplicantPhotoReplace" onchange="javascript: validateUploadImageOnly('itfApplicantPhotoReplace')" />
+                </td>
+                
+
+            </tr>
+
+
+        </tbody>
+    </table>
+
+</div>

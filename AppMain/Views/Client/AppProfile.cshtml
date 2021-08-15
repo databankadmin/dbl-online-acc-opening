@@ -1,0 +1,111 @@
+﻿@using AppModels
+@using AppUtils
+@using AppMain.Providers
+@using DBHelper.Schema
+@{
+    ViewBag.Title = "App Profile - " + MvcApplication.TempAccount.ReferenceNo;
+    Layout = "~/Views/Shared/_Client.cshtml";
+    var context = new DBLAccountOpeningContext();
+    var applicationId = MvcApplication.TempAccount.Id;
+    var errors = context.AccountEditRequests.Where(x => x.AccountId == MvcApplication.TempAccount.Id);
+    var basicAccountProfile = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Application Profile Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <dl class="dl-horizontal">
+                            <dt>Reference Number</dt>
+                            <dd>@basicAccountProfile.RefNo</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Account Name</dt>
+                            <dd>@basicAccountProfile.AccountName</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Account Type</dt>
+                            <dd>@basicAccountProfile.AccountTypeName</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+
+                        <dl class="dl-horizontal">
+                            <dt>Expected Account Activity</dt>
+                            <dd>@basicAccountProfile.ExpectedAccountActivityName</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Frequency of Statement</dt>
+                            <dd>@basicAccountProfile.FrequencyOfStatementsName</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Investment Type</dt>
+                            <dd>@basicAccountProfile.InvestmentTypeName</dd>
+                        </dl>
+
+
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <dl class="dl-horizontal">
+                            <dt>Status</dt>
+                            <dd>@basicAccountProfile.StatusName</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Application Date</dt>
+                            <dd>@basicAccountProfile.CreatedDate</dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Signatory</dt>
+                            <dd>@basicAccountProfile.SignatureTypeName</dd>
+                        </dl>
+                    </div>
+
+                </div>
+                @{
+                    if (MvcApplication.TempAccount.StatusId == 5)
+                    {
+                        <hr />
+                        <div>
+                            <p style="color:red; font-size:18px;">
+                                <i>
+                                    Please correct the following errors and re-submit the application
+
+                                </i>
+                            </p>
+
+                            @{
+                                foreach (var item in errors)
+                                {
+                                    <div class="row">
+                                        @Html.Raw(item.ErrorList)
+                                    </div>
+                                    <br />
+                                    @*<p>Comments from Databank | @item.CreatedDate.ToString("G")</p>*@
+                                }
+                            }
+                        </div>
+
+
+                    }
+                }
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

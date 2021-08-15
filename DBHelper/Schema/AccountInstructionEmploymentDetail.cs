@@ -29,6 +29,7 @@ namespace DBHelper.Schema
         public string EmploymentDateTo { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<int> YearsOfEmployment { get; set; }
+        public string SourceOfFundsIds { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual EmploymentStatu EmploymentStatu { get; set; }

@@ -1,0 +1,242 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@{
+    var context = new DBLAccountOpeningContext();
+    var applicationId = MvcApplication.TempAccount.Id;
+    var accountMembers = Utilities.GetAccountMembers(applicationId);
+    var secondApplicant = accountMembers.LastOrDefault();
+
+
+}
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">JOINT APPLICANT</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantTitle" class="form-label">Title *</label>
+                        <select name="jointApplicantTitle" id="jointApplicantTitle" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Titles)
+                                {
+                                    if (item.Id == secondApplicant.TitleId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantSurname" class="form-label">Surname *</label>
+                        <input type="text" name="jointApplicantSurname" id="jointApplicantSurname" required class="form-control" value="@secondApplicant.Lname" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantFname" class="form-label">First Name *</label>
+                        <input type="text" name="jointApplicantFname" id="jointApplicantFname" required class="form-control"  value="@secondApplicant.Fname"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantOname" class="form-label">Other Name</label>
+                        <input type="text" name="jointApplicantOname" id="jointApplicantOname" class="form-control" value="@secondApplicant.Othername" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantGender" class="form-label">Gender *</label>
+                        <select name="jointApplicantGender" id="jointApplicantGender" style="width:200px;" class="form-control" required>
+                            <option value="">-select-</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        $("#jointApplicantGender").val('@secondApplicant.Gender');
+                    </script>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantNationality" class="form-label">Nationality *</label>
+                        <select name="jointApplicantNationality" id="jointApplicantNationality" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == secondApplicant.NationalityId)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantDOB" class="form-label" style="font-size:14px;">Date of Birth *</label>
+                        <input type="date" value="@secondApplicant.DOB" class="form-control" name="jointApplicantDOB" id="jointApplicantDOB" required onchange="javascript:DateChanged(this.value,'jointApplicantDOB')" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantPlaceOfBirth" class="form-label">Place of Birth *</label>
+                        <input type="text" value="@secondApplicant.PlaceOfBirth" name="jointApplicantPlaceOfBirth" id="jointApplicantPlaceOfBirth" required class="form-control" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantTelephone" class="form-label">Telephone</label>
+                        <input type="text" name="jointApplicantTelephone" id="jointApplicantTelephone" value="@secondApplicant.Telephone" class="form-control" />
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantMobile" class="form-label">Mobile *</label>
+                        <input type="text" name="jointApplicantMobile" id="jointApplicantMobile" value="@secondApplicant.Mobile" required class="form-control" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantResidentialFax" class="form-label">Fax</label>
+                        <input type="text" name="jointApplicantResidentialFax" id="jointApplicantResidentialFax" value="@secondApplicant.Fax" class="form-control" />
+
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantMailingEmail" class="form-label">Email *</label>
+                        <input type="email" name="jointApplicantMailingEmail" id="jointApplicantMailingEmail" value="@secondApplicant.Email" required class="form-control" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantResidentialAddress" class="form-label">Residential Address</label>
+                        <input type="text" name="jointApplicantResidentialAddress" value="@secondApplicant.ResidentialAddressFull" id="jointApplicantResidentialAddress" class="form-control" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantOccupation" class="form-label">Occupation *</label>
+                        <input type="text" name="jointApplicantOccupation" value="@secondApplicant.Occupation" id="jointApplicantOccupation" required class="form-control" />
+
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantIdType" class="form-label">ID Type *</label>
+                        <select name="jointApplicantIdType" id="jointApplicantIdType" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                                {
+                                    if (item.Id == secondApplicant.IdTypeId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantIdNumber" class="form-label">ID Number *</label>
+                        <input type="text" name="jointApplicantIdNumber" id="jointApplicantIdNumber" required class="form-control" value="@secondApplicant.IdNumber"/>
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantIdIssuingAuthority" class="form-label">Issuing Authority *</label>
+                        <input type="text" name="jointApplicantIdIssuingAuthority" id="jointApplicantIdIssuingAuthority" required class="form-control" value="@secondApplicant.IssuingAuthority"/>
+                    </div>
+
+
+                </td>
+
+                <td>
+
+
+                    <div class="form-group">
+                        <label for="jointApplicantIdCardIssueDate" class="form-label">Issue Date * </label>
+                        <input type="date" name="jointApplicantIdCardIssueDate" id="jointApplicantIdCardIssueDate" required class="form-control" value="@secondApplicant.IdCardIssueDate" />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="jointApplicantIdCardExpDate" class="form-label">Expiry Date</label>
+                        <input type="date" name="jointApplicantIdCardExpDate" id="jointApplicantIdCardExpDate" class="form-control" value="@secondApplicant.IdCardExpiryDate"/>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <label>Photo ID</label>
+                </td>
+                <td>
+                    <label>Signature</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Images/@secondApplicant.IdPath" style="width:180px; height:140px;" /><br />
+                    <input type="file" placeholder="new photo" name="jointApplicantPhotoReplace" id="jointApplicantPhotoReplace" onchange="javascript: validateUploadImageOnly('jointApplicantPhotoReplace')" />
+                </td>
+                <td>
+                    <img src="~/Images/@secondApplicant.SignaturePath" style="width:180px; height:140px;" /><br />
+                    <input type="file" placeholder="new photo" name="jointApplicantSignatureReplace" id="jointApplicantSignatureReplace" onchange="javascript: validateUploadImageOnly('jointApplicantSignatureReplace')" />
+
+
+                </td>
+
+            </tr>
+
+
+        </tbody>
+    </table>
+
+</div>

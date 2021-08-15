@@ -75,5 +75,8 @@ namespace DBHelper.Schema
         public virtual DbSet<ForgottenAccountDetail> ForgottenAccountDetails { get; set; }
         public virtual DbSet<StaffRefList> StaffRefLists { get; set; }
         public virtual DbSet<Branch> Branches { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<ForgottenPasswordStatu> ForgottenPasswordStatus { get; set; }
+        public virtual DbSet<AccountEditRequest> AccountEditRequests { get; set; }
     }
 }

@@ -182,8 +182,8 @@
 
 
         <div class="form-group">
-            <label for="jointApplicantIdCardIssueDate" class="form-label">Issue Date</label>
-            <input type="date" name="jointApplicantIdCardIssueDate" id="jointApplicantIdCardIssueDate" />
+            <label for="jointApplicantIdCardIssueDate" class="form-label">Issue Date * </label>
+            <input type="date" name="jointApplicantIdCardIssueDate" id="jointApplicantIdCardIssueDate" required />
         </div>
 
         <div class="form-group">
@@ -214,8 +214,17 @@
                     UPLOAD SIGNATURE *
                 </center>
             </div>
+            <a onclick="javascript:showCaptureModal('jointApplicantSignatureCapture','_jointApplicantSignatureCapture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
         </div>
         <input type="hidden" name="jointApplicantSignaturehidden" id="jointApplicantSignaturehidden" />
+
+
+        <div class="form-group">
+            <img src="" name="jointApplicantSignatureCapture" id="jointApplicantSignatureCapture" style="width:300px; height:170px; border:1px groove; display:none;" />
+            <input type="hidden" name="_jointApplicantSignatureCapture" id="_jointApplicantSignatureCapture" />
+
+        </div>
 
 
     </div>

@@ -1,4 +1,5 @@
-﻿using AppMain.Providers;
+﻿using AppLogger;
+using AppMain.Providers;
 using AppUtils;
 using IronPdf;
 using System;
@@ -30,9 +31,15 @@ namespace AppMain.Controllers
             //Renderer.PrintOptions.p
             Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
 
+            string _title = "DBL Form Data - " + model.AccountName;
+
+            if (!string.IsNullOrEmpty(model.BackConnectAccountNumber))
+            {
+               _title= _title + "-" + model.BackConnectAccountNumber;
+            }
             Renderer.PrintOptions.Header = new SimpleHeaderFooter()
             {
-                CenterText = "DBL Form Data - " + model.AccountName,
+                CenterText = _title,
                 DrawDividerLine = true,
                 FontSize = 12
             };
@@ -56,46 +63,60 @@ namespace AppMain.Controllers
 
         public ActionResult AmlFormData(string _refNumber, string message = null)
         {
-            Guid applicationId = Guid.Parse(_refNumber.Decrypt());
-            ViewBag.applicationId = applicationId;
-            var model = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
-
-            var Renderer = new IronPdf.HtmlToPdf();
-            Renderer.PrintOptions.MarginTop = 20;  //millimeters
-            Renderer.PrintOptions.MarginBottom = 20;
-            Renderer.PrintOptions.MarginLeft = 1;
-            Renderer.PrintOptions.MarginRight = 1;
-            //Renderer.PrintOptions.p
-            Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
-
-            Renderer.PrintOptions.Header = new SimpleHeaderFooter()
+            try
             {
-                CenterText = "AML Profile - " + model.AccountName,
-                DrawDividerLine = true,
-                FontSize = 12
-            };
 
-            Renderer.PrintOptions.Footer = new SimpleHeaderFooter()
+                Guid applicationId = Guid.Parse(_refNumber.Decrypt());
+                ViewBag.applicationId = applicationId;
+                var model = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+
+                var Renderer = new IronPdf.HtmlToPdf();
+                Renderer.PrintOptions.MarginTop = 20;  //millimeters
+                Renderer.PrintOptions.MarginBottom = 20;
+                Renderer.PrintOptions.MarginLeft = 1;
+                Renderer.PrintOptions.MarginRight = 1;
+                //Renderer.PrintOptions.p
+                Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
+                string _title = "AML Profile - " + model.AccountName;
+                if (!string.IsNullOrEmpty(model.BackConnectAccountNumber))
+                {
+                    _title = _title + "-" + model.BackConnectAccountNumber;
+                }
+                Renderer.PrintOptions.Header = new SimpleHeaderFooter()
+                {
+                    CenterText = _title,
+                    DrawDividerLine = true,
+                    FontSize = 12
+                };
+
+                Renderer.PrintOptions.Footer = new SimpleHeaderFooter()
+                {
+                    LeftText = "{date} {time}",
+                    RightText = "Page {page} of {total-pages}",
+                    DrawDividerLine = true,
+                    FontSize = 6
+                };
+
+
+
+                string result = this.RenderRazorViewToString("~/Views/Partials/pdfs/amlProfile.cshtml", model);
+                string fileName = "AML_Profile_" + model.AccountName.Replace(" ", "_") + "_" + DateTime.Now.Ticks.ToString();
+                var PDF = Renderer.RenderHtmlAsPdf(result);
+
+                //watermark
+                //  PDF.WatermarkAllPages("<img src='/Images/sw2.jpg'/>", PdfDocument.WaterMarkLocation.MiddleCenter,5,0,null);
+
+                var OutputPath = Server.MapPath("~/Images/" + fileName + ".pdf");
+                PDF.SaveAs(OutputPath);
+                //   System.Diagnostics.Process.Start(OutputPath);
+                return RedirectToAction("DownloadFile", "Admin", new { path = fileName + ".pdf", _refNumber = _refNumber });
+            }
+            catch (Exception ex)
             {
-                LeftText = "{date} {time}",
-                RightText = "Page {page} of {total-pages}",
-                DrawDividerLine = true,
-                FontSize = 6
-            };
 
-
-            
-            string result = this.RenderRazorViewToString("~/Views/Partials/pdfs/amlProfile.cshtml", model);
-            string fileName = "AML_Profile_" + model.AccountName.Replace(" ", "_") + "_" + DateTime.Now.Ticks.ToString();
-            var PDF = Renderer.RenderHtmlAsPdf(result);
-
-            //watermark
-          //  PDF.WatermarkAllPages("<img src='/Images/sw2.jpg'/>", PdfDocument.WaterMarkLocation.MiddleCenter,5,0,null);
-
-            var OutputPath = Server.MapPath("~/Images/" + fileName + ".pdf");
-            PDF.SaveAs(OutputPath);
-            //   System.Diagnostics.Process.Start(OutputPath);
-            return RedirectToAction("DownloadFile", "Admin", new { path = fileName + ".pdf", _refNumber = _refNumber });
+                Logger.Instance.logError(ex);
+                return View();
+            }
         }
 
         public ActionResult ETIFormData(string _refNumber, string message = null)
@@ -111,10 +132,14 @@ namespace AppMain.Controllers
             Renderer.PrintOptions.MarginRight = 1;
             //Renderer.PrintOptions.p
             Renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
-
+            string _title = "ETI Profile - " + model.AccountName;
+            if (!string.IsNullOrEmpty(model.BackConnectAccountNumber))
+            {
+                _title = _title + "-" + model.BackConnectAccountNumber;
+            }
             Renderer.PrintOptions.Header = new SimpleHeaderFooter()
             {
-                CenterText = "ETI Profile - " + model.AccountName,
+                CenterText = _title,
                 DrawDividerLine = true,
                 FontSize = 12
             };

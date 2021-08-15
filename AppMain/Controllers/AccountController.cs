@@ -1,8 +1,11 @@
 ﻿using AppMain.Providers;
+using AppModels;
 using AppUtils;
 using DBHelper.Schema;
+using Hangfire;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,61 +18,64 @@ namespace AppMain.Controllers
         // GET: Account
         public ActionResult Index(string message = null)
         {
-            SetSuperAdmin();
+            Utilities.AppUsers = AppServerHelper.GetAppUsers();
+
+            // SetSuperAdmin();
             if (!string.IsNullOrEmpty(message))
             {
                 ViewBag.Message = message.Decrypt();
             }
-           // RecurringJob.AddOrUpdate(() => Utilities.ProcessMessages(), "*/1 * * * *");
+           // RecurringJob.AddOrUpdate(() => Utilities.ProcessQuickSMS(), "*/1 * * * *");
+            RecurringJob.AddOrUpdate(() => Utilities.ProcessEmails(), "*/1 * * * *");
             ViewBag.username = string.Empty;
             return View();
         }
 
 
-        public void SetSuperAdmin()
-        {
-            using (var context = new DBLAccountOpeningContext())
-            {
-                if (!context.AppUsers.Any())
-                {
-                    context.AppUsers.Add(new AppUser
-                    {
+        //public void SetSuperAdmin()
+        //{
+        //    using (var context = new DBLAccountOpeningContext())
+        //    {
+        //        if (!context.AppUsers.Any())
+        //        {
+        //            context.AppUsers.Add(new AppUser
+        //            {
 
-                        CreatedDate = DateTime.Now,
-                        Email = "admin@dbl",
-                        Id = Guid.NewGuid(),
-                        IsActive = true,
-                        Name = "Administrator",
-                        Password = "admin@1234".Encrypt(),
-                        Phone = "0302610610",
-                        RoleId = 1,
-                    });
-                }
-                foreach (var item in context.Accounts.Where(x => x.ReferenceNo == null))
-                {
-                    SetRef(item.Id, Utilities.GenerateApplicationReference());
-                }
-                context.SaveChanges();
-                foreach (var item in context.Accounts)
-                {
-                    if (string.IsNullOrEmpty(item.BranchCode))
-                    {
-                        item.BranchCode = Utilities.GetRandomBranchCode();
-                    }
+        //                CreatedDate = DateTime.Now,
+        //                Email = "admin@dbl",
+        //                Id = Guid.NewGuid(),
+        //                IsActive = true,
+        //                Name = "Administrator",
+        //                Password = "admin@1234".Encrypt(),
+        //                Phone = "0302610610",
+        //                RoleId = 1,
+        //            });
+        //        }
+        //        foreach (var item in context.Accounts.Where(x => x.ReferenceNo == null))
+        //        {
+        //            SetRef(item.Id, Utilities.GenerateApplicationReference());
+        //        }
+        //        context.SaveChanges();
+        //        foreach (var item in context.Accounts)
+        //        {
+        //            if (string.IsNullOrEmpty(item.BranchCode))
+        //            {
+        //                item.BranchCode = Utilities.GetRandomBranchCode();
+        //            }
 
-                }
-                context.SaveChanges();
-            }
-        }
-        public void SetRef(Guid accountId,string _ref)
-        {
-            using (var context=new DBLAccountOpeningContext())
-            {
-                var model = context.Accounts.Find(accountId);
-                model.ReferenceNo = _ref;
-                context.SaveChanges();
-            }
-        }
+        //        }
+        //        context.SaveChanges();
+        //    }
+        //}
+        //public void SetRef(Guid accountId,string _ref)
+        //{
+        //    using (var context=new DBLAccountOpeningContext())
+        //    {
+        //        var model = context.Accounts.Find(accountId);
+        //        model.ReferenceNo = _ref;
+        //        context.SaveChanges();
+        //    }
+        //}
 
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Index(string username, string password)
@@ -77,13 +83,34 @@ namespace AppMain.Controllers
            
             string encryptedPassword = password.Encrypt();
             ViewBag.username = username;
-            var admin = Utilities.ValidateAdmin(username, encryptedPassword);
+            var accountUser = Utilities.ValidateClientAccountLogin(username, password);
 
-            if (admin != null)
+            var identityServerUser = AppServerHelper.AuthenticateUserAsync(username, password);
+
+
+            if (identityServerUser != null)
+            {
+                if (!identityServerUser.DefaultPasswordChanged)
+                {
+                    string appUrl = ConfigurationManager.AppSettings["appUrl"];
+                    string appServerUrl = ConfigurationManager.AppSettings["AUTH_BASE_URL"] +
+                                          "/User/FirstTimeLogin?returnUrl=" + Utilities.EncodeBase64(appUrl) +
+                                          "&_username=" + Utilities.EncodeBase64(username);
+                    return RedirectPermanent(appServerUrl);
+                }
+                FormsAuthentication.SetAuthCookie(username, false);
+                Profile.Initialize(username, true);
+                Utilities.LogActivity(username,"Successful login");
+                return RedirectToAction("Applications", "Admin");
+            }
+            else if (accountUser!=null)
             {
                 FormsAuthentication.SetAuthCookie(username, false);
                 Profile.Initialize(username, true);
-                return RedirectToAction("Applications", "Admin");
+                MvcApplication.TempAccount = accountUser;
+                MvcApplication.AccountType = MvcApplication.TempAccount.AccountTypeId;
+
+                return RedirectToAction("AppProfile", "Client");
             }
             else
             {
@@ -95,6 +122,12 @@ namespace AppMain.Controllers
 
         public ActionResult Logout(string message = null)
         {
+            var user =Utilities.GetSessionUser() as UserModel;
+            if (user!=null)
+            {
+                Utilities.LogActivity(user.Username, "User Logout");
+
+            }
 
             FormsAuthentication.SignOut();
 

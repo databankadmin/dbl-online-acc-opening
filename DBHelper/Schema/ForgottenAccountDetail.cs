@@ -20,5 +20,9 @@ namespace DBHelper.Schema
         public string Phone { get; set; }
         public string Address { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public int StatusId { get; set; }
+        public string Response { get; set; }
+    
+        public virtual ForgottenPasswordStatu ForgottenPasswordStatu { get; set; }
     }
 }

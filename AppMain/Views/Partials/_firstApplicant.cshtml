@@ -4,6 +4,117 @@
     var accountType = context.AccountTypes.Find(MvcApplication.AccountType);
 }
 
+<style type="text/css">
+    .multi-select-container {
+        display: inline-block;
+        position: relative;
+    }
+
+    .multi-select-menu {
+        position: absolute;
+        left: 0;
+        top: 0.8em;
+        z-index: 1;
+        float: left;
+        min-width: 100%;
+        background: #fff;
+        margin: 1em 0;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+
+    .multi-select-menuitem {
+        display: block;
+        font-size: 0.875em;
+        padding: 0.6em 1em 0.6em 30px;
+        white-space: nowrap;
+    }
+
+    .multi-select-menuitem--titled:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        margin: 0 0 0.25em -20px;
+    }
+
+    .multi-select-menuitem--titledsr:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .multi-select-menuitem + .multi-select-menuitem {
+        padding-top: 0;
+    }
+
+    .multi-select-presets {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .multi-select-menuitem input {
+        position: absolute;
+        margin-top: -15px;
+        margin-left: -25px;
+        width:20px;
+    }
+
+    .multi-select-button {
+        display: inline-block;
+        font-size: 0.875em;
+        padding: 0.2em 0.6em;
+        max-width: 16em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: -0.5em;
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: default;
+    }
+
+        .multi-select-button:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0.4em 0.4em 0 0.4em;
+            border-color: #999 transparent transparent transparent;
+            margin-left: 0.4em;
+            vertical-align: 0.1em;
+        }
+
+    .multi-select-container--open .multi-select-menu {
+        display: block;
+    }
+
+    .multi-select-container--open .multi-select-button:after {
+        border-width: 0 0.4em 0.4em 0.4em;
+        border-color: transparent transparent #999 transparent;
+    }
+
+    .multi-select-container--positioned .multi-select-menu {
+        /* Avoid border/padding on menu messing with JavaScript width calculation */
+        box-sizing: border-box;
+    }
+
+        .multi-select-container--positioned .multi-select-menu label {
+            /* Allow labels to line wrap when menu is artificially narrowed */
+            white-space: normal;
+        }
+</style>
+
 <fieldset>
     <h2>Databank Brokerage Form | @accountType.Name</h2>
     <h4 style="color:red">Required fields are marked with asterisk (*)</h4>
@@ -389,10 +500,16 @@
                         UPLOAD SIGNATURE *
                     </center>
                 </div>
+                <a onclick="javascript:showCaptureModal('firstApplicantSignatureCapture','_firstApplicantSignatureCapture')" style="color:blue;" href="#">Live signature capture(for walk in clients only)</a>
+
             </div>
             <input type="hidden" name="firstApplicantSignaturehidden" id="firstApplicantSignaturehidden" />
 
+            <div class="form-group">
+                <img src="" name="firstApplicantSignatureCapture" id="firstApplicantSignatureCapture" style="width:300px; height:170px; border:1px groove; display:none;" />
+                <input type="hidden" name="_firstApplicantSignatureCapture" id="_firstApplicantSignatureCapture" />
 
+            </div>
 
 
         </div>
@@ -643,9 +760,20 @@
             </div>
 
 
-            <div class="form-group">
-                <label for="instructionsEmploymentDetailsSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
-                <select name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" required>
+            <div class="form-group" id="instructionsEmploymentDetailsSourceOfIncomeIdsDiv">
+                <label for="instructionsEmploymentDetailsSourceOfIncomeIds" class="form-label">Source(s) of Income/Funds *</label>
+                @*<select name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" required>
+            <option value="">-select-</option>
+            @{
+                foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+
+        </select>*@
+                <input type="hidden" name="instructionsEmploymentDetailsSourceOfIncome" id="instructionsEmploymentDetailsSourceOfIncome" value="1" />
+                <select id="instructionsEmploymentDetailsSourceOfIncomeIds" name="instructionsEmploymentDetailsSourceOfIncomeIds" multiple required>
                     <option value="">-select-</option>
                     @{
                         foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
@@ -653,9 +781,9 @@
                             <option value="@item.Id">@item.Name</option>
                         }
                     }
-
                 </select>
             </div>
+
 
 
 
@@ -734,8 +862,8 @@
             </div>
 
             <div class="form-group">
-                <label for="yearsOfEmployment" class="form-label">Total years of employment(in years) </label>
-                <input type="number" name="yearsOfEmployment" id="yearsOfEmployment" />
+                @*<label for="yearsOfEmployment" class="form-label">Total years of employment(in years) </label>*@
+                <input type="hidden" name="yearsOfEmployment" id="yearsOfEmployment" value="0" />
             </div>
 
 
@@ -960,7 +1088,12 @@
                 <select name="numberOfSignatories" id="numberOfSignatories" style="width:300px;" required>
                     <option value="">-select-</option>
                     @{
-                        foreach (var item in context.SignatureTypes.OrderBy(x => x.Id).Take(3))
+                        var signTypes = context.SignatureTypes.OrderBy(x => x.Id).Take(3).ToList();
+                        if (MvcApplication.AccountType == 1)
+                        {
+                            signTypes = signTypes.Where(x => x.Id == 1).ToList();
+                        }
+                        foreach (var item in signTypes)
                         {
 
                             <option value="@item.Id">@item.Name</option>
@@ -970,7 +1103,7 @@
 
             </div>
             <div class="form-group">
-                <label for="staffRefCode" class="form-label">Staff Referral Code <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>
+                <label for="staffRefCode" class="form-label">Do you have introducer Code? (optional) <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>
                 <input type="number" name="staffRefCode" id="staffRefCode" maxlength="5" placeholder="****"  style="width:200px"/>
             </div>
 
@@ -982,28 +1115,18 @@
 </fieldset>
 
 
-<div id="refCode" title="Staff Referral Code - Help">
-    <p>
-        If a Databank staff directed you to this application, please enter the staff code here
-    </p>
-</div>
-
-
 <script type="text/javascript">
-    function showReferalHelp() {
-        $("#refCode").dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 500
-            },
-            hide: {
-                effect: "explode",
-                duration: 500
-            }
-        });
 
-        $("#refCode").dialog("open");
+    $(document).ready(function () {
+        $('#instructionsEmploymentDetailsSourceOfIncomeIds').multiSelect();
+
+    });
+
+
+
+
+    function showReferalHelp() {
+        bootbox.alert("If a Databank staff directed you to this application, please enter the staff code here");
 
     }
 </script>
