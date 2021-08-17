@@ -10,6 +10,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Security.Principal;
+using System.Threading;
+using System.DirectoryServices.AccountManagement;
 
 namespace AppMain.Controllers
 {
@@ -20,12 +23,18 @@ namespace AppMain.Controllers
         {
             Utilities.AppUsers = AppServerHelper.GetAppUsers();
 
-            // SetSuperAdmin();
-            if (!string.IsNullOrEmpty(message))
-            {
-                ViewBag.Message = message.Decrypt();
-            }
-           // RecurringJob.AddOrUpdate(() => Utilities.ProcessQuickSMS(), "*/1 * * * *");
+            //string windowsName = WindowsPrincipal.Current.Identity.Name;
+            ////OR
+            //string windowsName2 = Thread.CurrentPrincipal.Identity.Name;
+            //      ViewBag._user = //_user.Name+ ", "+_user.DisplayName+","+_user.DistinguishedName+","+_user.EmailAddress+","+_user.Description+","+_user.GivenName+","+_user.SamAccountName+", "+_user.Surname+", "+_user.UserPrincipalName;
+
+            //ViewBag.Message = "Name1: "+windowsName+" Name 2: "+windowsName2;
+            //if (!string.IsNullOrEmpty(message))
+            //{
+            //    ViewBag.Message = message.Decrypt();
+            //}
+
+            //RecurringJob.AddOrUpdate(() => Utilities.ProcessQuickSMS(), "*/1 * * * *");
             RecurringJob.AddOrUpdate(() => Utilities.ProcessEmails(), "*/1 * * * *");
             ViewBag.username = string.Empty;
             return View();
