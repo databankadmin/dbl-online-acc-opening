@@ -1,0 +1,380 @@
+﻿@using AppModels
+@using DBHelper
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+
+    var investmentTypesData = ViewBag.investmentTypesData as List<NameValueModel>;
+    var statusTypesData = ViewBag.statusTypesData as List<NameValueModel>;
+    var context = new DBHelper.Schema.DBLAccountOpeningContext();
+
+}
+
+
+<script src="~/Scripts/moment-with-locales.js"></script>
+<script src="https://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<link rel="stylesheet" href="~/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="~/files/bower_components/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/assets/pages/data-table/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/bower_components/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    Investment Types
+                </h4>
+            </div>
+            <div class="card-block">
+                <div class="chartJS">
+                    <canvas id="chart002" height="262" width="495" style="width: 495px; height: 262px;"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Account Status </h4>
+            </div>
+            <div class="card-block">
+                <div class="chartJS">
+                    <canvas id="chart003" height="262" width="495" style="width: 495px; height: 262px;"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<br/>
+
+<div class="row">
+
+
+    <div class="col-md-12">
+        <div class="card" style="padding:1%">
+            <br />
+            <h3 class="card-title">
+                Recent User Activities
+            </h3>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Activity</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in context.AuditLogs.OrderByDescending(x => x.CreatedDate).Take(10))
+                            {
+                                <tr>
+                                    <td>@item.UserId</td>
+                                    <td>@item.Activity</td>
+                                    <td data-sort="@item.CreatedDate.ToString("O")">@item.CreatedDate.ToString()</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+        <script>
+    $(function () {
+        @*@{
+             if (!string.IsNullOrEmpty(ViewBag.from))
+            {
+                <text>
+                    $("#from").val('@ViewBag.from.ToString()');
+                </text>
+
+            }
+
+             if (!string.IsNullOrEmpty(ViewBag.to))
+            {
+                <text>
+                    $("#to").val('@ViewBag.to.ToString()');
+                </text>
+
+            }
+        }*@
+
+
+        //var dateFormat = "mm/dd/yy",
+        //    from = $("#from")
+        //        .datepicker({
+        //            defaultDate: "+1w",
+        //            changeMonth: true,
+        //            numberOfMonths: 1
+        //        })
+        //        .on("change", function () {
+        //            to.datepicker("option", "minDate", getDate(this));
+        //        }),
+        //    to = $("#to").datepicker({
+        //        defaultDate: "+1w",
+        //        changeMonth: true,
+        //        numberOfMonths: 1
+        //    })
+        //        .on("change", function () {
+        //            from.datepicker("option", "maxDate", getDate(this));
+        //        });
+
+        //function getDate(element) {
+        //    var date;
+        //    try {
+        //        date = $.datepicker.parseDate(dateFormat, element.value);
+        //    } catch (error) {
+        //        date = null;
+        //    }
+
+        //    return date;
+        //}
+
+
+
+
+    });
+        </script>
+
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+        <script type="text/javascript">
+    $(document).ready(function () {
+        var ctx = document.getElementById("chart002");
+    var myChart = new Chart(ctx,
+        {
+            type: 'bar',
+            data: {
+                labels: [
+                    @{
+                            foreach (var item in investmentTypesData)
+                            {
+                               <text>
+                                   '@item.Label.Trim()',
+                               </text>
+                            }
+                       }
+                ],
+
+                datasets: [
+                    {
+                        label: 'count',
+                        fill: false,
+
+                        data: [
+                            @{
+                                    foreach (var item in investmentTypesData)
+                            {
+                               <text>
+                                   @item.IntVal,
+                               </text>
+                            }
+                              }
+                        ],
+
+                         backgroundColor: [
+                                @{
+
+                                    foreach (var item in statusTypesData)
+                                    {
+                                        <text>
+                                            "@item.Color",
+                                        </text>
+                                    }
+                                }
+
+                            ],
+ borderColor: [
+                                @{
+
+                                    foreach (var item in statusTypesData)
+                                    {
+                                        <text>
+                                            "@item.Color",
+                                        </text>
+                                    }
+                                }
+
+                            ],                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: "black",
+                        boxWidth: 20,
+                        padding: 20
+                    }
+               },
+
+
+                scales: {
+                    xAxes: [
+                        {
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 80
+                            }
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }
+                    ]
+                }
+            }
+            });
+
+
+
+
+
+
+        new Chart(document.getElementById("chart003"),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        @{
+
+                            foreach (var item in statusTypesData)
+                            {
+                                <text>
+                                    "@item.Label",
+                                </text>
+                            }
+                        }
+                    ],
+
+                    datasets: [
+                        {
+                            label: "count: ",
+
+                            backgroundColor: [
+                                @{
+
+                                    foreach (var item in statusTypesData)
+                                    {
+                                        <text>
+                                            "@item.Color",
+                                        </text>
+                                    }
+                                }
+
+                            ],
+
+
+                            data:
+                            [
+                                @{
+
+                                    foreach (var item in statusTypesData)
+                                    {
+                                        <text>
+                                    "@item.IntVal",
+                                        </text>
+                                    }
+                                }
+
+
+                            ]
+
+
+                        }
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            fontColor: "black",
+                            boxWidth: 20,
+                            padding: 20
+                        }
+                    }
+                },
+
+            })
+    });
+
+
+
+
+    $(function () {
+        $('table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "aaSorting": [[2, "desc"]],
+          //  dom: 'Bfrtlp',
+
+        });
+    });
+
+
+
+
+        </script>
+
+
+
+        <script src="~/AdminLTE/plugins/datatables/jquery.dataTables.js"></script>
+        <script src="~/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+
+        <script src="~/files/bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="~/files/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+        <script src="~/files/assets/pages/data-table/js/jszip.min.js" type="text/javascript"></script>
+        <script src="~/files/assets/pages/data-table/js/pdfmake.min.js" type="text/javascript"></script>
+        <script src="~/files/assets/pages/data-table/js/vfs_fonts.js" type="text/javascript"></script>
+        <script src="~/files/bower_components/datatables.net-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+        <script src="~/files/bower_components/datatables.net-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+        <script src="~/files/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+        <script src="~/files/bower_components/datatables.net-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+
+
+

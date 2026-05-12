@@ -22,11 +22,14 @@ namespace DBHelper.Schema
             this.AccountMembers = new HashSet<AccountMember>();
             this.AccountMembers1 = new HashSet<AccountMember>();
             this.AccountMembers2 = new HashSet<AccountMember>();
+            this.AccountBeneficiaries = new HashSet<AccountBeneficiary>();
+            this.AccountBeneficiaries1 = new HashSet<AccountBeneficiary>();
         }
     
         public int ID { get; set; }
         public string CountryName { get; set; }
         public string Code { get; set; }
+        public string SoftTechCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Account> Accounts { get; set; }
@@ -38,5 +41,9 @@ namespace DBHelper.Schema
         public virtual ICollection<AccountMember> AccountMembers1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountMember> AccountMembers2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountBeneficiary> AccountBeneficiaries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountBeneficiary> AccountBeneficiaries1 { get; set; }
     }
 }

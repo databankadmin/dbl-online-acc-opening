@@ -1,0 +1,71 @@
+﻿
+<fieldset>
+    <h2>File/Documents Uploads</h2>
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="passportPhotos" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        Upload Passport Photos of Applicants *
+
+                    </center>
+                </div>
+                <input type="hidden" name="passportPhotoshidden" id="passportPhotoshidden" />
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="proofOfResidence" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        Proof of Residential Address/Reference Letter *
+                    </center>
+                </div>
+                <input type="hidden" name="proofOfResidencehidden" id="proofOfResidencehidden" />
+
+            </div>
+        </div>
+    </div>
+
+
+
+    @{
+        if (MvcApplication.AccountType == 4)
+        {
+            <div class="form-row">
+                <div class="form-flex">
+                    <div class="form-group">
+                        <div class="dropzone dropzone-previews" id="otherBusinessFiles" style="padding-top:2px;">
+                            <center style="text-align:center;">
+                                Other necessary documents such as Certified Copy of Regulations,
+                                Certified Copy of Cert. of Incorporation, etc
+
+                            </center>
+                           
+                        </div>
+                        <input type="hidden" name="otherBusinessFileshidden" id="otherBusinessFileshidden" />
+                       
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+
+
+
+</fieldset>
+

@@ -4,7 +4,7 @@ function idLookUp(idType, idNumber, idName, recordId, objectType, loaderId,idTyp
 
     $("#" + loaderId).slideDown();
     $.ajax({
-        url: '/Utilities/ValidateIdFromGvive?idType='+idType + "&idNumber=" + idNumber + "&idName=" + idName + "&recordId="+recordId + "&objectType="+objectType,
+        url: '/dblonline/Utilities/ValidateIdFromGvive?idType='+idType + "&idNumber=" + idNumber + "&idName=" + idName + "&recordId="+recordId + "&objectType="+objectType,
         type: "GET",
         async: true,
         processData: false,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using AppLogger;
 using AppModels;
 using AppUtils;
+using DBHelper.Schema;
 using Newtonsoft.Json;
 
 namespace AppMain.Providers
@@ -161,6 +163,38 @@ namespace AppMain.Providers
                     }
                     string responseBody = result.Content.ReadAsStringAsync().Result;
                     var users = JsonConvert.DeserializeObject<List<UserModel>>(responseBody);
+                    var context = new DBLAccountOpeningContext();
+                    foreach (var item in users)
+                    {
+                        if (!context.AppUsers.Any(x => x.Email.Trim() == item.Username.Trim()))
+                        {
+                           // var _redemptionUser = GetUserFromRedemption(item.Username.Trim()).Result;
+                           // if (_redemptionUser != null && _redemptionUser.LocationId > 0)
+                            //{
+                                var newUser = new AppUser
+                                {
+                                    Name = item.Fullname,
+                                    Email = item.Username,
+                                    RoleId = 1,
+                                    //LocationId = _redemptionUser.LocationId,
+                                    Phone = item.Phone,
+                                    IsActive = true,
+                                    CreatedDate = DateTime.Now,
+                                    Id = Guid.NewGuid(),
+                                    //IsSuper = item.IsSuper,
+                                    LastLogin=DateTime.Now,
+                                    
+                                };
+                                context.AppUsers.Add(newUser);
+
+                            //}
+
+
+
+                        }
+
+                    }
+                    context.SaveChanges();
                     return users;
                 }
 

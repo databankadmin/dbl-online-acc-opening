@@ -103,6 +103,42 @@
         <AssociationConnector Association="DBLAccountOpeningModel.FK_ForgottenAccountDetails_ForgottenPasswordStatus" />
         <EntityTypeShape EntityType="DBLAccountOpeningModel.AccountEditRequest" Width="1.5" PointX="16.25" PointY="19.75" />
         <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountEditRequest_Account" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.City" Width="1.5" PointX="0.75" PointY="19.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Occupation" Width="1.5" PointX="18.75" PointY="19.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Relationship" Width="1.5" PointX="2.75" PointY="20.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.AggregatedCounter" Width="1.5" PointX="20.75" PointY="16.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Hash" Width="1.5" PointX="20.75" PointY="19.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Job" Width="1.5" PointX="5.75" PointY="21.125" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.JobParameter" Width="1.5" PointX="8" PointY="20.125" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.JobQueue" Width="1.5" PointX="21.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.List" Width="1.5" PointX="10.75" PointY="22.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Schema" Width="1.5" PointX="16.75" PointY="14.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Server" Width="1.5" PointX="22.75" PointY="15.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Set" Width="1.5" PointX="22.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.State" Width="1.5" PointX="8" PointY="22.625" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Counter" Width="1.5" PointX="18.75" PointY="22.75" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_HangFire_JobParameter_Job" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_HangFire_State_Job" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.SourceOfFund" Width="1.5" PointX="18.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.TopUpOption" Width="1.5" PointX="21.75" PointY="22.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.WithdrawalOption" Width="1.5" PointX="0.75" PointY="23.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.AccountExpectedActivity" Width="1.5" PointX="25" PointY="13.625" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_Account" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_TopUpOptions" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_WithdrawalOptions" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.Gender" Width="1.5" PointX="24.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.AccountBeneficiary" Width="1.5" PointX="26.625" PointY="5.5" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Account" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Country" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Country_Residence" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Gender" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_IDCardType" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_MaritalStatus" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Title" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.AccountCheckList" Width="1.5" PointX="25.25" PointY="18.375" />
+        <EntityTypeShape EntityType="DBLAccountOpeningModel.CheckListItem" Width="1.5" PointX="23" PointY="25.625" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountCheckList_Account" />
+        <AssociationConnector Association="DBLAccountOpeningModel.FK_AccountCheckList_CheckListItem" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

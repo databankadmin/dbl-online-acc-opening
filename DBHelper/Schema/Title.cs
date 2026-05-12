@@ -19,6 +19,7 @@ namespace DBHelper.Schema
         {
             this.AccountInsTradingContacts = new HashSet<AccountInsTradingContact>();
             this.AccountMembers = new HashSet<AccountMember>();
+            this.AccountBeneficiaries = new HashSet<AccountBeneficiary>();
         }
     
         public int Id { get; set; }
@@ -28,5 +29,7 @@ namespace DBHelper.Schema
         public virtual ICollection<AccountInsTradingContact> AccountInsTradingContacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountMember> AccountMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountBeneficiary> AccountBeneficiaries { get; set; }
     }
 }

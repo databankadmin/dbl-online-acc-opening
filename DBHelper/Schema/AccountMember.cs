@@ -54,6 +54,13 @@ namespace DBHelper.Schema
         public string IdValidationBy { get; set; }
         public string IdValidationMode { get; set; }
         public string ManualValidationComment { get; set; }
+        public string ResidentPermitNumber { get; set; }
+        public string ResidentPermitNumberPlaceOfIssue { get; set; }
+        public string ResidentPermitNumberIssueDate { get; set; }
+        public string ResidentPermitNumberExpiryDate { get; set; }
+        public string Profession { get; set; }
+        public string GhanaCardNo { get; set; }
+        public string ProfessionalLicenceNumber { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Country Country { get; set; }

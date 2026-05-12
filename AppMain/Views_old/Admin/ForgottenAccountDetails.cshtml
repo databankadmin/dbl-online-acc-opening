@@ -1,0 +1,67 @@
+﻿@model DBHelper.Schema.ForgottenAccountDetail
+ @using DBHelper.Schema
+
+@{
+    ViewBag.Title = "Forgotten Account Details";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    var context = new DBLAccountOpeningContext();
+    var status = context.ForgottenPasswordStatus.Find(Model.StatusId);
+}
+
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Forgotten Account Details | @Model.Name
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        <dt>Name</dt>
+                        <dd>@Model.Name</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Email</dt>
+                        <dd>@Model.Email</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Phone Number</dt>
+                        <dd>@Model.Phone</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        <dt>Address</dt>
+                        <dd>@Model.Address</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Submitted On</dt>
+                        <dd>@Model.CreatedDate</dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Status</dt>
+                        <dd>@status.Name</dd>
+                    </dl>
+                </div>
+
+
+            </div>
+            <h5>Response</h5>
+            <div class="row">
+                @Html.Raw(Model.Response)
+            </div>
+            </div>
+        </div>
+    </div>
+

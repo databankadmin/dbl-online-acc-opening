@@ -1,9 +1,11 @@
 ﻿@using DBHelper.Schema
 @using AppUtils
+@using AppModels
 @{ 
     Layout = null;
     var context = new DBLAccountOpeningContext();
     var settings = Utilities.GetAppSettings();
+    var user = Utilities.GetSessionUser() as UserModel;
 
 }
 
@@ -23,7 +25,7 @@
     <link rel="icon" href="~/images/databank.png" type="image/x-icon">
 
     <link rel="stylesheet" href="~/wizardFiles/css/style.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     @*<script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -66,18 +68,35 @@
     <script src="~/signoTec/STPadServerLib-3.2.0.js"></script>
 </head>
 
-<body  onload="onMainWindowLoad();" onbeforeunload="onMainWindowBeforeUnload();">
+<body onload="onMainWindowLoad();" onbeforeunload="onMainWindowBeforeUnload();">
     @*@Html.Partial("~/Views/Partials/_header.cshtml")*@
     <div class="main" style="padding:0;">
 
         <div class="container">
             <img src="~/Images/brokerage_header.jpg" />
+            @{
+                if (user != null)
+                {
+                    <p style="text-align:right; margin-right:10%; font-size:16px; font-weight:bold">
+                        <i class="fa fa-user"></i>
+                        @user.Fullname
+                    </p>
+
+                }
+            }
 
             <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data" action="@Url.Action("Initiate")">
+                <input type="hidden" name="passportPhotosList" id="passportPhotosList" value="" />
+                <input type="hidden" name="residenceList" id="residenceList" value="" />
+                <input type="hidden" name="businessDocsList" id="businessDocsList" value="" />
+
                 <div>
 
                     <h3>Databank Brokerage Form</h3>
                     @{
+                        @*@Html.Partial("~/Views/Partials/_fileUploads.cshtml")
+                            @Html.Partial("~/Views/Partials/_csdForm.cshtml")*@
+
                         if (MvcApplication.AccountType <= 3)
                         {
                             //single, joint or itf
@@ -243,7 +262,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-   
+
 
 
 
@@ -273,7 +292,8 @@
     <script src="~/wizardFiles/vendor/nouislider/nouislider.min.js"></script>
     <script src="~/wizardFiles/vendor/wnumb/wNumb.js"></script>
     <script src="~/wizardFiles/js/main.js"></script>
-    <script src="~/Scripts/dropZoneInit.js"></script>
+    @*<script src="~/Scripts/dropZoneInit3.js"></script>*@
+    <script src="~/Scripts/dropZoneInit4.js"></script>
 
     <style type="text/css">
         select {
@@ -331,7 +351,8 @@
 
         #csd-image-div, #firstApplicantIdPhoto, #jointApplicantIdPhoto, #itfApplicantIdPhoto,
         #firstJointItfAuthorisedPerson, #instAuthorisedOfficer1PhotoId,
-        #instAuthorisedOfficer2PhotoId, #firstApplicantSignature, #jointApplicantSignature {
+        #instAuthorisedOfficer2PhotoId, #instAuthorisedOfficer3PhotoId, #instAuthorisedOfficer4PhotoId, #instAuthorisedOfficer5PhotoId,
+        #firstApplicantSignature, #jointApplicantSignature {
             width: 250px;
             height: 200px;
             border: 2px dashed #0087f7;
@@ -471,6 +492,36 @@
                 }
             });
 
+            $("#intAuthorisedOfficer3CountryId").change(function () {
+                val = $("#intAuthorisedOfficer3CountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('intAuthorisedOfficer3IDType')
+                }
+                else {
+                    setDropDownValues('intAuthorisedOfficer3IDType', intAuthorisedOfficer3IDTypeArr)
+                }
+            });
+
+            $("#intAuthorisedOfficer4CountryId").change(function () {
+                val = $("#intAuthorisedOfficer4CountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('intAuthorisedOfficer4IDType')
+                }
+                else {
+                    setDropDownValues('intAuthorisedOfficer4IDType', intAuthorisedOfficer4IDTypeArr)
+                }
+            });
+
+            $("#intAuthorisedOfficer5CountryId").change(function () {
+                val = $("#intAuthorisedOfficer5CountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('intAuthorisedOfficer5IDType')
+                }
+                else {
+                    setDropDownValues('intAuthorisedOfficer5IDType', intAuthorisedOfficer5IDTypeArr)
+                }
+            });
+
         });
 
 
@@ -557,7 +608,7 @@
                 width: 1000,
                 height: 700,
                 autoOpen: false,
-                modal:true,
+                modal: true,
                 show: {
                     effect: "blind",
                     duration: 300
@@ -571,27 +622,6 @@
             $("#signDialog").dialog("open");
 
         }
-
-        $(document).ready(function () {
-            $("#signup-form :input").prop("disabled", true);
-            $("#dialog").dialog({
-                width: 800,
-                height: 600,
-                autoOpen: false,
-                show: {
-                    effect: "blind",
-                    duration: 300
-                },
-                hide: {
-                    effect: "explode",
-                    duration: 1000
-                }
-            });
-
-            $("#dialog").dialog("open");
-            $("#signDialog").css('display', 'none');
-        });
-
 
 
 
@@ -638,11 +668,74 @@
         });
     </script>
 
+    @{
+        if (user == null)
+        {
+            <script type="text/javascript">
+                $("#signup-form :input").prop("disabled", true);
+                $("#dialog").dialog({
+                    width: 800,
+                    height: 600,
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 300
+                    },
+                    hide: {
+                        effect: "explode",
+                        duration: 1000
+                    }
+                });
+
+                $("#dialog").dialog("open");
+                $("#signDialog").css('display', 'none');
+
+            </script>
+        }
+        else
+        {
+            <script>
+                hasAnsweredModal = true;
+                $("#dialog").dialog("close");
+                $("#signup-form :input").removeAttr("disabled");
+
+            </script>
+        }
+    }
 
 
+
+    <style type="text/css">
+        #firstApplicantOccupation, #instructionsEmploymentDetailsCurrentOccupation, #instructionsEmploymentDetailsPreviousOccupation, #jointApplicantOccupation,
+        #authorisedPersonRelation, #nextOfKin1Relation, #nextOfKin2Relation {
+            width: 100%;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        function countryOfOriginChanged(selectVal, ctrlDiv, txtFocus) {
+            if (parseInt(selectVal) != 81) {
+                $("#" + ctrlDiv).slideDown();
+                $("#" + txtFocus).focus();
+            }
+            else {
+                $("#" + ctrlDiv).slideUp();
+            }
+        }
+        function titleChanged(val, ctrl) {
+            if (parseInt(val) === 7) {
+                $("#" + ctrl).slideDown();
+                $("#" + ctrl).focus();
+            }
+            else {
+                $("#" + ctrl).slideUp();
+                $("#" + ctrl).val("");
+            }
+        }
+    </script>
 
 </body>
-
 
 
 </html>

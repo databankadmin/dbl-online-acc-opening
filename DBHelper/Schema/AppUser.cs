@@ -23,6 +23,7 @@ namespace DBHelper.Schema
         public bool IsActive { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> LastLogin { get; set; }
+        public string SignatureImg { get; set; }
     
         public virtual Role Role { get; set; }
     }

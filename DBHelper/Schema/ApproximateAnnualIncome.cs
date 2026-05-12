@@ -23,6 +23,7 @@ namespace DBHelper.Schema
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public string SoftTechCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountFinancialInvestmentRiskProfile> AccountFinancialInvestmentRiskProfiles { get; set; }

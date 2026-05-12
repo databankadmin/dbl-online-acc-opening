@@ -1,0 +1,2052 @@
+﻿@using AppModels
+@using AppUtils
+@using AppMain.Providers
+
+
+@model AppModels.AccountBasicModel
+@{
+    ViewBag.Title = "Applicant Profile | " + Model.AccountName;
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    Guid applicationId = Guid.Parse(ViewBag.applicationId.ToString());
+
+    var accountAuthorisedPersons = Utilities.GetAccountAuthorisedPersons(applicationId);
+    var accountETI = Utilities.GetAccountETI(applicationId);
+    var accountUploads = Utilities.GetAccountFilesUploads(applicationId);
+    var accountFinancialInvestmentRiskProfile = Utilities.GetAccountInvestmentRiskProfile(applicationId);
+    var accountCustodyDetails = Utilities.GetAccountCustodyDetails(applicationId);
+    var accountTradingContacts = Utilities.GetAccountTradingContract(applicationId);
+    var accountInstructionEmploymentDetails = Utilities.GetAccountInstructionEmploymentDetailModel(applicationId);
+    var accountSignatories = Utilities.GetAccountSignatories(applicationId);
+    var accountMembers = Utilities.GetAccountMembers(applicationId);
+    var accountNextOfKins = Utilities.GetAccountNextOfKins(applicationId);
+    var accountSettlementDetails = Utilities.GetAccountSettlementDetail(applicationId);
+    var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
+    var context = new DBHelper.Schema.DBLAccountOpeningContext();
+    // var accountActivity = context.ExpectedAccountActivities.Find(Model.ExpectedAccountActivityId.Value);
+    // var acc = context.Accounts.Find(Model.Id);
+    var checkListItems = context.AccountCheckLists.Where(x => x.AccountId == applicationId);
+
+    bool allowCSDFormGenerate = string.IsNullOrEmpty(ViewBag.staffSign) ? false : true;
+}
+<script src="~/Scripts/appProfile.js"></script>
+
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<style type="text/css">
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #fff;
+        background-color: #00a65a;
+    }
+
+    th.theader {
+        color: #fff;
+        background-color: #00a65a !important;
+        font-size: 16px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        width: 100%;
+    }
+</style>
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Application Profile | @Model.AccountName |
+                @{
+                    if (Model.StatusId == 1)
+                    {
+                        <span class="badge badge-info">@Model.StatusName</span>
+                    }
+                    else if (Model.StatusId == 2)
+                    {
+                        <span class="badge badge-success">@Model.StatusName</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">@Model.StatusName</span>
+                    }
+
+                    if (!string.IsNullOrEmpty(Model.BackConnectAccountNumber))
+                    {
+                        <span> | @Model.BackConnectAccountNumber</span>
+                    }
+                }
+
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <ul class="nav nav-pills" id="myTab">
+                <li class="nav-item"><a class="nav-link active" href="#basic" data-toggle="tab">Basic Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#files" data-toggle="tab">File Uploads</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="#aml" data-toggle="tab">AML Profile</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="#eti" data-toggle="tab">Email Indemnity</a></li>
+                @{
+                    if (checkListItems != null)
+                    {
+                        <li class="nav-item"><a class="nav-link" href="#chcklist" data-toggle="tab">Account Check List</a></li>
+
+                    }
+                }
+
+            </ul>
+
+
+            <div class="tab-content">
+                <br />
+                <div class="tab-pane active" id="basic">
+
+                    <div class="col-col-12 invoice-col">
+                        @{
+                            if (Model.AccountTypeId <= 3)
+                            {
+                                //single, joint or institutional
+                                var firstApplicant = accountMembers.FirstOrDefault();
+
+                                <div class="table-responsive">
+                                    <table class="table" style="width:100%;">
+                                        <tr>
+                                            <th colspan="1">Account Type</th>
+                                            <td>@Model.AccountTypeName</td>
+
+                                            <th>Investment Type</th>
+                                            <td colspan="1">@Model.InvestmentTypeName</td>
+
+                                            <th>Created By</th>
+                                            <td>@Model.CreatedBy</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th colspan="2">Expected Account Activity</th>
+                                            <td colspan="2">@Model.ExpectedAccountActivityName</td>
+                                            <th>TIN #</th>
+                                            <td>@Model.TIN</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="theader" colspan="6">First Applicant</th>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Fullname</th>
+                                            <td colspan="4">@firstApplicant.TitleName @firstApplicant.Fname @firstApplicant.Othername @firstApplicant.Lname</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Gender</th>
+                                            <td>@firstApplicant.Gender</td>
+
+                                            <th>Nationality</th>
+                                            <td>@firstApplicant.NationalityName</td>
+
+                                            <th>Date of Birth</th>
+                                            <td>@firstApplicant.DOB</td>
+                                        </tr>
+                                        <tr>
+
+                                            <th>Place of Birth</th>
+                                            <td>@firstApplicant.PlaceOfBirth</td>
+                                            <th>Marital Status</th>
+                                            <td>@firstApplicant.MaritalStatusName</td>
+
+                                            <th>Mothers maiden name</th>
+                                            <td>@firstApplicant.MothersMaidenName</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            @{
+                                                if (!string.IsNullOrEmpty(firstApplicant.MaidenName))
+                                                {
+                                                    <th>Maiden name</th>
+                                                    <td>@firstApplicant.MaidenName</td>
+                                                }
+                                                <th>Residential Address</th>
+                                                <td colspan="3">@firstApplicant.ResidentialAddressFull</td>
+                                            }
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>City</th>
+                                            <td>@firstApplicant.ResidentialCity</td>
+                                            <th>Zip Code/GhanaPost Code</th>
+                                            <td>@firstApplicant.ResidentialZipCode</td>
+
+
+                                            <th>Country</th>
+                                            <td>@firstApplicant.ResidentialCountryName</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mailing Address</th>
+                                            <td>@firstApplicant.MailingAddressFull</td>
+                                            <th>Applicable Suffix</th>
+                                            <td>@firstApplicant.SelectWhereApplicableName</td>
+                                            <th>Telephone</th>
+                                            <td>@firstApplicant.Telephone</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <th>Mobile</th>
+                                            <td>@firstApplicant.Mobile</td>
+                                            <th>Email</th>
+                                            <td>@firstApplicant.Email</td>
+                                            <th>Occupation</th>
+                                            <td>@firstApplicant.Occupation</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>ID Type</th>
+                                            <td>@firstApplicant.IdTypeName</td>
+                                            <th>ID Number</th>
+                                            <td>@firstApplicant.IdNumber</td>
+                                            <th>Issuing Authority </th>
+                                            <td>@firstApplicant.IssuingAuthority</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>ID Issue Date</th>
+                                            <td>@firstApplicant.IdCardIssueDate</td>
+                                            <th>ID Expiry Date</th>
+                                            <td>@firstApplicant.IdCardExpiryDate</td>
+
+                                            <th>ID Verification</th>
+                                            <td id="firstApplicantIdStatus">@firstApplicant.IdCardValidationStatus</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>ID Upload</th>
+                                            <td>
+                                                @{
+
+                                                    if (Utilities.IsFilePdf(firstApplicant.IdPath))
+                                                    {
+                                                        @*string thumbnail = Utilities.GetPdfThumbnail(firstApplicant.IdPath, 150, 120);
+                        <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+                                                        <iframe src="~/Images/@firstApplicant.IdPath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                        <br />
+                                                        <a href="~/Images/@firstApplicant.IdPath" target="_blank">view file</a>
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Images/@firstApplicant.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                    }
+                                                }
+
+
+                                                @{
+                                                    string IdName = firstApplicant.Lname + " " + firstApplicant.Othername + " " + firstApplicant.Fname;
+                                                }
+                                                <a class="btn btn-xs btn-success" href="javascript:idLookUp('@firstApplicant.IdTypeId','@firstApplicant.IdNumber','@IdName','@firstApplicant.Id','AccMember','loader1','@firstApplicant.IdTypeName','firstApplicantIdStatus')">Lookup</a>
+                                                <span id="loader1" style="display:none;">
+                                                    <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                </span>
+
+
+
+                                                @{
+                                                    string downloadFileName = "PhotoId_" + firstApplicant.IdPath;
+                                                }
+                                                <a class="btn btn-success btn-xs" href="~/Images/@firstApplicant.IdPath" title="download file" download="@downloadFileName">
+                                                    <i class="fa fa-download" style="color:white !important"></i>
+                                                </a>
+                                            </td>
+
+                                            <th>Signature Upload</th>
+                                            <td>
+                                                @{
+                                                    if (Utilities.IsFilePdf(firstApplicant.SignaturePath))
+                                                    {
+                                                        <iframe src="~/Images/@firstApplicant.SignaturePath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                        <br />
+                                                        <a href="~/Images/@firstApplicant.SignaturePath" target="_blank">view file</a>
+
+
+                                                        @*string thumbnail = Utilities.GetPdfThumbnail(firstApplicant.SignaturePath, 150, 120);
+                        <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Images/@firstApplicant.SignaturePath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                    }
+                                                }
+
+                                                @{
+                                                    downloadFileName = "signature" + firstApplicant.SignaturePath;
+                                                }
+                                                <a class="btn btn-success btn-xs" href="~/Images/@firstApplicant.SignaturePath" title="download file" download="@downloadFileName">
+                                                    <i class="fa fa-download" style="color:white !important"></i>
+                                                </a>
+
+
+                                            </td>
+                                        </tr>
+
+                                        @{
+                                            if (Model.AccountTypeId == 2)
+                                            {
+                                                var secondApplicant = accountMembers.LastOrDefault();
+                                                <tr>
+                                                    <th class="theader" colspan="6">Joint Applicant</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Fullname</th>
+                                                    <td colspan="4">@secondApplicant.TitleName @secondApplicant.Fname @secondApplicant.Othername @secondApplicant.Lname</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Gender</th>
+                                                    <td>@secondApplicant.Gender</td>
+                                                    <th>Nationality</th>
+                                                    <td>@secondApplicant.NationalityName</td>
+                                                    <th>Date of Birth</th>
+                                                    <td>@secondApplicant.DOB</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Place of Birth</th>
+                                                    <td>@secondApplicant.PlaceOfBirth</td>
+                                                    <th>Mobile</th>
+                                                    <td>@secondApplicant.Mobile</td>
+                                                    <th>Fax</th>
+                                                    <td>@secondApplicant.Fax</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Email</th>
+                                                    <td>@secondApplicant.Email</td>
+                                                    <th>Residential Address</th>
+                                                    <td>@secondApplicant.ResidentialAddressFull</td>
+                                                    <th>Occupation</th>
+                                                    <td>@secondApplicant.Occupation</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>ID Type</th>
+                                                    <td>@secondApplicant.IdTypeName</td>
+                                                    <th>ID Number</th>
+                                                    <td>@secondApplicant.IdNumber</td>
+                                                    <th>Issuing Authority </th>
+                                                    <td>@secondApplicant.IssuingAuthority</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>ID Issue Date</th>
+                                                    <td>@secondApplicant.IdCardIssueDate</td>
+                                                    <th>ID Expiry Date</th>
+                                                    <td>@secondApplicant.IdCardExpiryDate</td>
+
+                                                    <th>ID Verification</th>
+                                                    <td id="secondApplicantIdStatus">@secondApplicant.IdCardValidationStatus</td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <th>ID Upload</th>
+                                                    <td>
+                                                        @{
+                                                            if (Utilities.IsFilePdf(secondApplicant.IdPath))
+                                                            {
+
+                                                                <iframe src="~/Images/@secondApplicant.IdPath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                                <br />
+                                                                <a href="~/Images/@secondApplicant.IdPath" target="_blank">view file</a>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Images/@secondApplicant.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                            }
+                                                        }
+
+                                                        @{
+                                                            IdName = secondApplicant.Lname + " " + secondApplicant.Othername + " " + secondApplicant.Fname;
+                                                        }
+
+                                                        <a class="btn btn-xs btn-success" href="javascript:idLookUp('@secondApplicant.IdTypeId','@secondApplicant.IdNumber','@IdName','@secondApplicant.Id','AccMember','loader2','@secondApplicant.IdTypeName','secondApplicantIdStatus')">Lookup</a>
+                                                        <span id="loader2" style="display:none;">
+                                                            <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                        </span>
+
+
+
+
+
+                                                        @{
+                                                            downloadFileName = "PhotoId_" + secondApplicant.IdPath;
+                                                        }
+                                                        <a class="btn btn-success btn-xs" href="~/Images/@secondApplicant.IdPath" title="download file" download="@downloadFileName">
+                                                            <i class="fa fa-download" style="color:white !important"></i>
+                                                        </a>
+
+                                                    </td>
+
+                                                    <th>Signature Upload</th>
+                                                    <td>
+                                                        @{
+                                                            if (Utilities.IsFilePdf(secondApplicant.SignaturePath))
+                                                            {
+                                                                <iframe src="~/Images/@secondApplicant.SignaturePath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                                <br />
+                                                                <a href="~/Images/@secondApplicant.SignaturePath" target="_blank">view file</a>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Images/@secondApplicant.SignaturePath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                            }
+                                                        }
+
+                                                        @{
+                                                            downloadFileName = "signature" + secondApplicant.SignaturePath;
+                                                        }
+                                                        <a class="btn btn-success btn-xs" href="~/Images/@secondApplicant.SignaturePath" title="download file" download="@downloadFileName">
+                                                            <i class="fa fa-download" style="color:white !important"></i>
+                                                        </a>
+
+
+                                                    </td>
+                                                </tr>
+                                            }
+
+
+
+
+
+
+
+                                            else if (Model.AccountTypeId == 3)
+                                            {
+                                                var itfApplicant = accountMembers.LastOrDefault();
+
+                                                <tr>
+                                                    <th class="theader" colspan="6">ITF Applicant</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Fullname</th>
+                                                    <td colspan="4">@itfApplicant.TitleName @itfApplicant.Fname @itfApplicant.Othername @itfApplicant.Lname</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Gender</th>
+                                                    <td>@itfApplicant.Gender</td>
+                                                    <th>Nationality</th>
+                                                    <td>@itfApplicant.NationalityName</td>
+                                                    <th>Date of Birth</th>
+                                                    <td>@itfApplicant.DOB</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Place of Birth</th>
+                                                    <td colspan="5">@itfApplicant.PlaceOfBirth</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>ID Type</th>
+                                                    <td>@itfApplicant.IdTypeName</td>
+                                                    <th>ID Number</th>
+                                                    <td>@itfApplicant.IdNumber</td>
+                                                    <th>Issuing Authority </th>
+                                                    <td>@itfApplicant.IssuingAuthority</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>ID Issue Date</th>
+                                                    <td>@itfApplicant.IdCardIssueDate</td>
+                                                    <th>ID Expiry Date</th>
+                                                    <td>@itfApplicant.IdCardExpiryDate</td>
+                                                    <th>ID Upload</th>
+                                                    <td>
+                                                        @{
+                                                            if (Utilities.IsFilePdf(itfApplicant.IdPath))
+                                                            {
+                                                                @*string thumbnail = Utilities.GetPdfThumbnail(itfApplicant.SignaturePath, 150, 120);
+                                <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+
+                                                                <iframe src="~/Images/@itfApplicant.SignaturePath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                                <br />
+                                                                <a href="~/Images/@itfApplicant.SignaturePath" target="_blank">view file</a>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Images/@itfApplicant.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                            }
+                                                        }
+
+
+                                                        @{
+                                                            IdName = itfApplicant.Lname + " " + itfApplicant.Othername + " " + itfApplicant.Fname;
+                                                        }
+
+                                                        <a class="btn btn-xs btn-success" href="javascript:idLookUp('@itfApplicant.IdTypeId','@itfApplicant.IdNumber','@IdName','@itfApplicant.Id','AccMember','loader3','@itfApplicant.IdTypeName','itfApplicantIdStatus')">Lookup</a>
+                                                        <span id="loader3" style="display:none;">
+                                                            <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                        </span>
+
+
+
+
+                                                        @{
+                                                            downloadFileName = "PhotoId_" + itfApplicant.IdPath;
+                                                        }
+                                                        <a class="btn btn-success btn-xs" href="~/Images/@itfApplicant.IdPath" title="download file" download="@downloadFileName">
+                                                            <i class="fa fa-download" style="color:white !important"></i>
+                                                        </a>
+
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td colspan="4"></td>
+                                                    <th>ID Verification</th>
+                                                    <td id="itfApplicantIdStatus">@itfApplicant.IdCardValidationStatus</td>
+
+                                                </tr>
+                                            }
+
+
+
+                                            <tr>
+                                                <th class="theader" colspan="6">Next Of Kins Details</th>
+                                            </tr>
+                                            if (accountNextOfKins.Count > 1)
+                                            {
+                                                <tr>
+                                                    <th colspan="6">Next of Kin 1</th>
+                                                </tr>
+                                            }
+
+
+                                            var nextOfKin1 = accountNextOfKins.FirstOrDefault();
+
+                                            if (accountNextOfKins != null && accountNextOfKins.Any())
+                                            {
+
+
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <td>@nextOfKin1.Name</td>
+                                                    <th>Telephone</th>
+                                                    <td>@nextOfKin1.Telephone</td>
+                                                    <th>Mobile</th>
+                                                    <td>@nextOfKin1.Mobile</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Fax</th>
+                                                    <td>@nextOfKin1.Fax</td>
+                                                    <th>Relation to the Acc. Holder</th>
+                                                    <td>@nextOfKin1.RelationToAccount</td>
+                                                    <th>E-mail address</th>
+                                                    <td>@nextOfKin1.Email</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Mailing Address</th>
+                                                    <td colspan="5">@nextOfKin1.MailingAddress</td>
+                                                </tr>
+                                                if (accountNextOfKins.Count > 1)
+                                                {
+                                                    var nextOfKin2 = accountNextOfKins.LastOrDefault();
+                                                    <tr>
+                                                        <th colspan="6">Next of Kin 2</th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <td>@nextOfKin2.Name</td>
+                                                        <th>Telephone</th>
+                                                        <td>@nextOfKin2.Telephone</td>
+                                                        <th>Mobile</th>
+                                                        <td>@nextOfKin2.Mobile</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Fax</th>
+                                                        <td>@nextOfKin2.Fax</td>
+                                                        <th>Relation to the Acc. Holder</th>
+                                                        <td>@nextOfKin2.RelationToAccount</td>
+                                                        <th>E-mail address</th>
+                                                        <td>@nextOfKin2.Email</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Mailing Address</th>
+                                                        <td colspan="5">@nextOfKin2.MailingAddress</td>
+                                                    </tr>
+                                                }
+                                            }
+
+
+
+
+
+                                            if (accountAuthorisedPersons != null)
+                                            {
+
+                                                if (accountAuthorisedPersons != null && accountAuthorisedPersons.Any())
+                                                {
+                                                    <tr>
+                                                        <th class="theader" colspan="6">
+                                                            Authorised Person other than Account Holder(s) to Deal on the Account
+                                                        </th>
+                                                    </tr>
+                                                    var authorisedPerson = accountAuthorisedPersons.FirstOrDefault();
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <td>@authorisedPerson.Name</td>
+                                                        <th>Telephone</th>
+                                                        <td>@authorisedPerson.Tel</td>
+                                                        <th>Mobile</th>
+                                                        <td>@authorisedPerson.Mobile</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Fax</th>
+                                                        <td>@authorisedPerson.Fax</td>
+                                                        <th>Relation to account holder</th>
+                                                        <td>@authorisedPerson.RelationToAccountHolder</td>
+                                                        <th>Email</th>
+                                                        <td>@authorisedPerson.Email</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Mailing address</th>
+                                                        <td>@authorisedPerson.MailingAddress</td>
+                                                        <th>City</th>
+                                                        <td>@authorisedPerson.City</td>
+                                                        <th>Country</th>
+                                                        <td>@authorisedPerson.CountryName</td>
+                                                    </tr>
+
+
+                                                    <tr>
+                                                        <th>ID Type</th>
+                                                        <td>@authorisedPerson.IdTypeName</td>
+                                                        <th>ID Number</th>
+                                                        <td>@authorisedPerson.IdNumber</td>
+                                                        <th>Issuing Authority </th>
+                                                        <td>@authorisedPerson.IdIssueAuthority</td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>ID Issue Date</th>
+                                                        <td>@authorisedPerson.IssueDate</td>
+                                                        <th>ID Expiry Date</th>
+                                                        <td>@authorisedPerson.IDExpiryDate</td>
+                                                        <th>ID Upload</th>
+                                                        <td>
+                                                            @{
+                                                                if (!string.IsNullOrEmpty(authorisedPerson.IdPath))
+                                                                {
+                                                                    if (Utilities.IsFilePdf(authorisedPerson.IdPath))
+                                                                    {
+                                                                        @*string thumbnail = Utilities.GetPdfThumbnail(authorisedPerson.SignaturePath, 150, 120);
+                                        <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+
+                                                                        <iframe src="~/Images/@authorisedPerson.IdPath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                                        <br />
+                                                                        <a href="~/Images/@authorisedPerson.IdPath" target="_blank">view file</a>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <img src="~/Images/@authorisedPerson.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                                    }
+
+
+                                                                    IdName = authorisedPerson.Name;
+
+
+                                                                    <a class="btn btn-xs btn-success" href="javascript:idLookUp('@authorisedPerson.IdType','@authorisedPerson.IdNumber','@IdName','@authorisedPerson.Id','AuthPerson','loader4','@authorisedPerson.IdTypeName','authPersonIndividualIdStatus')">Lookup</a>
+                                                                    <span id="loader4" style="display:none;">
+                                                                        <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                                    </span>
+
+
+
+
+
+
+
+                                                                    downloadFileName = "PhotoId_" + authorisedPerson.IdPath;
+
+                                                                    <a class="btn btn-success btn-xs" href="~/Images/@authorisedPerson.IdPath" title="download file" download="@downloadFileName">
+                                                                        <i class="fa fa-download" style="color:white !important"></i>
+                                                                    </a>
+
+
+                                                                }
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4"></td>
+                                                        <th>ID Verification</th>
+                                                        <td id="authPersonIndividualIdStatus">@authorisedPerson.IdCardValidationStatus</td>
+
+                                                    </tr>
+
+                                                }
+
+                                            }
+
+
+                                            if (accountSettlementDetails != null)
+                                            {
+                                                <tr>
+                                                    <th class="theader" colspan="6">
+                                                        Settlement Details
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Account Name</th>
+                                                    <td>@accountSettlementDetails.AccountName</td>
+                                                    <th>Account Number</th>
+                                                    <td>@accountSettlementDetails.AccountNumber</td>
+                                                    <th>Bank</th>
+                                                    <td>@accountSettlementDetails.BankName</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Branch</th>
+                                                    <td>@accountSettlementDetails.Branch</td>
+                                                    <th>Swift Code</th>
+                                                    <td colspan="3">@accountSettlementDetails.SwiftCode</td>
+                                                </tr>
+                                            }
+
+
+                                            if (accountInstructionEmploymentDetails != null)
+                                            {
+                                                <tr>
+                                                    <th class="theader" colspan="6">
+                                                        Instructions and Employment Details
+
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Mode of Instructions</th>
+                                                    <td>@accountInstructionEmploymentDetails.ModeOfInstructionName</td>
+
+                                                    <th>Mode of Notifications</th>
+                                                    <td>@accountInstructionEmploymentDetails.ModeOfNotificationName</td>
+                                                    <th>Source of Funds</th>
+                                                    <td>@accountInstructionEmploymentDetails.SourceOfIncomeNamesList</td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <th>Employment Status</th>
+                                                    <td>@accountInstructionEmploymentDetails.EmploymentStatusName</td>
+
+                                                    <th>Previous Occupation</th>
+                                                    <td>@accountInstructionEmploymentDetails.PrevOccupation</td>
+                                                    <th>Previous Employer</th>
+                                                    <td>@accountInstructionEmploymentDetails.PrevEmployer</td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <th>Current Occupation</th>
+                                                    <td>@accountInstructionEmploymentDetails.CurrentOccupation</td>
+
+                                                    <th>Current Employer</th>
+                                                    <td>@accountInstructionEmploymentDetails.CurrentEmployer</td>
+                                                    <th>Current Employer Address</th>
+                                                    <td>@accountInstructionEmploymentDetails.CurrentEmployerAddress</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Employment Dates: (From)</th>
+                                                    <td>@accountInstructionEmploymentDetails.EmploymentDateFrom</td>
+
+                                                    <th>Employment Dates: (To)</th>
+                                                    <td>@accountInstructionEmploymentDetails.EmploymentDateTo</td>
+                                                    <th>Total years of employment(in years)</th>
+                                                    <td>@accountInstructionEmploymentDetails.YearsOfEmployment</td>
+
+                                                </tr>
+
+
+                                            }
+                                            if (accountFinancialInvestmentRiskProfile != null)
+                                            {
+                                                <tr>
+                                                    <th class="theader" colspan="6">
+                                                        Financial, Investment and Risk Profile
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Approx. Annual Income(GHS)</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.ApproximateAnnualIncomeName</td>
+                                                    <th>Net Worth(GHS)</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.NetWorthName</td>
+                                                    <th>Investment Horizon</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.InvestmentHorizonName</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Objectives</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.ObjectiveName</td>
+                                                    <th>Investment Knowledge</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.InvestmentKnowledgeName</td>
+                                                    <th>Risk Tolerance</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.RiskToleranceName</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th colspan="2">Online Trading Facility</th>
+                                                    <td>@accountFinancialInvestmentRiskProfile.OnlineTradingFacility</td>
+                                                    <th colspan="2">Frequency of Account Statements</th>
+                                                    <td>@Model.FrequencyOfStatementsName</td>
+
+                                                </tr>
+                                            }
+
+
+                                            <tr>
+                                                <th class="theader" colspan="6">
+                                                    Declaration by Applicant(s)
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2">Convicted in any Court of Law?</th>
+                                                <td>@Model.DeclarationConvictedOfLaw</td>
+                                                <th colspan="2">Details</th>
+                                                <td>@Model.DeclarationConvictedOfLawDetails</td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2">
+                                                    Are you acting as a nominee in trust for others?
+                                                </th>
+                                                <td>@Model.DeclarationActingAsNominee</td>
+
+                                                <th>
+                                                    Name
+                                                </th>
+                                                <td>@Model.DeclarationActingAsNomineeName</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="6">
+                                                    I/We  <b><i> @Model.DeclarationIWe</i></b>
+                                                    hereby declare that I/we am/are not involved in or related to any act of or dealing with the tracking of narcotics and dangerous drugs and proceeds of such tracking. I declare that the information provided in this form is true and complete. I undertake to notify Databank Brokerage Limited immediately in writing of any change in particulars or information provided above.
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <th colspan="2">Number of Signatories</th>
+                                                <td>@Model.SignatureTypeName</td>
+
+                                                @{
+                                                    if (Model.StaffRefCode.HasValue)
+                                                    {
+                                                        <th>Staff Referral</th>
+                                                        <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+
+                            }
+
+                            else
+                            {
+                                //institutional
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Account Type</th>
+                                            <td>@Model.AccountTypeName</td>
+
+                                            <th>Investment Type</th>
+                                            <td>@Model.InvestmentTypeName</td>
+
+
+                                            <th>Expected Account Activity</th>
+                                            <td>@Model.ExpectedAccountActivityName</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Name of Client</th>
+                                            <td>@Model.InstitutionClientName</td>
+                                            <th>Nature of Business</th>
+                                            <td>@Model.InstitutionNatureOfBusiness</td>
+                                            <th>Name of Principal Broker</th>
+                                            <td>@Model.InstitutionalPrincipalBroker</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Country of Incorporation</th>
+                                            <td>@Model.InsstitutionalCountryOfIncorporationName</td>
+                                            <th>Registration Number</th>
+                                            <td>@Model.InstitutionRegistrationNumber</td>
+                                            <th>TIN Number</th>
+                                            <td>@Model.TIN</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mailing Address</th>
+                                            <td colspan="5">@Model.MailingAddressFull</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>City</th>
+                                            <td>@Model.MailingAddressCity</td>
+                                            <th>Country</th>
+                                            <td>@Model.InstMailingAddressCountryIdName</td>
+                                            <th>Street Address</th>
+                                            <td>@Model.StreetAddressFull</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Zip Code/GhanaPost Code</th>
+                                            <td>@Model.InsStreetAddressZipCode</td>
+                                            <th>Telephone</th>
+                                            <td>@Model.InsStreetAddressTel</td>
+                                            <th>Email</th>
+                                            <td>@Model.InsStreetAddressEmail</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Applicable suffix</th>
+                                            <td>@Model.InstCompanyType</td>
+                                            <th>Regional Investment Interest</th>
+                                            <td>@Model.RegionalInvestmentName</td>
+                                            <th>Frequency of Account Statements </th>
+                                            <td>@Model.FrequencyOfStatementsName</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                CUSTODY ACCOUNT DETAILS
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Custodian Name</th>
+                                            <td>@accountCustodyDetails.CustodianName</td>
+                                            <th>Telephone</th>
+                                            <td>@accountCustodyDetails.Telephone</td>
+                                            <th>Address </th>
+                                            <td>@accountCustodyDetails.Address</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Fax</th>
+                                            <td>@accountCustodyDetails.Fax</td>
+                                            <th>Cash Account Number</th>
+                                            <td>@accountCustodyDetails.CashAccountNumber</td>
+                                            <th>Securities Account Number </th>
+                                            <td>@accountCustodyDetails.SecuritiesAccountNumber</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                SETTLEMENT DETAILS
+                                            </th>
+                                        </tr>
+
+                                        <tr>
+                                            <th colspan="2">Correspondent Bank</th>
+                                            <td colspan="2">@accountSettlementDetails.CorrespondentBankName</td>
+                                            <th>Swift / Sort code</th>
+                                            <td>@accountSettlementDetails.CorrespondentBankSwiftCode</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th colspan="2">Intermediary Bank </th>
+                                            <td colspan="2">@accountSettlementDetails.IntermediaryBankName</td>
+
+                                            <th>Swift / Sort code</th>
+                                            <td>@accountSettlementDetails.IntermediaryBankSwiftCode</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Beneficiary Name</th>
+                                            <td>@accountSettlementDetails.NameOfBeneficiary</td>
+                                            <th>BIC</th>
+                                            <td>@accountSettlementDetails.BIC</td>
+                                            <th>Account Number</th>
+                                            <td>@accountSettlementDetails.AccountNumber</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">Margin Trading Option</th>
+                                            <td>@accountSettlementDetails.MarginTradingOption</td>
+
+                                            <th colspan="2">Online Trading Facility</th>
+                                            <td>@accountSettlementDetails.OnlineTradingFacility</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                INSTRUCTIONS AND FINANCIAL DETAILS
+
+                                            </th>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mode of Instructions</th>
+                                            <td>@accountInstructionEmploymentDetails.ModeOfInstructionName</td>
+
+                                            <th>Mode of Notifications</th>
+                                            <td>@accountInstructionEmploymentDetails.ModeOfNotificationName</td>
+                                            <th>Source of Income</th>
+                                            <td>@accountInstructionEmploymentDetails.SourceOfIncomeName</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                Authorised Officer 1
+                                            </th>
+                                        </tr>
+                                        @{
+                                            var authorsedOfficer1 = accountAuthorisedPersons.FirstOrDefault();
+                                            var authorsedOfficer2 = accountAuthorisedPersons.LastOrDefault();
+
+                                        }
+                                        <tr>
+                                            <th>Name</th>
+                                            <td>@authorsedOfficer1.Name</td>
+
+                                            <th>Mobile</th>
+                                            <td>@authorsedOfficer1.Mobile</td>
+
+                                            <th>Telephone(Direct)</th>
+                                            <td>@authorsedOfficer1.Tel</td>
+
+
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>Title</th>
+                                            <td>@authorsedOfficer1.Title</td>
+
+                                            <th>Fax</th>
+                                            <td>@authorsedOfficer1.Fax</td>
+
+
+
+                                            <th>Email</th>
+                                            <td>@authorsedOfficer1.Email</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th>Relation to Company</th>
+                                            <td>@authorsedOfficer1.RelationToAccountHolder</td>
+
+                                            <th>Street Address</th>
+                                            <td>@authorsedOfficer1.StreetAddress</td>
+
+                                            <th>City</th>
+                                            <td>@authorsedOfficer1.City</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th>Zip code/GhanaPost code</th>
+                                            <td>@authorsedOfficer1.ZipCode</td>
+
+                                            <th>Country</th>
+                                            <td>@authorsedOfficer1.CountryName</td>
+                                            <th>ID Type</th>
+                                            <td>@authorsedOfficer1.IdTypeName</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>ID Number</th>
+                                            <td>@authorsedOfficer1.IdNumber</td>
+                                            <th>Issuing Authority</th>
+                                            <td>@authorsedOfficer1.IdIssueAuthority</td>
+                                            <th>Issue Date</th>
+                                            <td>@authorsedOfficer1.IssueDate</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Expiry Date</th>
+                                            <td>@authorsedOfficer1.IDExpiryDate</td>
+
+                                            <th>ID Upload</th>
+                                            <td>
+                                                @{
+                                                    if (Utilities.IsFilePdf(authorsedOfficer1.IdPath))
+                                                    {
+                                                        @*string thumbnail = Utilities.GetPdfThumbnail(authorsedOfficer1.IdPath, 150, 120);
+                                                        <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+                                                        <iframe src="~/Images/@authorsedOfficer1.IdPath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                        <br />
+                                                        <a href="~/Images/@authorsedOfficer1.IdPath" target="_blank">view file</a>
+
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Images/@authorsedOfficer1.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+                                                    }
+                                                }
+
+                                                @{
+                                                    string IdName = authorsedOfficer1.Name;
+
+                                                }
+
+                                                <a class="btn btn-xs btn-success" href="javascript:idLookUp('@authorsedOfficer1.IdType','@authorsedOfficer1.IdNumber','@IdName','@authorsedOfficer1.Id','AuthPerson','loader5','@authorsedOfficer1.IdTypeName','authOfficer1InstIdStatus')">Lookup</a>
+                                                <span id="loader5" style="display:none;">
+                                                    <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                </span>
+
+
+
+                                                @{
+                                                    string downloadFileName = "PhotoId_" + authorsedOfficer1.IdPath;
+                                                }
+                                                <a class="btn btn-success btn-xs" href="~/Images/@authorsedOfficer1.IdPath" title="download file" download="@downloadFileName">
+                                                    <i class="fa fa-download" style="color:white !important"></i>
+                                                </a>
+
+                                            </td>
+
+                                            <th>ID Verification</th>
+                                            <td id="authOfficer1InstIdStatus">@authorsedOfficer1.IdCardValidationStatus</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                Authorised Officer 2
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <td>@authorsedOfficer2.Name</td>
+
+                                            <th>Mobile</th>
+                                            <td>@authorsedOfficer2.Mobile</td>
+
+                                            <th>Telephone(Direct)</th>
+                                            <td>@authorsedOfficer2.Tel</td>
+
+
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>Title</th>
+                                            <td>@authorsedOfficer2.Title</td>
+
+                                            <th>Fax</th>
+                                            <td>@authorsedOfficer2.Fax</td>
+
+
+
+                                            <th>Email</th>
+                                            <td>@authorsedOfficer2.Email</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th>Relation to Company</th>
+                                            <td>@authorsedOfficer2.RelationToAccountHolder</td>
+
+                                            <th>Street Address</th>
+                                            <td>@authorsedOfficer2.StreetAddress</td>
+
+                                            <th>City</th>
+                                            <td>@authorsedOfficer2.City</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th>Zip code/GhanaPost code</th>
+                                            <td>@authorsedOfficer2.ZipCode</td>
+
+                                            <th>Country</th>
+                                            <td>@authorsedOfficer2.CountryName</td>
+                                            <th>ID Type</th>
+                                            <td>@authorsedOfficer2.IdTypeName</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>ID Number</th>
+                                            <td>@authorsedOfficer2.IdNumber</td>
+                                            <th>Issuing Authority</th>
+                                            <td>@authorsedOfficer2.IdIssueAuthority</td>
+                                            <th>Issue Date</th>
+                                            <td>@authorsedOfficer2.IssueDate</td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Expiry Date</th>
+                                            <td>@authorsedOfficer2.IDExpiryDate</td>
+
+                                            <th>ID Upload</th>
+                                            <td>
+                                                @{
+                                                    if (Utilities.IsFilePdf(authorsedOfficer2.IdPath))
+                                                    {
+                                                        @*string thumbnail = Utilities.GetPdfThumbnail(authorsedOfficer2.IdPath, 150, 120);
+                                                        <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+
+                                                        <iframe src="~/Images/@authorsedOfficer2.IdPath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                        <br />
+                                                        <a href="~/Images/@authorsedOfficer2.IdPath" target="_blank">view file</a>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Images/@authorsedOfficer2.IdPath" style="width:150px; height:120px; border:1px groove" /><br />
+
+                                                    }
+                                                }
+                                                @{
+                                                    IdName = authorsedOfficer2.Name;
+
+                                                }
+
+                                                <a class="btn btn-xs btn-success" href="javascript:idLookUp('@authorsedOfficer2.IdType','@authorsedOfficer2.IdNumber','@IdName','@authorsedOfficer2.Id','AuthPerson','loader6','@authorsedOfficer2.IdTypeName','authOfficer2InstIdStatus')">Lookup</a>
+                                                <span id="loader6" style="display:none;">
+                                                    <img src="~/Images/gifs/3.gif" style="width:20px;height:20px;" />
+                                                </span>
+
+
+
+
+
+
+                                                @{
+                                                    downloadFileName = "PhotoId_" + authorsedOfficer2.IdPath;
+                                                }
+                                                <a class="btn btn-success btn-xs" href="~/Images/@authorsedOfficer2.IdPath" title="download file" download="@downloadFileName">
+                                                    <i class="fa fa-download" style="color:white !important"></i>
+                                                </a>
+
+                                            </td>
+                                            <th>ID Verification</th>
+                                            <td id="authOfficer2InstIdStatus">@authorsedOfficer2.IdCardValidationStatus</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th class="theader" colspan="6">
+                                                Trading Contacts
+                                            </th>
+                                        </tr>
+                                        @{
+                                            var tradingContact1 = accountTradingContacts.FirstOrDefault();
+                                            if (accountTradingContacts.Count() > 1)
+                                            {
+                                                <tr>
+                                                    <th colspan="6">1st Contact</th>
+                                                </tr>
+                                            }
+
+                                        }
+                                        <tr>
+                                            <th>Title</th>
+                                            <td>@tradingContact1.TitleName</td>
+
+                                            <th>Name</th>
+                                            <td>@tradingContact1.Name</td>
+                                            <th>Telephone(direct)</th>
+                                            <td>@tradingContact1.Tel</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mobile</th>
+                                            <td>@tradingContact1.Mobile</td>
+
+                                            <th>Fax</th>
+                                            <td>@tradingContact1.Fax</td>
+                                            <th>Email</th>
+                                            <td>@tradingContact1.Email</td>
+                                        </tr>
+                                        @{
+
+
+                                            if (accountTradingContacts.Count > 1)
+                                            {
+                                                var tradingContact2 = accountTradingContacts.LastOrDefault();
+                                                <tr>
+                                                    <th colspan="6">2nd Contact</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <td>@tradingContact2.TitleName</td>
+
+                                                    <th>Name</th>
+                                                    <td>@tradingContact2.Name</td>
+                                                    <th>Telephone(direct)</th>
+                                                    <td>@tradingContact2.Tel</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th>Mobile</th>
+                                                    <td>@tradingContact2.Mobile</td>
+
+                                                    <th>Fax</th>
+                                                    <td>@tradingContact2.Fax</td>
+                                                    <th>Email</th>
+                                                    <td>@tradingContact2.Email</td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <th class="theader" colspan="6">
+                                                    Signatories and Mandate
+
+                                                </th>
+                                            </tr>
+
+                                            foreach (var item in accountSignatories)
+                                            {
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <td>@item.Name</td>
+
+                                                    <th>Position</th>
+                                                    <td>@item.Position</td>
+                                                    @{
+                                                        if (!string.IsNullOrEmpty(item.SignaturePath))
+                                                        {
+                                                    <td>
+                                                        @{
+                                                            if (Utilities.IsFilePdf(item.SignaturePath))
+                                                            {
+                                                                @*string thumbnail = Utilities.GetPdfThumbnail(item.SignaturePath, 150, 120);
+                                                                <img src="~/Images/@thumbnail" style="width:150px; height:120px; border:1px groove" /><br />*@
+
+
+                                                                <iframe src="~/Images/@item.SignaturePath" style="width:150px; height:120px;" frameborder="0"></iframe>
+                                                                <br />
+                                                                <a href="~/Images/@item.SignaturePath" target="_blank">view file</a>
+
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Images/@item.SignaturePath" style="width:120px; height:70px; border:1px groove" />
+
+                                                            }
+                                                        }
+                                                        @{
+                                                            downloadFileName = "Signature" + item.SignaturePath;
+                                                        }
+                                                        <a class="btn btn-success btn-xs" href="~/Images/@item.SignaturePath" title="download file" download="@downloadFileName">
+                                                            <i class="fa fa-download" style="color:white !important"></i>
+                                                        </a>
+                                                    </td>
+                                                        }
+                                                    }
+
+                                                </tr>
+                                            }
+
+                                            <tr>
+                                                <th colspan="2">Number of Signatories</th>
+                                                <td>@Model.SignatureTypeName</td>
+
+                                                <th>Other Details</th>
+                                                <td>@Model.InstOtherDetails</td>
+
+                                                @{
+                                                    if (Model.StaffRefCode.HasValue)
+                                                    {
+                                                        <th>Staff Referral</th>
+                                                        <td>@Model.StaffRefName (@Model.StaffRefCode)</td>
+                                                    }
+                                                }
+                                            </tr>
+
+                                        }
+
+
+                                    </table>
+                                </div>
+
+
+
+                            }
+                        }
+
+
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Created By</th>
+                                    <td>@Model.CreatedBy</td>
+
+                                    <th>Created Date</th>
+                                    <td>@Model.CreatedDate</td>
+                                    </tr>
+
+
+                                    @{
+                                        if (Model.StatusId == 2)
+                                        {
+                                            <tr>
+                                            <th>Review By</th>
+                                            <td>@Model.SuccessfullyReviewwedByName</td>
+
+                                            <th>Review Date</th>
+                                            <td>@Model.SuccessfulReviewDate</td>
+                                                </tr>
+                                        }
+                                    }
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                    <hr />
+                    <center>
+                        <a class="btn btn-success btn-sm" style="color:white;" href="@Url.Action("DblFormData", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                            <i class="fa fa-file"></i> Generate Pdf
+                        </a>
+
+                        @{
+                            if (allowCSDFormGenerate)
+                            {
+                                <a class="btn btn-primary btn-sm" style="color:white;" href="@Url.Action("GetCSDPDf", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                                    <i class="fa fa-file"></i> Get CSD Pdf
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary btn-sm" style="color:white;" href="#" onclick="javascript:noStaffSignFound()">
+                                    <i class="fa fa-file"></i> Get CSD Pdf
+                                </a>
+                            }
+                        }
+
+
+
+                    </center>
+
+                </div>
+
+                <div class="tab-pane" id="files">
+                    <div class="table-responsive">
+                        <table class="table" style="width:60%;">
+                            <tr>
+                                <th class="theader">Thumbnail</th>
+                                <th class="theader">Type</th>
+                                <th class="theader">Download</th>
+                            </tr>
+
+                            <tr>
+                                @{
+                                    bool isPdf = Utilities.IsFilePdf(Model.CSDFormPath);
+                                    string thumbnailPath = isPdf == true ? "pdf.png" : Model.CSDFormPath;
+                                    string csddownloadFileName = "CSD_Form" + "_" + Model.CSDFormPath;
+                                    <td>
+                                        <a href="~/Images/@Model.CSDFormPath" target="_blank">
+                                            <img src="~/Images/@thumbnailPath" style="width:50px; height:50px;" />
+                                        </a>
+
+                                    </td>
+                                    <td>CSD Form</td>
+
+                                    <td>
+                                        <a href="~/Images/@Model.CSDFormPath" title="download file" download="@csddownloadFileName">
+                                            <i class="fa fa-download fa-2x" style="color:#00a65a !important"></i>
+                                        </a>
+                                    </td>
+                                }
+                            </tr>
+
+                            @{
+                                foreach (var item in accountUploads)
+                                {
+                                    isPdf = Utilities.IsFilePdf(item.Path);
+                                    thumbnailPath = isPdf == true ? "pdf.png" : item.Path;
+                                    string downloadFileName = item.FileUploadTypeName.Replace(" ", "_") + "_" + item.Path;
+                                    <tr>
+                                        <td>
+                                            <a href="~/Images/@item.Path" target="_blank">
+                                                <img src="~/Images/@thumbnailPath" style="width:50px; height:50px;" />
+                                            </a>
+
+                                        </td>
+                                        <td>@item.FileUploadTypeName</td>
+
+                                        <td>
+                                            <a href="~/Images/@item.Path" title="download file" download="@downloadFileName">
+                                                <i class="fa fa-download fa-2x" style="color:#00a65a !important"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="aml">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <th>Question</th>
+                                <th>Response</th>
+                                <th>Remark</th>
+                                <th>Rating</th>
+
+                            </tr>
+                            @{
+                                foreach (var item in accountAmlResponses)
+                                {
+                                    <tr>
+                                        <td>@item.QuestionText</td>
+                                        <td>@item.YesNo</td>
+                                        <td>@item.Remark</td>
+                                        <td>@item.RatingValueTxt</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td></td>
+                                    <th colspan="2">TOTAL AML SCORE </th>
+                                    <th style="border-bottom:double;">@accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue).ToString("N2")</th>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <th colspan="2">AML RATING</th>
+                                    <th style="border-bottom:double">
+                                        @Utilities.GetAMLRating(accountAmlResponses.Where(x => x.RatingValue > 0).Sum(x => x.RatingValue))
+
+                                    </th>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+                    <center>
+                        <a class="btn btn-success btn-sm" style="color:white;" href="@Url.Action("AmlFormData", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                            <i class="fa fa-file"></i> Generate Pdf
+                        </a>
+                        @{
+                            if (allowCSDFormGenerate)
+                            {
+                                <a class="btn btn-primary btn-sm" style="color:white;" href="@Url.Action("GetCSDPDf", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                                    <i class="fa fa-file"></i> Get CSD Pdf
+                                </a>
+
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary btn-sm" style="color:white;" href="#" onclick="javascript:noStaffSignFound()">
+                                    <i class="fa fa-file"></i> Get CSD Pdf
+                                </a>
+                            }
+                        }
+
+
+
+
+
+                    </center>
+                </div>
+
+
+                <div class="tab-pane" id="eti">
+
+                    <fieldset>
+                        @{
+                            if (accountETI == null)
+                            {
+                                accountETI = new AccountETIModel
+                                {
+                                    Text1 = "Text 1",
+                                    Text2 = "Text 2",
+                                    Text3 = "Text 3",
+                                    Text4 = "Text 4"
+
+                                };
+                            }
+                        }
+                        <br />
+                        <div class="fieldset-content" style="text-align:inherit;font-size:18px;">
+
+                            I / We, <input readonly type="text" style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text1" />, the undersigned,<br /><br />
+                            here acting in the capacity of <input readonly type="text" style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text2" /<br /> <br />,
+                            authorise and instruct Databank Brokerage Limited to execute within the earliest possible time, the
+                            instructions which I am / we are likely to transmit by fax, telephone and e-mail, with regard to securities
+                            transactions generally, in the name of <input type="text" readonly style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text3" / unless
+                            otherwise indicated, pending receipt or not
+                            of my / our original written conrmation, which when issued by me / us will be annotated with “Instructions
+                            already given by telephone / e-mail or fax.
+                            <br />
+                            <br />
+                            I am / We are however perfectly aware of inherent risks there may be in transmission of instructions by fax,
+                            telephone and e-mail, such as, but not limited to, delays and errors in transmission, incomprehension,
+                            absence of condentiality, transmission by unauthorised persons and loss caused thereby, and agree to
+                            bear the consequences thereof.
+                            <br />
+                            <br />
+                            In consideration of your agreeing to carry out my / our instructions by such means as aforesaid, I / we, the
+                            undersigned, here acting in the capacity of <input type="text" readonly style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text4" / ,
+                            undertake:
+                            <br /><br />
+                            <ul style="list-style-type:disc">
+                                <li>to hold you or any of your agents blameless in the execution of such instructions;</li>
+                                <li>not to enter any action against you (and in so far as need be); and</li>
+                                <li>
+                                    to indemnify you for all losses and all actions, proceedings and demands that might be entered or made
+                                    against you by any third party as a result of your complying with instructions transmitted by the above
+                                    means, as well as for fees, costs and expenses which you might incur in relation to such actions,
+                                    proceedings or demands.
+
+                                </li>
+                            </ul>
+
+                            <br />
+                            This authorisation is given by me / us to Databank Brokerage Limited and is valid until formal revocation by
+                            written instructions from me / us.
+
+                            <br /><br />
+                            Dated this @DateTime.Now.Date.ToString("dd") day of @DateTime.Now.ToString("MMMM yyyy").
+                            <br />
+                            <br />
+
+                            <table class="table">
+                                <tr>
+                                    <th>Name</th>
+                                    <td>@accountETI.Name1</td>
+                                    <th>Email</th>
+                                    <td>@accountETI.Email1</td>
+                                </tr>
+                                @{
+                                    if (Model.AccountTypeId == 4)
+                                    {
+                                        <tr>
+                                            <th>Name</th>
+                                            <td>@accountETI.Name2</td>
+                                            <th>Email</th>
+                                            <td>@accountETI.Email2</td>
+                                        </tr>
+                                    }
+                                }
+
+                            </table>
+
+
+
+
+                        </div>
+
+
+
+                    </fieldset>
+
+                    <center>
+                        <a class="btn btn-success btn-sm" style="color:white;" href="@Url.Action("ETIFormData", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                            <i class="fa fa-file"></i> Generate Pdf
+                        </a>
+
+
+
+                        <a class="btn btn-success btn-sm" style="color:white;" href="@Url.Action("GetCSDPDf", "Pdf", new { _refNumber = Model.Id.ToString().Encrypt() })">
+                            <i class="fa fa-file"></i> Get CSD Pdf
+                        </a>
+
+                    </center>
+                </div>
+
+
+                @{
+                    if (checkListItems != null)
+                    {
+                        <div class="tab-pane" id="chcklist">
+                            @{
+                                foreach (var item in checkListItems)
+                                {
+                                    <p>
+                                        @context.CheckListItems.Find(item.CheckListItemId).Name
+                                    </p>
+                                }
+                            }
+                        </div>
+                    }
+                }
+
+
+
+                @{
+                    if (Model.StatusId == 1)
+                    {
+                        <hr />
+                        <a href="javascript:confirmReview('@Model.Id')" class="btn btn-success">Approve</a>
+                        <a href="#" style="color:white;" onclick="javascript:requestEdit()" class="btn btn-warning">Request Edit</a>
+
+                        <a href="javascript:rejectApplication()" class="btn btn-danger">Reject or Cancel</a>
+                    }
+                }
+
+
+            </div>
+            </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="rejectModal">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <div class="card m-t-15">
+                <div class="auth-box card-block">
+                    <form method="post" action="@Url.Action("CancelOrRejectApplication", "Admin")">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Cancel or Reject Application</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card-body">
+
+                                    <input type="hidden" name="applicationId" id="applicationId" value="@Model.Id" />
+                                    <select name="action" class="form-control" required>
+                                        <option value="">-choose action-</option>
+                                        <option value="C">Cancel</option>
+                                        <option value="R">Reject</option>
+                                    </select>
+                                    <br />
+                                    <textarea name="comments" id="comments" class="form-control" rows="4" required style="margin-bottom:12px;"></textarea>
+
+                                    <label style="font-weight:normal;">
+                                        <input type="checkbox" name="notifyApplicant" id="notifyApplicant">Notify Applicant
+                                    </label>
+
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+
+
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="photoIdVerificationModal">
+    <div class="modal-dialog">
+        <div class="login-card card-block login-card-modal">
+            <div class="card m-t-15">
+                <div class="auth-box card-block">
+
+                    <div id="photoIdVerificationDiv">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="requestEditModal">
+    <form method="post" action="@Url.Action("SendEditRequest", "Admin")" enctype="multipart/form-data" onsubmit="javascript:return checkForm()">
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Request for Edit - List identified errors </h4>
+                    <input type="hidden" name="itemId" id="itemId" value="@Model.Id" />
+                </div>
+                <div class="modal-body">
+                    <textarea name="errorList" id="errorList" class="form-control" placeholder="error list here"></textarea>
+                    <br />
+                    <fieldset>
+                        <legend>Indicate sections of errors</legend>
+                        <ul>
+                            <li>
+                                <label style="font-weight:normal;">
+                                    <input type="checkbox" name="dbl" id="dbl"> DBL Form
+                                </label>
+                            </li>
+                            <li>
+                                <label style="font-weight:normal;">
+                                    <input type="checkbox" name="fileUpload" id="fileUpload"> File Uploads
+                                </label>
+                            </li>
+
+                            <li>
+                                <label style="font-weight:normal;">
+                                    <input type="checkbox" name="aml" id="aml"> AML Form
+                                </label>
+                            </li>
+
+
+                            <li>
+                                <label style="font-weight:normal;">
+                                    <input type="checkbox" name="eti" id="eti"> Electronic Indemnity
+                                </label>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Send Now" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+
+
+
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="manualCardValidationModal">
+
+    <form method="post" action="@Url.Action("ManualCardValidation", "Admin")">
+        @Html.AntiForgeryToken()
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">How was the verification done?</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <p id="msg1"></p>
+                        <p id="msg2"></p>
+                        <input type="hidden" name="applicationId" id="applicationId" value="@Model.Id" />
+                        <input type="hidden" name="recordId" id="recordId" />
+                        <input type="hidden" name="objectType" id="objectType" />
+                        <textarea name="comments" id="comments" class="form-control" rows="6" required></textarea>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="reviewAccModal">
+
+    <form method="post" action="@Url.Action("ReviewSuccessfully", "Admin")">
+        @Html.AntiForgeryToken()
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Check list items</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <p id="msg1"></p>
+                        <p id="msg2"></p>
+                        <input type="hidden" name="_ref" id="_ref" value="@Model.Id" />
+                        <table class="table table-striped table-condensed">
+                            @{
+                                foreach (var item in context.CheckListItems.OrderBy(x => x.Id))
+                                {
+                            <tr>
+                                <td>
+                                    <label style="font-weight:500; font-style:normal;">
+                                        <input type="checkbox" name="checkList[]" value="@item.Id" id="@Guid.NewGuid()" />
+
+                                        @item.Name
+                                    </label>
+                                </td>
+
+
+                            </tr>
+                                    
+                                }
+                            }
+                        </table>
+                      
+                       
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Send</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+
+    </form>
+</div>
+
+
+<div class="modal fade" id="uploadStaffSignatureModal">
+
+    <form method="post" action="@Url.Action("UploadStaffSignature", "Admin")" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Upload your signature file</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <p id="msg1"></p>
+                        <p id="msg2"></p>
+                        <input type="hidden" name="appId" id="appId" value="@applicationId"/>
+<input type="file"  name="staffSign" id="staffSign" required onchange="javascript:validateUploadImageOnly('staffSign')"/>                       
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(function () {
+        //   $(":input").prop("disabled", true);
+    });
+
+    function rejectApplication() {
+        $("#rejectModal").modal();
+
+    }
+    function requestEdit()
+    {
+        $("#requestEditModal").modal();
+        $('#errorList').summernote(
+            {
+                height: 200
+
+            }
+        );
+
+    }
+
+
+    $('#requestEditModal').on('shown.bs.modal',
+        function (e) {
+            $("#errorList").focus();
+            $('#errorList').trigger('focus');
+       //     alert('done');
+
+
+        });
+
+    function checkForm() {
+        if ($('#errorList').summernote('isEmpty')) {
+            alert('error list cannot be empty');
+            $('#errorList').summernote('focus')
+            return false;
+        }
+        return true;
+    }
+    function confirmReview(ref) {
+        $("#reviewAccModal").modal();
+            @*bootbox.dialog(
+                {
+                    title: "Confirm Action",
+                    message: "Mark as Successfully Reviewed?<br/>",
+                    buttons: {
+                        success: {
+                            label: "OK",
+                            className: "btn-success",
+                            callback: function() {
+                                document.location.href = "@Url.Action("ReviewSuccessfully", "Admin")?_ref=" +
+                                    ref;
+                            }
+                        },
+                        main: {
+                            label: "Cancel",
+                            className: "btn-danger",
+                            callback: function() {
+
+                            }
+                        }
+
+                    }
+                });*@
+
+    };
+
+
+    function noStaffSignFound()
+    {
+        bootbox.alert("No staff signature found for your account. Please Upload one now");
+        $("#uploadStaffSignatureModal").modal();
+    }
+</script>

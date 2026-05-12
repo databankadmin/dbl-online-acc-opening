@@ -1,0 +1,174 @@
+﻿@using AppMain.Providers
+@using AppUtils
+@{
+    ViewBag.Title = "File Uploads";
+    Layout = "~/Views/Shared/_Client.cshtml";
+    var applicationId = MvcApplication.TempAccount.Id;
+    var Model = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+    var accountUploads = Utilities.GetAccountFilesUploads(applicationId);
+    var context = new DBHelper.Schema.DBLAccountOpeningContext();
+    var checkStatus = context.Accounts.Find(MvcApplication.TempAccount.Id).StatusId;
+
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    File Uploads
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table" style="width:60%;">
+                        <tr>
+                            <th class="theader">Thumbnail</th>
+                            <th class="theader">Type</th>
+                            <th class="theader">Download</th>
+                            <th class="theader">Replace</th>
+                        </tr>
+
+                        <tr>
+                            @{
+                                bool isPdf = Utilities.IsFilePdf(Model.CSDFormPath);
+                                string thumbnailPath = isPdf == true ? "pdf.png" : Model.CSDFormPath;
+                                string csddownloadFileName = "CSD_Form" + "_" + Model.CSDFormPath;
+                                <td>
+                                    <a href="~/Images/@Model.CSDFormPath" target="_blank">
+                                        <img src="~/Images/@thumbnailPath" style="width:50px; height:50px;" />
+                                    </a>
+
+                                </td>
+                                <td>CSD Form</td>
+
+                                <td>
+                                    <a href="~/Images/@Model.CSDFormPath" title="download file" download="@csddownloadFileName">
+                                        <i class="fa fa-download fa-2x" style="color:#00a65a !important"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="#" onclick="javascript:replaceFile('@Model.Id','0','@Model.CSDFormPath','CSD Form')" class="btn btn-xs btn-success">Replace file</a>
+
+                                </td>
+                            }
+                        </tr>
+
+                        @{
+                            foreach (var item in accountUploads)
+                            {
+                                isPdf = Utilities.IsFilePdf(item.Path);
+                                thumbnailPath = isPdf == true ? "pdf.png" : item.Path;
+                                string downloadFileName = item.FileUploadTypeName.Replace(" ", "_") + "_" + item.Path;
+                                <tr>
+                                    <td>
+                                        <a href="~/Images/@item.Path" target="_blank">
+                                            <img src="~/Images/@thumbnailPath" style="width:50px; height:50px;" />
+                                        </a>
+
+                                    </td>
+                                    <td>@item.FileUploadTypeName</td>
+
+                                    <td>
+                                        <a href="~/Images/@item.Path" title="download file" download="@downloadFileName">
+                                            <i class="fa fa-download fa-2x" style="color:#00a65a !important"></i>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a href="#" onclick="javascript:replaceFile('@Model.Id','@item.TypeId','@item.Path','@item.FileUploadTypeName')" class="btn btn-xs btn-success">Replace file</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="replaceFileModal">
+    <form method="post" action="@Url.Action("ReplaceFile", "Client")" enctype="multipart/form-data" appForm>
+        @Html.AntiForgeryToken()
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Replace File - <span id="fileType"></span> </h4>
+
+                    <input type="hidden" name="applicationId" id="applicationId" value="@Model.Id" />
+                    <input type="hidden" name="typeId" id="typeId" value="" />
+                    <input type="hidden" name="oldPath" id="oldPath" value="" />
+
+
+                </div>
+                <div class="modal-body">
+                    <div id="imgUpload">
+                        <input type="file"  placeholder="new photo" name="imgFile" id="imgFile" onchange="javascript: ValidateUpload('imgFile')" />
+                    </div>
+
+                    <div id="pdfUpload">
+                        <input type="file"  placeholder="new pdf" name="pdfFile" id="pdfFile" onchange="javascript: ValidatePdfFile('pdfFile')" />
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Save File" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+
+
+
+    </form>
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    function replaceFile(applicationId, typeId, oldPath, typeName)
+    {
+        if (Number(@checkStatus)!=5) {
+            bootbox.alert("No changes are allowed after application is submitted");
+            return;
+
+        }
+
+        $("#fileType").text(typeName);
+        $("#typeId").val(typeId);
+        $("#oldPath").val(oldPath);
+
+        if (Number(typeId) === 0)
+        {
+            //csd..pdf only
+            $("#pdfUpload").slideDown();
+            $("#pdfFile").attr("required", "required");
+            $("#imgFile").removeAttr("required");
+            $("#imgUpload").slideUp();
+        }
+
+        else {
+            $("#pdfUpload").slideUp();
+            $("#imgFile").attr("required", "required");
+            $("#pdfFile").removeAttr("required");
+            $("#imgUpload").slideDown();
+        }
+
+        $("#replaceFileModal").modal();
+    }
+</script>
+
+

@@ -1,0 +1,1492 @@
+﻿<style type="text/css" media="all">
+    #log {
+        overflow: auto;
+        max-height: 300px;
+        list-style: none;
+        padding: 0;
+    }
+
+        #log li {
+            border-top: 1px solid #ccc;
+            margin: 0;
+            padding: 10px 0;
+        }
+
+    #status {
+        color: #fff;
+        background: #ccc;
+    }
+
+        #status.fail {
+            background: #c00;
+        }
+
+        #status.success {
+            background: #0c0;
+        }
+
+        #status.offline {
+            background: #c00;
+        }
+
+        #status.online {
+            background: #0c0;
+        }
+
+    #sigCanvas {
+        border: 1px solid #000000;
+    }
+</style>
+
+<p id="status" style="visibility:hidden"></p>
+
+<div style="width:63%; padding-left:1%; display:inline; float:left">
+
+    <input type="hidden" name="img_cert" id="img_cert" value="" />
+    <input type="hidden" name="sign_data" id="sign_data" value="" />
+    <input type="hidden" name="rsa_sign" id="rsa_sign" value="" />
+    <!--
+        HIDDEN BUT IMPORTANT ITEMS
+        -->
+
+    <ul id="log" style="visibility:hidden;height:10px;"></ul>
+    <h3>
+        <input style="margin-left:2%; width:300px; color:white; background-color:#00a65a !important" id="SignBtn" name="SignBtn" type="button" value="Capture Signature" onclick="getSignature();" />
+    </h3>
+    <div style="width:40%;">
+        <h4 style="text-align:left">Live Signature</h4>
+        <canvas id="sigCanvas" width="340" height="150"></canvas>
+        <h4 style="text-align:left;">Signature Image</h4>
+        <img id="Signature_0" alt="Signature 0" src="~/signoTec/White.png" style="min-width:500px;height:150px; border:1px groove" />
+        <br /><br />
+        <input type="button" onclick="javascript:captureCompleted()" value="OK, Proceed" class="btn btn-success" style="background-color:#00a65a !important; color:white;" />
+
+    </div>
+
+
+    <div style="width:30%;">
+        <textarea id="SignData_0" rows="30" cols="40" readonly="readonly" style="visibility:hidden; border-style:hidden; resize:none;"></textarea>
+        <textarea id="RsaSignature_0" rows="30" cols="40" readonly="readonly" style="visibility:hidden; border-style:hidden;resize:none;"></textarea>
+
+    </div>
+</div>
+
+
+<div style="width:35%; padding-left:1%; background-color:#f5f5f5; display:inline; float:right">
+    <h3>Device Properties</h3>
+    <table>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">Pad Type:</p>
+            </td>
+            <td>
+                <p id="PadType_0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">Serial Number:</p>
+            </td>
+            <td>
+                <p id="SerialNumber_0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">Firmware Version:</p>
+            </td>
+            <td>
+                <p id="FirmwareVersion_0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">RSA Support:</p>
+            </td>
+            <td>
+                <p id="RSASupport_0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">Biometry Cert. ID:</p>
+            </td>
+            <td>
+                <p id="biometryCertID_0" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="font-weight:bold;">RSAScheme:</p>
+            </td>
+            <td>
+                <p id="RSAScheme_0" />
+            </td>
+        </tr>
+
+    </table>
+
+
+    <!--
+           HIDDEN BUT IMPORTANT ITEMS
+           -->
+
+
+    <select name="ModeListName" id="ModeList" size="2" onchange="ModeListName_onchange()" style="visibility:hidden;height:2px;margin:0;padding:0">
+        <option selected value="Default">Default mode</option>
+        <option value="API">API mode</option>
+    </select>
+    <select name="PadConnectionTypeListName" id="PadConnectionTypeList" size="2" style="visibility:hidden;height:2px;margin:0;padding:0">
+        <option value="USB" selected>signotec signature HID pad</option>
+        <option value="Serial">signotec signature Serial pad</option>
+    </select>
+    <select id="check_boxes_selectedElements" onchange="check_boxes_selectedElements_onchange()" style="visibility:hidden">
+        <option value="0" selected>0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <p id="signatureColorLabel" style="font-weight:bold;">@*Signature Color:*@</p>
+    <select id="signaturePenColorSelect" style="visibility:hidden;">
+        <option name="signaturePenColorBlack" value="0x00000000" selected>black</option>
+        <option name="signaturePenColorGrey" value="0x007f7f7f">grey</option>
+        <option name="signaturePenColorRed" value="0x000000ff">red</option>
+        <option name="signaturePenColorGreen" value="0x0000ff00">green</option>
+        <option name="signaturePenColorBlue" value="0x00ff0000">blue</option>
+    </select>
+
+</div>
+<script type="text/javascript">
+    function captureCompleted()
+    {
+        $("#" + captureTarget).slideDown();
+        var data = $("#sign_data").val();
+        $("#signDialog").dialog("close");
+        $("#" + captureTarget).attr("src", data);
+        $("#" + captureTargetHiddenField).val(data);
+        clearSignature();
+       
+        var ctx = sigcanvas.getContext("2d");
+        ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+
+        document.getElementById("Signature_0").src = "/signoTec/White.png";
+        document.getElementById("SignData_0").value = "";
+        document.getElementById("RsaSignature_0").value = "";
+
+    }
+</script>
+
+
+
+
+<script type="text/javascript">
+    var padStates = {
+        closed: 0,
+        opened: 1
+    };
+    var padState = padStates.closed;
+
+    var padModes = {
+        Default: 0,
+        API: 1
+    };
+    var padMode = padModes.Default;
+
+    var padTypes = {
+        sigmaUSB: 1,
+        sigmaSerial: 2,
+        zetaUSB: 5,
+        zetaSerial: 6,
+        omegaUSB: 11,
+        omegaSerial: 12,
+        gammaUSB: 15,
+        gammaSerial: 16,
+        deltaUSB: 21,
+        deltaSerial: 22,
+        deltaIP: 23,
+        alphaUSB: 31,
+        alphaSerial: 32,
+        alphaIP: 33
+    }
+    var padType = 0;
+
+    var deviceCapabilities = {
+        HasColorDisplay: 0x00000001,
+        HasBacklight: 0x00000002,
+        SupportsVerticalScrolling: 0x00000004,
+        SupportsHorizontalScrolling: 0x00000008,
+        SupportsPenScrolling: 0x00000010,
+        SupportsServiceMenu: 0x00000020,
+        SupportsRSA: 0x00000040,
+        SupportsContentSigning: 0x00000080,
+        SupportsH2ContentSigning: 0x00000100,
+        CanGenerateSignKey: 0x00000200,
+        CanStoreSignKey: 0x00000400,
+        CanStoreEncryptKey: 0x00000800,
+        CanSignExternalHash: 0x00001000,
+        SupportsRSAPassword: 0x00002000,
+        SupportsSecureModePassword: 0x00004000,
+        Supports4096BitKeys: 0x00008000,
+        HasNFCReader: 0x00010000,
+        SupportsKeyPad: 0x00020000,
+        SupportsKeyPad32: 0x00040000,
+        HasDisplay: 0x00080000,
+        SupportsRSASignPassword: 0x00100000
+    };
+
+    var docHashes = {
+        kSha1: 0,
+        kSha256: 1
+    };
+
+    var cancelButton = -1;
+    var retryButton = -1;
+    var confirmButton = -1;
+    var buttonDiff = 0;
+    var buttonLeft = 0;
+    var buttonTop = 0;
+    var buttonSize = 0;
+    var backgroundImage;
+    var scaleFactorX = 1.0;
+    var scaleFactorY = 1.0;
+
+    var supportsRSA = false;
+    var canStoreEncryptKey = false;
+
+    var field_name = "Client Signature";
+    var custom_text = "Please sign";
+
+    var docHash_type = docHashes.kSha256;
+    var sha1_dochash = "AAECAwQFBgcICQoLDA0ODxAREhM=";
+    var sha256_dochash = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=";
+    var encryption_cert = "MIICqTCCAZGgAwIBAgIBATANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQKEw1EZW1vIHNpZ25vdGVjMB4XDTE1MTAwNzA5NDc1MFoXDTI1MTAwNDA5NDc1MFowGDEWMBQGA1UEChMNRGVtbyBzaWdub3RlYzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOFFpsZexYW28Neznn26Bp9NVCJywFFj1QYXg3DDsaSyr6ubuqXKSC4jkenIGBnom/zKPxwPDtNXuy+nyDYFXYNn87TUdh/51CCr3uk9kR9hvRIzBKwkOx0DGLdCoSGAKDOPHwx1rE0m/SOqYOQh6XFjlybw+KzDZcPvhf2Fq/IFNXHpk8m0YHMAReW8q34CYjk9ZtcIlrcYGTikQherOtYM8CaEUPDd6vdJgosGWEnDeNXDCAIWTFc5ECJm9Hh7a47eF3BG5Pjl1QfOSA8lQBV5eTjQc1n1rWCWULt143nIbN5yCFrn0D8W6+eKJV5urETxWUQ208iqgeU1bIgKSEUCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAt2ax8iwLFoOmlAOZTQcRQtjxseQAhgOTYL/vEP14rPZhF1/gkI9ZzhESdkqR8mHIIl7FnfBg9A2v9ZccC7YgRb4bCXNzv6TIEyz4EYXNkIq8EaaQpvsX4+A5jKIP0PRNZUaLJaDRcQZudd6FMyHxrHtCUTEvORzrgGtRnhBDhAMiSDmQ958t8RhET6HL8C7EnL7f8XBMMFR5sDC60iCu/HeIUkCnx/a2waZ13QvhEIeUBmTRi9gEjZEsGd1iZmgf8OapTjefZMXlbl7CJBymKPJgXFe5mD9/yEMFKNRy5Xfl3cB2gJka4wct6PSIzcQVPaCts6I0V9NfEikXy1bpSA==";
+    var encryption_cert_only_when_empty = "TRUE";
+    var rsa_scheme = STPadServerLibDefault.RsaScheme.PSS;
+
+    var padIndex = 0;
+    var padConnectionType;
+    var sampleRate;
+
+    var wsUri = "wss://local.signotecwebsocket.de:49494";
+
+    var state = document.getElementById("status");
+    var sigcanvas = document.getElementById("sigCanvas");
+
+    const PEN_COLOR_GREY = "0x007f7f7f";
+    const PEN_COLOR_RED = "0x000000ff";
+    const PEN_COLOR_GREEN = "0x0000ff00";
+    const PEN_COLOR_BLUE = "0x00ff0000";
+    const PEN_COLOR_BLACK = "0x00000000";
+
+    const MODE_LIST_DEFAULT = "Default";
+    const MODE_LIST_API = "API";
+
+    if (window.WebSocket === undefined) {
+        state.innerHTML = "sockets not supported " + evt.target.url;
+        state.className = "fail";
+    }
+    else {
+        if (typeof String.prototype.startsWith != "function") {
+            String.prototype.startsWith = function (str) {
+                return this.indexOf(str) == 0;
+            };
+        }
+    }
+
+    function onMainWindowLoad() {
+        STPadServerLibCommons.handleLogging = logMessage;
+        STPadServerLibCommons.createConnection(wsUri, onOpen, onClose, onError);
+
+        clearSignature();
+        check_boxes_selectedElements_onchange();
+        ModeListName_onchange();
+    }
+
+    function onMainWindowBeforeUnload() {
+        STPadServerLibCommons.destroyConnection();
+    }
+
+    function onOpen(evt) {
+        state.className = "success";
+        if ((evt.target === undefined) || (evt.target.url === undefined)) {
+            state.innerHTML = "ActiveX loaded";
+        }
+        else {
+            // state.innerHTML = "Connected to " + evt.target.url;
+        }
+    }
+
+    function onClose(evt) {
+        state.className = "fail";
+        if ((evt.target === undefined) || (evt.target.url === undefined)) {
+            state.innerHTML = "ActiveX unloaded";
+        }
+        else {
+            state.innerHTML = "Disconnected from " + evt.target.url;
+        }
+    }
+
+    function onError(evt) {
+        state.className = "fail";
+        if ((evt.target === undefined) || (evt.target.url === undefined)) {
+            state.innerHTML = "Communication error";
+        }
+        else {
+            state.innerHTML = "Communication error " + evt.target.url;
+        }
+    }
+
+    function logMessage(msg) {
+        log.innerHTML = "<li>" + msg + "</li>";
+        // console.log(msg);
+    }
+
+    /**
+    * Draws a stroke start point into the canvas
+    */
+    function drawStrokeStartPoint(canvasContext, softCoordX, softCoordY) {
+        // open new stroke's path
+        canvasContext.beginPath();
+        canvasContext.arc(softCoordX, softCoordY, 0.1, 0, 2 * Math.PI, true);
+        canvasContext.fill();
+        canvasContext.stroke();
+        canvasContext.moveTo(softCoordX, softCoordY);
+    }
+
+    /**
+    * Draws a stroke point into the canvas
+    */
+    function drawStrokePoint(canvasContext, softCoordX, softCoordY) {
+        // continue after start or not start point
+        canvasContext.lineTo(softCoordX, softCoordY);
+        canvasContext.stroke();
+    }
+
+    /**
+    * The send events
+    */
+    STPadServerLibCommons.handleDisconnect = function (index) {
+        disconnect_send(index);
+    };
+
+    STPadServerLibCommons.handleNextSignaturePoint = function (x, y, p) {
+        signature_point_send(x, y, p);
+    }
+
+    STPadServerLibDefault.handleRetrySignature = function () {
+        signature_retry_send();
+    };
+
+    STPadServerLibDefault.handleConfirmSignature = function () {
+        signature_confirm_send();
+    };
+
+    STPadServerLibDefault.handleCancelSignature = function () {
+        signature_cancel_send();
+    };
+
+    STPadServerLibDefault.handleConfirmSelection = function () {
+        selection_confirm_send();
+    };
+
+    STPadServerLibDefault.handleSelectionChange = function (fieldId, fieldChecked) {
+        selection_change_send(fieldId, fieldChecked);
+    };
+
+    STPadServerLibDefault.handleCancelSelection = function () {
+        selection_cancel_send();
+    };
+
+    STPadServerLibDefault.handleError = function (error_context, return_code, error_description) {
+        error_send(error_context, return_code, error_description);
+    };
+
+    STPadServerLibApi.Sensor.handleHotSpotPressed = function (button) {
+        api_sensor_hot_spot_pressed_send(button);
+    };
+
+    STPadServerLibApi.Sensor.handleDisplayScrollPosChanged = function (xPos, yPos) {
+        api_display_scroll_pos_changed_send(xPos, yPos);
+    };
+
+    // disconnect send begin
+    function disconnect_send(index) {
+        var msg = "The pad (index: " + index + ") has been disconnected.";
+        alert(msg);
+
+        padState = padStates.closed;
+    }
+    // disconnect send end
+
+    // signature point send begin
+    function signature_point_send(x, y, p) {
+        var ctx = sigcanvas.getContext("2d");
+
+        ctx.fillStyle = "#fff";
+
+        switch (document.getElementById("signaturePenColorSelect").value) {
+            case PEN_COLOR_GREY:
+                ctx.strokeStyle = "#7F7F7F";
+                break;
+
+            case PEN_COLOR_RED:
+                ctx.strokeStyle = "#FF0000";
+                break;
+
+            case PEN_COLOR_GREEN:
+                ctx.strokeStyle = "#00FF00";
+                break;
+
+            case PEN_COLOR_BLUE:
+                ctx.strokeStyle = "#0000FF";
+                break;
+
+            case PEN_COLOR_BLACK:
+                ctx.strokeStyle = "#000000";
+                break;
+
+            default:
+                ctx.strokeStyle = "#FF0000";
+                break;
+        }
+
+        ctx.lineWidth = 4.5;
+        ctx.lineCap = "round";
+
+        if (p == 0) {
+            drawStrokeStartPoint(ctx, x * scaleFactorX, y * scaleFactorY);
+        }
+        else {
+            drawStrokePoint(ctx, x * scaleFactorX, y * scaleFactorY);
+        }
+    }
+    // signature point send end
+
+    // signature retry send begin
+    function signature_retry_send() {
+        if (padMode == padModes.Default) {
+            // default mode
+            STPadServerLibDefault.retrySignature()
+                .then(function (value) {
+                    var ctx = sigcanvas.getContext("2d");
+                    ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            STPadServerLibApi.Signature.retry()
+                .then(function (value) {
+                    var ctx = sigcanvas.getContext("2d");
+                    ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    api_close_pad();
+                });
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // signature retry send end
+
+    // signature confirm send begin
+    function signature_confirm_send() {
+        if (padMode == padModes.Default) {
+            // default mode
+            STPadServerLibDefault.confirmSignature()
+                .then(function (value) {
+                    // check if there are enough points for a valid signature
+                    if ((value.countedPoints / sampleRate) <= 0.2) {
+                        alert("The signature is too short. Please sign again!");
+                        return STPadServerLibDefault.retrySignature();
+                    }
+                    if (supportsRSA) {
+                        return STPadServerLibDefault.getSigningCert();
+                    }
+                    else {
+                        return value;
+                    }
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                    if (value.command == "TOKEN_CMD_SIGNATURE_RETRY") {
+                        var ctx = sigcanvas.getContext("2d");
+                        ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                        return value;
+                    }
+                    if (supportsRSA) {
+                        if (value.signingCert !== undefined) {
+                            //  document.getElementById("signatureCert_0").innerHTML = value.signingCert;
+                            $("#img_cert").val(value.signingCert);
+                        }
+                    }
+                    else {
+                        // document.getElementById("signatureCert_0").innerHTML = "none";
+                    }
+                    var getSignatureImageParams = new STPadServerLibDefault.Params.getSignatureImage();
+                    getSignatureImageParams.setFileType(STPadServerLibDefault.FileType.PNG);
+                    getSignatureImageParams.setPenWidth(5);
+                    return STPadServerLibDefault.getSignatureImage(getSignatureImageParams);
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                    if (value.command == "TOKEN_CMD_SIGNATURE_RETRY") {
+                        // just do nothing but returning original promise object
+                        return value;
+                    }
+                    if (value.file !== undefined) {
+                        document.getElementById("Signature_0").src = "data:image/png;base64," + value.file;
+                        $("#sign_data").val("data:image/png;base64," + value.file);
+                    }
+                    var getSignatureDataParams = new STPadServerLibDefault.Params.getSignatureData();
+                    getSignatureDataParams.setRsaScheme(rsa_scheme);
+                    return STPadServerLibDefault.getSignatureData(getSignatureDataParams);
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                    if (value.command == "TOKEN_CMD_SIGNATURE_RETRY") {
+                        // just do nothing but returning original promise object
+                        return value;
+                    }
+                    if (supportsRSA) {
+                        if (value.certId !== undefined) {
+                            document.getElementById("biometryCertID_0").innerHTML = value.certId;
+
+                        }
+                        document.getElementById("RSAScheme_0").innerHTML = rsa_scheme;
+                        if (value.rsaSignature !== undefined) {
+                            document.getElementById("RsaSignature_0").value = value.rsaSignature;
+                            $("#rsa_sign").val(value.rsaSignature);
+                        }
+                    }
+                    else {
+                        document.getElementById("biometryCertID_0").innerHTML = "none";
+                        document.getElementById("RSAScheme_0").innerHTML = "none";
+                        document.getElementById("RsaSignature_0").value = "";
+                    }
+                    if (value.signData !== undefined) {
+                        document.getElementById("SignData_0").value = value.signData;
+                    }
+                    default_close_pad();
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            STPadServerLibApi.Signature.confirm()
+                .then(function (value) {
+                    // check if there are enough points for a valid signature
+                    if ((value.countedPoints / sampleRate) <= 0.2) {
+                        alert("The signature is too short. Please sign again!");
+                        return STPadServerLibApi.Signature.retry();
+                    }
+                    var saveAsStreamExParams = new STPadServerLibApi.Signature.Params.saveAsStreamEx(300, 0, 0, STPadServerLibApi.FileType.PNG, 5, document.getElementById("signaturePenColorSelect").value, 0);
+                    return STPadServerLibApi.Signature.saveAsStreamEx(saveAsStreamExParams);
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                    if (value.command == "TOKEN_CMD_API_SIGNATURE_RETRY") {
+                        var ctx = sigcanvas.getContext("2d");
+                        ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                        return value;
+                    }
+                    if (value.image !== undefined) {
+                        document.getElementById("Signature_0").src = "data:image/png;base64," + value.image;
+                    }
+                    return STPadServerLibApi.Signature.getSignData();
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                    if (value.command == "TOKEN_CMD_API_SIGNATURE_RETRY") {
+                        // just do nothing but returning original promise object
+                        return value;
+                    }
+                    if (value.signData !== undefined) {
+                        document.getElementById("SignData_0").value = value.signData;
+                    }
+                    api_close_pad();
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                }, function (reason) {
+                    error_message(reason);
+                    api_close_pad();
+                });
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // signature confirm send end
+
+    // signature cancel send begin
+    function signature_cancel_send() {
+        if (padMode == padModes.Default) {
+            // default mode
+            STPadServerLibDefault.cancelSignature()
+                .then(function (value) {
+                    var ctx = sigcanvas.getContext("2d");
+                    ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                    default_close_pad();
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            var cancelParams = new STPadServerLibApi.Signature.Params.cancel();
+            cancelParams.setErase(0);
+            STPadServerLibApi.Signature.cancel(cancelParams)
+                .then(function (value) {
+                    var ctx = sigcanvas.getContext("2d");
+                    ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+                    api_close_pad();
+                }, STPadServerLibCommons.defaultReject)
+                .then(function (value) {
+                }, function (reason) {
+                    error_message(reason);
+                    api_close_pad();
+                });
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // signature cancel send end
+
+    // selection confirm send begin
+    function selection_confirm_send() {
+        if (padMode == padModes.Default) {
+            // default mode
+            var status = '';
+            for (i = 1; i <= document.getElementById("check_boxes_selectedElements").value; i++) {
+                status += 'Feld ' + i + ' = ' + document.getElementById("fieldChecked" + i).checked + '\n';
+            }
+            alert(status);
+            signature_start();
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            // do nothing
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // selection confirm send end
+
+    // selection change send begin
+    function selection_change_send(fieldId, fieldChecked) {
+        if (padMode == padModes.Default) {
+            // default mode
+            for (i = 1; i <= document.getElementById("check_boxes_selectedElements").value; i++) {
+                if (document.getElementById("fieldID" + i).value == fieldId) {
+                    if (fieldChecked == "TRUE") {
+                        document.getElementById("fieldChecked" + i).checked = true;
+                    } else {
+                        document.getElementById("fieldChecked" + i).checked = false;
+                    }
+                }
+            }
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            // do nothing
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // selection change send end
+
+    // selection cancel send begin
+    function selection_cancel_send() {
+        if (padMode == padModes.Default) {
+            // default mode
+            var ctx = sigcanvas.getContext("2d");
+            ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+
+            STPadServerLibDefault.cancelSignature()
+                .then(function (value) {
+                    default_close_pad();
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            // do nothing
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // selection cancel send end
+
+    // error send begin
+    function error_send(error_context, return_code, error_description) {
+        var ret = return_code;
+        if (ret < 0) {
+            alert("Failed to confirm the signature. Reason: " + error_description + ", Context: " + error_context);
+        }
+    }
+    // error send end
+
+    // api sensor hot spot pressed send begin
+    function api_sensor_hot_spot_pressed_send(button) {
+        switch (button) {
+            // cancel signing process
+            case cancelButton:
+                signature_cancel_send();
+                break;
+
+            // restart signing process
+            case retryButton:
+                signature_retry_send();
+                break;
+
+            // confirm signing process
+            case confirmButton:
+                signature_confirm_send();
+                break;
+
+            default:
+                alert("unknown button id: " + button);
+        }
+    }
+    // api sensor hot spot pressed send end
+
+    // api display scroll pos changed send begin
+    function api_display_scroll_pos_changed_send(xPos, yPos) {
+        console.log(xPos + "," + yPos);
+    }
+    // api display scroll pos changed send end
+
+    // getSignature begin
+    function getSignature() {
+        //var version;
+
+        //version = "1.0.0.0";
+        //version = "1.0.2.4";
+        //version = "1.7.0.0";
+
+        // set the json interface version
+        //var setInterfaceVersionParams = new STPadServerLibCommons.Params.setInterfaceVersion(version);
+        //STPadServerLibCommons.setInterfaceVersion(setInterfaceVersionParams);
+
+        //reset the pads properties
+        document.getElementById("PadType_0").innerHTML = "";
+        document.getElementById("SerialNumber_0").innerHTML = "";
+        document.getElementById("FirmwareVersion_0").innerHTML = "";
+        document.getElementById("RSASupport_0").innerHTML = "";
+        document.getElementById("biometryCertID_0").innerHTML = "";
+        document.getElementById("RSAScheme_0").innerHTML = "";
+        //  document.getElementById("signatureCert_0").innerHTML = "";
+
+        //delete the previous signature
+        var ctx = sigcanvas.getContext("2d");
+        ctx.clearRect(0, 0, sigcanvas.width, sigcanvas.height);
+
+        document.getElementById("Signature_0").src = "/signoTec/White.png";
+        document.getElementById("SignData_0").value = "";
+        document.getElementById("RsaSignature_0").value = "";
+
+        var padConnectionTypeList = document.getElementById("PadConnectionTypeList");
+        //alert(padConnectionTypeList.selectedIndex);
+        if (padConnectionTypeList.selectedIndex == -1) {
+            //if the pad type is not selected message to user and return
+            alert("Please select a pad type from the list!");
+            padConnectionTypeList.focus();
+            return;
+        }
+
+        if (padConnectionTypeList.selectedIndex == 0) {
+            //search for USB pads
+            padConnectionType = "HID";
+        }
+        else {
+            //search for serial pads
+            padConnectionType = "All";
+        }
+
+        if (padMode == padModes.Default) {
+            // default mode
+            getSignatureDefault();
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            alert('getting api mode...');
+
+            getSignatureAPI();
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // getSignature end
+
+    // getSignatureDefault begin
+    function getSignatureDefault() {
+
+        // search for pads begin
+        var searchForPadsParams = new STPadServerLibDefault.Params.searchForPads();
+        searchForPadsParams.setPadSubset(padConnectionType);
+        STPadServerLibDefault.searchForPads(searchForPadsParams)
+            .then(function (pads) {
+                // alert(pads.foundPads.length);
+                if (pads.foundPads.length == 0) {
+                    alert("No connected pads have been found.");
+                    return Promise.reject("No connected pads have been found.");
+                }
+
+                padType = pads.foundPads[padIndex].type;
+
+                document.getElementById("PadType_0").innerHTML = getReadableType(padType);
+                document.getElementById("SerialNumber_0").innerHTML = pads.foundPads[padIndex].serialNumber;
+                document.getElementById("FirmwareVersion_0").innerHTML = pads.foundPads[padIndex].firmwareVersion;
+
+                if (pads.foundPads[padIndex].capabilities & deviceCapabilities.SupportsRSA) {
+                    supportsRSA = true;
+                } else {
+                    supportsRSA = false;
+                }
+
+                if (pads.foundPads[padIndex].capabilities & deviceCapabilities.CanStoreEncryptKey) {
+                    canStoreEncryptKey = true;
+                } else {
+                    canStoreEncryptKey = false;
+                }
+
+                if (supportsRSA) {
+                    document.getElementById("RSASupport_0").innerHTML = "Yes";
+                }
+                else {
+                    document.getElementById("RSASupport_0").innerHTML = "No";
+                }
+            }, STPadServerLibCommons.defaultReject)
+            // search for pads end
+
+            // open pad begin
+            .then(function (value) {
+                var openPadParams = new STPadServerLibDefault.Params.openPad(padIndex);
+                return STPadServerLibDefault.openPad(openPadParams);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (padInfo) {
+                padState = padStates.opened;
+
+                sigcanvas.width = padInfo.padInfo.displayWidth;
+                sigcanvas.height = padInfo.padInfo.displayHeight;
+
+                //get scale factor from signature resolution to canvas
+                scaleFactorX = padInfo.padInfo.displayWidth / padInfo.padInfo.xResolution;
+                scaleFactorY = padInfo.padInfo.displayHeight / padInfo.padInfo.yResolution;
+
+                //get sample rate
+                sampleRate = padInfo.padInfo.samplingRate;
+
+                //start the signature process
+                selection_dialog();
+            }, STPadServerLibCommons.defaultReject)
+            // open pad end
+
+            .then(function (selection) {
+            }, function (reason) {
+                error_message(reason);
+                default_close_pad();
+            });
+    }
+    // getSignatureDefault end
+
+    // getSignatureAPI begin
+    function getSignatureAPI() {
+
+        // api search for pads begin
+        var setComPortParams = new STPadServerLibApi.Device.Params.setComPort(padConnectionType);
+        STPadServerLibApi.Device.setComPort(setComPortParams)
+            .then(function (value) {
+                return STPadServerLibApi.Device.getCount();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                if (value.countedDevices == 0) {
+                    alert("No connected pads have been found.");
+                    return Promise.reject("No connected pads have been found.");
+                }
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                return STPadServerLibApi.Device.getInfo(new STPadServerLibApi.Device.Params.getInfo(padIndex));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (info) {
+                padType = info.type;
+                document.getElementById("PadType_0").innerHTML = getReadableType(padType);
+                document.getElementById("SerialNumber_0").innerHTML = info.serial;
+                var imageName = getReadableType(padType).split(" ");
+                var padName = imageName[0];
+                switch (padName) {
+                    case "Sigma":
+                        buttonSize = 36;
+                        buttonTop = 2;
+                        break;
+                    case "Zeta":
+                        buttonSize = 36;
+                        buttonTop = 2;
+                        break;
+                    case "Omega":
+                    case "Gamma":
+                    case "Delta":
+                        buttonSize = 48;
+                        buttonTop = 4;
+                        break;
+                    case "Alpha":
+                        buttonSize = 80;
+                        buttonTop = 10;
+                        break;
+                }
+                getBackgroundImage(padName);
+                return STPadServerLibApi.Device.getVersion(new STPadServerLibApi.Device.Params.getVersion(padIndex));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (version) {
+                document.getElementById("FirmwareVersion_0").innerHTML = version.version;
+            }, STPadServerLibCommons.defaultReject)
+            // api search for pads end
+
+            // api device open begin
+            .then(function (value) {
+                var openParams = new STPadServerLibApi.Device.Params.open(padIndex);
+                openParams.setEraseDisplay(true);
+                return STPadServerLibApi.Device.open(openParams);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                padState = padStates.opened;
+                var params = new STPadServerLibApi.Display.Params.configPen(3, document.getElementById("signaturePenColorSelect").value);
+                return STPadServerLibApi.Display.configPen(params);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                return STPadServerLibApi.Display.getWidth();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (width) {
+                sigcanvas.width = width.width;
+                return STPadServerLibApi.Display.getHeight();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (height) {
+                sigcanvas.height = height.height;
+                return STPadServerLibApi.Signature.getResolution();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (resolution) {
+                scaleFactorX = sigcanvas.width / resolution.xResolution;
+                scaleFactorY = sigcanvas.height / resolution.yResolution;
+                return STPadServerLibApi.Sensor.getSampleRateMode();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (mode) {
+                //get sample rate
+                switch (mode.sampleRateMode) {
+                    case 0:
+                        sampleRate = 125;
+                        break;
+                    case 1:
+                        sampleRate = 250;
+                        break;
+                    case 2:
+                        sampleRate = 500;
+                        break;
+                    case 3:
+                        sampleRate = 280;
+                        break;
+                    default:
+                        alert("Failed to get sample rate. Reason: Unexpected sample rate mode: " + mode.sampleRateMode);
+                        return;
+                }
+            }, STPadServerLibCommons.defaultReject)
+            // api device open end
+
+            // api signature start begin
+            .then(function (value) {
+                var displayRotation = 0;
+                return STPadServerLibApi.Display.setRotation(new STPadServerLibApi.Display.Params.setRotation(displayRotation));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                return STPadServerLibApi.Display.getRotation();
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                var displayRotation = value;
+                var params = new STPadServerLibApi.Display.Params.setTarget(1);
+                return STPadServerLibApi.Display.setTarget(params);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                var setImageParams = new STPadServerLibApi.Display.Params.setImage(0, 0, backgroundImage);
+                return STPadServerLibApi.Display.setImage(setImageParams);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                buttonDiff = sigcanvas.width / 3;
+                buttonLeft = (buttonDiff - buttonSize) / 2;
+                return STPadServerLibApi.Sensor.addHotSpot(new STPadServerLibApi.Sensor.Params.addHotSpot(Math.round(buttonLeft), buttonTop, buttonSize, buttonSize));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                cancelButton = value.hotspotId;
+                buttonLeft = buttonLeft + buttonDiff;
+                return STPadServerLibApi.Sensor.addHotSpot(new STPadServerLibApi.Sensor.Params.addHotSpot(Math.round(buttonLeft), buttonTop, buttonSize, buttonSize));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                retryButton = value.hotspotId;
+                buttonLeft = buttonLeft + buttonDiff;
+                return STPadServerLibApi.Sensor.addHotSpot(new STPadServerLibApi.Sensor.Params.addHotSpot(Math.round(buttonLeft), buttonTop, buttonSize, buttonSize));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                confirmButton = value.hotspotId;
+                var top = 0;
+                switch (padType) {
+                    case padTypes.sigmaUSB:
+                    case padTypes.sigmaSerial:
+                        top = 40;
+                        break;
+                    case padTypes.zetaUSB:
+                    case padTypes.zetaSerial:
+                        top = 40;
+                        break;
+                    case padTypes.omegaUSB:
+                    case padTypes.omegaSerial:
+                    case padTypes.gammaUSB:
+                    case padTypes.gammaSerial:
+                    case padTypes.deltaUSB:
+                    case padTypes.deltaSerial:
+                    case padTypes.deltaIP:
+                        top = 56;
+                        break;
+                    case padTypes.alphaUSB:
+                    case padTypes.alphaSerial:
+                    case padTypes.alphaIP:
+                        top = 100;
+                        break;
+                    default:
+                        alert("unkown pad type: " + padType);
+                        return;
+                }
+
+                return STPadServerLibApi.Sensor.setSignRect(new STPadServerLibApi.Sensor.Params.setSignRect(0, top, sigcanvas.width, sigcanvas.height));
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                var left;
+                var top;
+                var width;
+                var height;
+                switch (padType) {
+                    case padTypes.sigmaUSB:
+                    case padTypes.sigmaSerial:
+                        left = 15;
+                        top = 43;
+                        width = 285;
+                        height = 18;
+                        break;
+                    case padTypes.zetaUSB:
+                    case padTypes.zetaSerial:
+                        left = 15;
+                        top = 43;
+                        width = 285;
+                        height = 18;
+                        break;
+                    case padTypes.omegaUSB:
+                    case padTypes.omegaSerial:
+                        left = 40;
+                        top = 86;
+                        width = 570;
+                        height = 40;
+                        break;
+                    case padTypes.gammaUSB:
+                    case padTypes.gammaSerial:
+                        left = 40;
+                        top = 86;
+                        width = 720;
+                        height = 40;
+                        break;
+
+                    case padTypes.deltaUSB:
+                    case padTypes.deltaSerial:
+                    case padTypes.deltaIP:
+                        left = 40;
+                        top = 86;
+                        width = 1200;
+                        height = 50;
+                        break;
+                    case padTypes.alphaUSB:
+                    case padTypes.alphaSerial:
+                    case padTypes.alphaIP:
+                        left = 20;
+                        top = 120;
+                        width = 730;
+                        height = 30;
+                        break;
+                    default:
+                        alert("unkown pad type: " + padType);
+                        return;
+                }
+                var setTextInRectParams = new STPadServerLibApi.Display.Params.setTextInRect(left, top, width, height, STPadServerLibApi.TextAlignment.LEFT, field_name, 0);
+                return STPadServerLibApi.Display.setTextInRect(setTextInRectParams);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (textWidth) {
+                var left;
+                var top;
+                var width;
+                var height;
+                switch (padType) {
+                    case padTypes.sigmaUSB:
+                    case padTypes.sigmaSerial:
+                        left = 15;
+                        top = 110;
+                        width = 265;
+                        height = 18;
+                        break;
+                    case padTypes.zetaUSB:
+                    case padTypes.zetaSerial:
+                        left = 15;
+                        top = 150;
+                        width = 265;
+                        height = 18;
+                        break;
+                    case padTypes.omegaUSB:
+                    case padTypes.omegaSerial:
+                        left = 40;
+                        top = 350;
+                        width = 520;
+                        height = 40;
+                        break;
+                    case padTypes.gammaUSB:
+                    case padTypes.gammaSerial:
+                        left = 40;
+                        top = 350;
+                        width = 670;
+                        height = 40;
+                        break;
+                    case padTypes.deltaUSB:
+                    case padTypes.deltaSerial:
+                    case padTypes.deltaIP:
+                        left = 40;
+                        top = 640;
+                        width = 670;
+                        height = 50;
+                        break;
+                    case padTypes.alphaUSB:
+                    case padTypes.alphaSerial:
+                    case padTypes.alphaIP:
+                        left = 20;
+                        top = 1316;
+                        width = 730;
+                        height = 30;
+                        break;
+                    default:
+                        alert("unkown pad type: " + padType);
+                        return;
+                }
+
+                var setTextInRectParams = new STPadServerLibApi.Display.Params.setTextInRect(left, top, width, height, STPadServerLibApi.TextAlignment.LEFT, custom_text, 0);
+                return STPadServerLibApi.Display.setTextInRect(setTextInRectParams);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                var params = new STPadServerLibApi.Display.Params.setTarget(0);
+                return STPadServerLibApi.Display.setTarget(params);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                var params = new STPadServerLibApi.Display.Params.setImageFromStore(1);
+                return STPadServerLibApi.Display.setImageFromStore(params);
+            }, STPadServerLibCommons.defaultReject)
+            .then(function (value) {
+                return STPadServerLibApi.Signature.start();
+            }, STPadServerLibCommons.defaultReject)
+            // api signature start end
+
+            .then(function (value) {
+            }, function (reason) {
+                error_message(reason);
+                api_close_pad();
+            });
+    }
+    // getSignatureAPI end
+
+    // selection dialog begin
+    function selection_dialog() {
+        if (padMode == padModes.Default) {
+            // default mode
+            var selectedElement = document.getElementById("check_boxes_selectedElements").value;
+            if (selectedElement > 0) {
+                // prepare selection dialog
+                var checkBoxInformation = [];
+                for (var i = 1; i <= selectedElement; i++) {
+                    var box = {};
+                    box.id = document.getElementById("fieldID" + i).value;
+                    box.text = document.getElementById("fieldText" + i).value;
+                    box.checked = document.getElementById("fieldChecked" + i).checked;
+                    box.required = document.getElementById("fieldRequired" + i).checked;
+                    checkBoxInformation[i - 1] = box;
+                }
+
+                var startSelectionDialogParams = new STPadServerLibDefault.Params.startSelectionDialog();
+                startSelectionDialogParams.addCheckboxInformation(checkBoxInformation);
+                STPadServerLibDefault.startSelectionDialog(startSelectionDialogParams)
+                    .then(function (value) {
+                    }, STPadServerLibCommons.defaultReject)
+                    .then(null, function (reason) {
+                        error_message(reason);
+                        default_close_pad();
+                    });
+            } else {
+                // start signature capture
+                signature_start();
+            }
+        }
+        else if (padMode == padModes.API) {
+            // API mode
+            // do nothing
+        }
+        else {
+            alert("invalid padMode");
+            return;
+        }
+    }
+    // selection dialog end
+
+    // signature start begin
+    function signature_start() {
+        var dochash;
+
+        switch (docHash_type) {
+            case docHashes.kSha1:
+                dochash = sha1_dochash;
+                break;
+
+            case docHashes.kSha256:
+                dochash = sha256_dochash;
+                break;
+
+            default:
+                alert("unknown doc hash");
+                return;
+        }
+
+        if (supportsRSA) {
+            var startSignatureParams = new STPadServerLibDefault.Params.startSignature();
+            startSignatureParams.setFieldName(field_name);
+            startSignatureParams.setCustomText(custom_text);
+            //startSignatureParams.setDialogImage("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=");
+
+            if (canStoreEncryptKey) {
+                startSignatureParams.enablePadEncryption(dochash, encryption_cert, encryption_cert_only_when_empty);
+            } else {
+                startSignatureParams.enablePadEncryption(dochash, null);
+            }
+            STPadServerLibDefault.startSignature(startSignatureParams)
+                .then(function (value) {
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+        else {
+            var startSignatureParams = new STPadServerLibDefault.Params.startSignature();
+            startSignatureParams.setFieldName(field_name);
+            startSignatureParams.setCustomText(custom_text);
+            STPadServerLibDefault.startSignature(startSignatureParams)
+                .then(function (value) {
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    default_close_pad();
+                });
+        }
+    };
+    // signature start end
+
+    // close pad begin
+    function default_close_pad() {
+        if (padState == padStates.opened) {
+            var closePadParams = new STPadServerLibDefault.Params.closePad(padIndex);
+            STPadServerLibDefault.closePad(closePadParams)
+                .then(function (value) {
+                    padState = padStates.closed;
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    return;
+                });
+        }
+    }
+
+    function api_close_pad() {
+        if (padState == padStates.opened) {
+            var closePadParams = new STPadServerLibApi.Device.Params.close(padIndex);
+            STPadServerLibApi.Device.close(closePadParams)
+                .then(function (value) {
+                    padState = padStates.closed;
+                }, STPadServerLibCommons.defaultReject)
+                .then(null, function (reason) {
+                    error_message(reason);
+                    return;
+                });
+        }
+    }
+    // close pad end
+
+    function getBackgroundImage(padName) {
+        var img = new Image();
+        img.setAttribute('crossOrigin', 'anonymous');
+        img.onload = function () {
+            var sigcanvas = document.createElement("canvas");
+            sigcanvas.width = this.width;
+            sigcanvas.height = this.height;
+
+            var ctx = sigcanvas.getContext("2d");
+            ctx.drawImage(this, 0, 0);
+
+            var dataURL = sigcanvas.toDataURL("image/png");
+            backgroundImage = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        };
+        var element = document.getElementById(padName);
+        img.src = element.src;
+    }
+
+    function check_boxes_selectedElements_onchange() {
+        var sender = document.getElementById("check_boxes_selectedElements");
+        var selectedElem = sender.value;
+        var elemCount = sender.childElementCount;
+
+        //for (i = 1; i < elemCount; i++) {
+        //    document.getElementById("fieldNumber" + i).style.visibility = 'hidden';
+        //    document.getElementById("fieldID" + i).style.visibility = 'hidden';
+        //    document.getElementById("fieldText" + i).style.visibility = 'hidden';
+        //    document.getElementById("fieldChecked" + i).style.visibility = 'hidden';
+        //    document.getElementById("fieldRequired" + i).style.visibility = 'hidden';
+        //}
+
+
+
+
+
+        //for(i = 1; i<=selectedElem; i++) {
+        //         document.getElementById("fieldNumber" + i).style.visibility = 'visible';
+        //         document.getElementById("fieldID" + i).style.visibility = 'visible';
+        //         document.getElementById("fieldText" + i).style.visibility = 'visible';
+        //         document.getElementById("fieldChecked" + i).style.visibility = 'visible';
+        //         document.getElementById("fieldRequired" + i).style.visibility = 'visible';
+        //     }
+    }
+
+    function ModeListName_onchange() {
+        var sender = document.getElementById("ModeList");
+        var selectedElem = sender.value;
+
+        // the signature pen color select
+        var scl = document.getElementById("signatureColorLabel");
+        var spcs = document.getElementById("signaturePenColorSelect");
+        spcs.selectedIndex = 0;
+
+        // the check boxes select
+        //  var cbsEL = document.getElementById("check_boxes_selectedElementsLabel");
+        var cbsE = document.getElementById("check_boxes_selectedElements");
+        var elemCount = cbsE.childElementCount;
+
+        switch (selectedElem) {
+            case MODE_LIST_DEFAULT:
+                // disable the signature pen color select
+                scl.disabled = true;
+                // spcs.disabled = true;
+
+                // enable the check boxes select and table elements
+                //cbsEL.disabled = false;
+                cbsE.disabled = false;
+                //for (i = 1; i < elemCount; i++) {
+                //    document.getElementById("fieldNumber" + i).disabled = false;
+                //    document.getElementById("fieldID" + i).disabled = false;
+                //    document.getElementById("fieldText" + i).disabled = false;
+                //    document.getElementById("fieldChecked" + i).disabled = false;
+                //    document.getElementById("fieldRequired" + i).disabled = false;
+                //}
+                padMode = padModes.Default;
+                break;
+
+            case MODE_LIST_API:
+                // enable the signature pen color select
+                scl.disabled = false;
+                //  spcs.disabled = false;
+
+                // disable the check boxes select and table elements
+                // cbsEL.disabled = true;
+                cbsE.disabled = true;
+                for (i = 1; i < elemCount; i++) {
+                    //    document.getElementById("fieldNumber" + i).disabled = true;
+                    //    document.getElementById("fieldID" + i).disabled = true;
+                    //    document.getElementById("fieldText" + i).disabled = true;
+                    //    document.getElementById("fieldChecked" + i).disabled = true;
+                    //    document.getElementById("fieldRequired" + i).disabled = true;
+                }
+                padMode = padModes.API;
+                break;
+
+            default:
+                alert("invalid padMode");
+                break;
+        }
+    }
+
+    function getReadableType(intTypeNumber) {
+        switch (intTypeNumber) {
+            case padTypes.sigmaUSB:
+                return "Sigma USB";
+            case padTypes.sigmaSerial:
+                return "Sigma serial";
+            case padTypes.zetaUSB:
+                return "Zeta USB";
+            case padTypes.zetaSerial:
+                return "Zeta serial";
+            case padTypes.omegaUSB:
+                return "Omega USB";
+            case padTypes.omegaSerial:
+                return "Omega serial";
+            case padTypes.gammaUSB:
+                return "Gamma USB";
+            case padTypes.gammaSerial:
+                return "Gamma serial";
+            case padTypes.deltaUSB:
+                return "Delta USB";
+            case padTypes.deltaSerial:
+                return "Delta serial";
+            case padTypes.deltaIP:
+                return "Delta IP";
+            case padTypes.alphaUSB:
+                return "Alpha USB";
+            case padTypes.alphaSerial:
+                return "Alpha serial";
+            case padTypes.alphaIP:
+                return "Alpha IP";
+            default:
+                return "Unknown";
+        }
+    }
+
+    function clearSignature() {
+        // document.getElementById("ModeList").selectedIndex = 0;
+        document.getElementById("PadConnectionTypeList").selectedIndex = 0;
+        document.getElementById("Signature_0").src = "/signoTec/White.png"
+        document.getElementById("SignData_0").value = "";
+        document.getElementById("RsaSignature_0").value = "";
+    }
+
+    function error_message(param) {
+        if (param.errorCode < 0) {
+            alert("Function " + param.command + " failed. Reason: " + param.errorMessage);
+        }
+    }
+
+</script>

@@ -1,0 +1,710 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@using AppModels
+@{ 
+    Layout = null;
+    var context = new DBLAccountOpeningContext();
+    var settings = Utilities.GetAppSettings();
+    var user = Utilities.GetSessionUser() as UserModel;
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="colorlib.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@settings.AppName | New Account</title>
+
+    <link rel="stylesheet" href="~/wizardFiles/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="~/wizardFiles/vendor/nouislider/nouislider.min.css">
+    <link rel="icon" href="~/images/databank.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="~/wizardFiles/css/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    @*<script src="~/wizardFiles/vendor/jquery/jquery.min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <style>
+        body, #main {
+            border-bottom: thin gold;
+            /*background-image: linear-gradient(to right, #FFF9ED 20%,#F5f5f5 30%,#FFF9EF);*/
+            padding-top: 1%;
+            padding-bottom: 1%;
+            height: auto;
+            min-height: 5px;
+        }
+
+        .question {
+            color: darkgreen;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/basic.min.css" rel="stylesheet" />
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/dropzone.js"></script>
+
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
+    @*<script src="~/Scripts/bootbox.min.js"></script>*@
+
+
+    <script type="text/javascript" src="~/multiselect/src/jquery.multi-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/multiselect/src/example-styles.css">
+
+    <script src="~/signoTec/bluebird.min.js"></script>
+    <script src="~/signoTec/STPadServerLib-3.2.0.js"></script>
+</head>
+
+<body onload="onMainWindowLoad();" onbeforeunload="onMainWindowBeforeUnload();">
+    @*@Html.Partial("~/Views/Partials/_header.cshtml")*@
+    <div class="main" style="padding:0;">
+
+        <div class="container">
+            <img src="~/Images/brokerage_header.jpg" />
+            @{
+                if (user != null)
+                {
+                    <p style="text-align:right; margin-right:10%; font-size:16px; font-weight:bold">
+                        <i class="fa fa-user"></i>
+                        @user.Fullname
+                    </p>
+
+                }
+            }
+
+            <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data" action="@Url.Action("Initiate")">
+                <input type="hidden" name="passportPhotosList" id="passportPhotosList" value="" />
+                <input type="hidden" name="residenceList" id="residenceList" value="" />
+                <input type="hidden" name="businessDocsList" id="businessDocsList" value="" />
+
+                <div>
+
+                    <h3>Databank Brokerage Form</h3>
+                    @{
+                        @*@Html.Partial("~/Views/Partials/_fileUploads.cshtml")
+            @Html.Partial("~/Views/Partials/_csdForm.cshtml")*@
+
+                        @Html.Partial("~/Views/Partials/_fileUploads.cshtml")
+                        if (MvcApplication.AccountType <= 3)
+                        {
+                            //single, joint or itf
+                            @Html.Partial("~/Views/Partials/_firstApplicant.cshtml")
+
+
+                        }
+
+
+                        else if (MvcApplication.AccountType == 4)
+                        {
+                            //inst
+                            @Html.Partial("~/Views/Partials/_institutionalApplicant.cshtml")
+
+                        }
+                    }
+
+
+                    <h3>File Uploads</h3>
+                    @{
+                        @Html.Partial("~/Views/Partials/_fileUploads.cshtml")
+                    }
+
+
+                    <h3>AML Questionnaire</h3>
+                    @{
+                        @Html.Partial("~/Views/Partials/_aml.cshtml")
+
+                    }
+                    <h3>Electronic Transmission Indemnity</h3>
+                    @{
+                        if (MvcApplication.AccountType <= 3)
+                        {
+                            @Html.Partial("~/Views/Partials/_indemnity_individual.cshtml")
+                        }
+                        else
+                        {
+                            @Html.Partial("~/Views/Partials/_indemnity_institutions.cshtml")
+
+                        }
+                    }
+
+                    @Html.Partial("~/Views/Partials/_csdForm.cshtml")
+
+
+                    <h3>Submit Application</h3>
+                    <fieldset>
+                        <h2>You are about to submit your application to Databank.</h2>
+                        <h4 style="color:red;">Please go through all the previous steps to confirm your entries before submission </h4>
+
+                        <br /><br /><br />
+                    </fieldset>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div id="dialog" title="Let's get started with some basic questions!">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:justify">
+                    <div class="card-body" style="overflow:auto">
+                        <div id="clientTypeModalDiv">
+                            <p>
+                                <label class="question">What type of client are you?</label>
+                                <select name="" class="form-control" style="width:200px;" onchange="javascript:clientTypeChanged(this.value)">
+                                    <option value="">-select-</option>
+                                    <option value="New">New Client</option>
+                                    <option value="Existing">Existing Client</option>
+                                </select>
+                            </p>
+                        </div>
+
+                        <div id="newClientTypeModalDiv" style="display:none;">
+                            <form id="newClientForm">
+                                <label class="question">Which of the following best describes you?</label><br />
+                                <label>
+                                    <input type="radio" name="group1" value="1" style="width:15px; height:15px;display:inline;" /> I have never previously opened a Databank account
+
+                                </label>
+
+                                <br />
+
+                                <label>
+                                    <input type="radio" name="group1" value="2" style="width:15px; height:15px;display:inline;" /> I want to make general enquiries
+                                </label>
+
+                            </form>
+                        </div>
+
+
+                        <div id="existingClientTypeModalDiv" style="display:none;">
+
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color:#1f2222; font-size:16px; font-weight:bold;">
+                                                I would like to have a different investment package (Equities or Fixed income)
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body" style="font-style:italic;">
+
+                                            Please note that this is for account holders who wish to invest in a different investment vehicle (Equities or Fixed income),  You will be required complete an account opening form.<br />
+
+                                            @*<a href="https://onlineservice.databankgroup.com/portal/" target="_blank"><i class="fa fa-hand-o-right"></i> Proceed to deposit</a><br />*@
+                                            <a href="#" onclick="javascript:existingClientOptionsHandler('1')"><i class="fa fa-hand-o-right"></i> Yes, continue</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="panel panel-default" style="border-radius:2px; border:2px thin #333;border-style:groove; padding:1%">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color:#1f2222; font-size:16px; font-weight:bold;">
+                                                I’ve forgotten my account details
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                        <div class="panel-body" style="font-style:italic">
+                                            <h3>Please provide the following details about your account</h3>
+                                            <form method="post" action="@Url.Action("ForgottenAccount")" enctype="multipart/form-data">
+                                                @Html.AntiForgeryToken()
+                                                <table>
+                                                    <tr>
+                                                        <td><input type="text" placeholder="Name(*)" name="name" required class="form-control" style="width:320px;" /></td>
+                                                        <td><input type="text" placeholder="Postal Address" name="address" class="form-control" style="width:320px;" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="email" placeholder="Email(*)" class="form-control" required name="email" style="width:320px;" /></td>
+                                                        <td><input type="text" placeholder="Telephone Number(*)" name="phone" required class="form-control" style="width:320px;" /></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th colspan="2" style="align-content:center; text-align:center;">
+                                                        </th>
+                                                    </tr>
+                                                </table>
+
+                                                <input type="submit" value="Submit" style="color:white; background-color: #00a65a !important; width:300px; margin-left:24%;" />
+
+
+
+
+                                            </form>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+
+
+
+    <div id="signDialog" title="Capture client signature">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:justify">
+                    <div class="card-body" style="overflow:auto">
+                        @Html.Partial("~/Views/Partials/_signnatureCapture.cshtml")
+
+
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+
+
+    <!-- JS -->
+    <script src="~/wizardFiles/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/wizardFiles/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/wizardFiles/vendor/jquery-steps/jquery.steps.min.js"></script>
+    <script src="~/wizardFiles/vendor/minimalist-picker/dobpicker.js"></script>
+    <script src="~/wizardFiles/vendor/nouislider/nouislider.min.js"></script>
+    <script src="~/wizardFiles/vendor/wnumb/wNumb.js"></script>
+    <script src="~/wizardFiles/js/main.js"></script>
+    <script src="~/Scripts/dropZoneInit.js"></script>
+
+    <style type="text/css">
+        select {
+            border: 1px solid #ebebeb;
+            box-sizing: border-box;
+            position: relative;
+            background: 0 0;
+            z-index: 10;
+            cursor: pointer;
+            padding: 0 20px;
+            height: 50px;
+            font-size: 14px;
+            font-family: 'Roboto Slab';
+            color: #999;
+            box-sizing: border-box;
+            background-color: #fff;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+
+
+
+        .form-flex {
+            width: 900px;
+        }
+
+        .vertical .content, .vertical .actions {
+            height: auto
+        }
+
+        #csdBankAccn-error {
+            margin-top: 20px;
+        }
+
+        .actions ul li a {
+            background-color: #00a65a !important;
+        }
+
+        .actions ul li:first-child a {
+            color: white;
+        }
+
+
+        .myHeader {
+            color: white;
+            background-color: #00a65a !important;
+            padding-left: 2%;
+            padding-top: 1%;
+            padding-bottom: 1%;
+            width: 90%;
+        }
+
+        #csd-image-div, #firstApplicantIdPhoto, #jointApplicantIdPhoto, #itfApplicantIdPhoto,
+        #firstJointItfAuthorisedPerson, #instAuthorisedOfficer1PhotoId,
+        #instAuthorisedOfficer2PhotoId, #firstApplicantSignature, #jointApplicantSignature {
+            width: 250px;
+            height: 200px;
+            border: 2px dashed #0087f7;
+        }
+
+
+        #instSignatory1, #instSignatory2, #instSignatory3, #instSignatory4 {
+            width: 250px;
+            height: 50px;
+            border: 2px dashed #0087f7;
+        }
+
+        #proofOfResidence, #otherBusinessFiles, #csdCompletedForm, #passportPhotos {
+            width: 1000px;
+            height: 250px;
+            border: 2px dashed #0087f7;
+        }
+
+
+        tr.greenHeader {
+            background-color: #00a65a;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        input, textarea, select {
+            border: 1px groove #000000
+        }
+
+
+        /*.dz-upload,.dz-progress {
+                display: block;
+                background-color: red;
+                height: 10px;
+                width: 0%;
+            }
+            .dropzone .dz-preview .dz-progress .dz-upload {
+                display: block;
+                background-color: red;
+                height: 10px;
+                width: 0%;
+            }*/
+
+
+        /*.dropzone .dz-preview .dz-progress {
+                opacity: 0;
+            }*/
+        .dropzone .dz-message {
+            margin-top: 5px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        captureTarget = "";
+        captureTargetHiddenField = "";
+        hasAnsweredModal = false;
+
+        function setZoom() {
+            document.body.style.zoom = "95%";
+        }
+
+
+
+
+        $(document).ready(function () {
+            setZoom();
+            var firstApplicantIdTypeArr = getDropDownItems('firstApplicantIdType');
+            var jointApplicantIdTypeArr = getDropDownItems('jointApplicantIdType');
+            var itfApplicantIdTypeArr = getDropDownItems('itfApplicantIdType');
+            var authorisedPersonApplicantIdTypeArr = getDropDownItems('authorisedPersonApplicantIdType');
+            var intAuthorisedOfficer1IDTypeArr = getDropDownItems('intAuthorisedOfficer1IDType');
+            var intAuthorisedOfficer2IDTypeArr = getDropDownItems('intAuthorisedOfficer2IDType');
+
+
+            $("#firstApplicantNationality").change(function () {
+                val = $("#firstApplicantNationality").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('firstApplicantIdType')
+                }
+                else {
+                    setDropDownValues('firstApplicantIdType', firstApplicantIdTypeArr)
+                }
+            });
+
+
+
+            $("#jointApplicantNationality").change(function () {
+                val = $("#jointApplicantNationality").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('jointApplicantIdType')
+                }
+                else {
+                    setDropDownValues('jointApplicantIdType', jointApplicantIdTypeArr)
+                }
+            });
+
+
+            $("#itfApplicantNationality").change(function () {
+                val = $("#itfApplicantNationality").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('itfApplicantIdType')
+                }
+                else {
+                    setDropDownValues('itfApplicantIdType', itfApplicantIdTypeArr)
+                }
+            });
+
+
+            $("#authorisedPersonZipCountryId").change(function () {
+                val = $("#authorisedPersonZipCountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('authorisedPersonApplicantIdType')
+                }
+                else {
+                    setDropDownValues('authorisedPersonApplicantIdType', authorisedPersonApplicantIdTypeArr)
+                }
+            });
+
+            $("#intAuthorisedOfficer1CountryId").change(function () {
+                val = $("#intAuthorisedOfficer1CountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('intAuthorisedOfficer1IDType')
+                }
+                else {
+                    setDropDownValues('intAuthorisedOfficer1IDType', intAuthorisedOfficer1IDTypeArr)
+                }
+            });
+
+            $("#intAuthorisedOfficer2CountryId").change(function () {
+                val = $("#intAuthorisedOfficer2CountryId").val();
+                if (Number(val) != 81) {
+                    resetIDDropDownToPassportOnly('intAuthorisedOfficer2IDType')
+                }
+                else {
+                    setDropDownValues('intAuthorisedOfficer2IDType', intAuthorisedOfficer2IDTypeArr)
+                }
+            });
+
+        });
+
+
+        function resetIDDropDownToPassportOnly(ctrlId) {
+            $('#' + ctrlId + ' option').remove();
+            $('#' + ctrlId).append('<option value="">-select-</option>');
+            $('#' + ctrlId).append('<option value="' + 4 + '">' + 'Passport' + '</option>');
+        }
+
+        function getDropDownItems(ctrlId) {
+            var oldValuesArray = new Array();
+            $('#' + ctrlId + ' option').each(function () {
+                if ($(this).val() != "") {
+                    var textId = $(this).text() + "_" + $(this).val()
+                    oldValuesArray.push(textId);
+                }
+            });
+            return oldValuesArray;
+        }
+
+        function setDropDownValues(ctrlId, valuesArr) {
+            $('#' + ctrlId + ' option').remove();
+            $('#' + ctrlId).append('<option value="">-select-</option>');
+            valuesArr.forEach(function (item) {
+                var result = item.split("_");
+                $('#' + ctrlId).append('<option value="' + result[1] + '">' + result[0] + '</option>');
+            });
+        }
+
+
+        function DateChanged(dob, ctrl) {
+            //jointApplicantDOB
+            minAge = 18;
+            age = computeAge(new Date(dob));
+            if (Number(age) < 0) {
+                age = 0;
+            }
+            if (ctrl === "firstApplicantDOB" || "jointApplicantDOB") {
+                if (age < minAge) {
+                    swal("Applicant MUST NOT be less than " + minAge + " years.\nAge is: " + age);
+                    $("#" + ctrl).val("");
+                }
+            }
+
+        }
+
+
+
+
+
+        function computeAge(birth) {
+            var today = new Date();
+            var nowyear = today.getFullYear();
+            var nowmonth = today.getMonth();
+            var nowday = today.getDate();
+
+            var birthyear = birth.getFullYear();
+            var birthmonth = birth.getMonth();
+            var birthday = birth.getDate();
+
+            var age = nowyear - birthyear;
+            var age_month = nowmonth - birthmonth;
+            var age_day = nowday - birthday;
+
+            if (age_month < 0 || (age_month === 0 && age_day < 0)) {
+                age = parseInt(age) - 1;
+            }
+            return parseInt(age);
+
+
+        }
+
+        function showMainForm() {
+            $("#dialog").dialog("close");
+            $("#signup-form :input").removeAttr("disabled");
+
+        }
+        function showCaptureModal(targetImg, targetHiddenFld) {
+            $("#signDialog").css('display', 'block');
+
+            captureTarget = targetImg;
+            captureTargetHiddenField = targetHiddenFld;
+            $("#signDialog").dialog({
+                width: 1000,
+                height: 700,
+                autoOpen: false,
+                modal: true,
+                show: {
+                    effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+
+            $("#signDialog").dialog("open");
+
+        }
+
+
+
+
+        function clientTypeChanged(value) {
+            if (value === "New") {
+                // $("#existingClientTypeModalDiv").slideUp();
+                hasAnsweredModal = true;
+                showMainForm();
+                $("#newClientTypeModalDiv").slideDown();
+            }
+
+            else if (value === "Existing") {
+                $("#newClientTypeModalDiv").slideUp();
+                $("#existingClientTypeModalDiv").slideDown();
+            }
+        }
+
+
+
+
+        function existingClientOptionsHandler(index) {
+            var number = Number(index);
+            hasAnsweredModal = true;
+            if (number === 1) {
+                showMainForm();
+            }
+            else if (number === 2) {
+                showMainForm();
+            }
+
+        }
+
+        $("#dialog").dialog({
+            beforeClose: function (event, ui) {
+                if (hasAnsweredModal) {
+                    return true;
+                }
+                else {
+                    return false;
+
+                }
+            }
+        });
+    </script>
+
+    @{
+        if (user == null)
+        {
+            <script type="text/javascript">
+                $("#signup-form :input").prop("disabled", true);
+                $("#dialog").dialog({
+                    width: 800,
+                    height: 600,
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 300
+                    },
+                    hide: {
+                        effect: "explode",
+                        duration: 1000
+                    }
+                });
+
+                $("#dialog").dialog("open");
+                $("#signDialog").css('display', 'none');
+
+            </script>
+        }
+        else
+        {
+            <script>
+                hasAnsweredModal = true;
+                $("#dialog").dialog("close");
+                $("#signup-form :input").removeAttr("disabled");
+
+            </script>
+        }
+    }
+
+
+
+    <style type="text/css">
+        #firstApplicantOccupation, #instructionsEmploymentDetailsCurrentOccupation, #instructionsEmploymentDetailsPreviousOccupation, #jointApplicantOccupation,
+        #authorisedPersonRelation, #nextOfKin1Relation, #nextOfKin2Relation {
+            width: 100%;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        function countryOfOriginChanged(selectVal, ctrlDiv, txtFocus) {
+            if (parseInt(selectVal) != 81) {
+                $("#" + ctrlDiv).slideDown();
+                $("#" + txtFocus).focus();
+            }
+            else {
+                $("#" + ctrlDiv).slideUp();
+            }
+        }
+        function titleChanged(val, ctrl) {
+            if (parseInt(val) === 7) {
+                $("#" + ctrl).slideDown();
+                $("#" + ctrl).focus();
+            }
+            else {
+                $("#" + ctrl).slideUp();
+                $("#" + ctrl).val("");
+            }
+        }
+    </script>
+
+</body>
+
+
+</html>

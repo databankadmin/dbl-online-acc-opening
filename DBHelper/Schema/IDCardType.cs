@@ -14,8 +14,18 @@ namespace DBHelper.Schema
     
     public partial class IDCardType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public IDCardType()
+        {
+            this.AccountBeneficiaries = new HashSet<AccountBeneficiary>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public string SoftTechCode { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountBeneficiary> AccountBeneficiaries { get; set; }
     }
 }

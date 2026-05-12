@@ -1,11 +1,16 @@
 ﻿$(function () {
-    var _url = "/NewAccount";
+    var _url = "/DBLAccountOpening/DropZoneUploader";
     var appForm = $("#signup-form");
+    var passportPhotosList ="";
+    var residenceList = "";
+    var businessDocsList ="";
+
+
 
    
     Dropzone.options.firstApplicantIdPhoto = {
-        url: _url + "/FirstApplicantIdPhoto",
-        paramName: "firstApplicantIdPhoto",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -27,11 +32,20 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#firstApplicantIdPhotohidden").val('');
-                    removeFileFromBackend("firstApplicantIdPhoto", file.name);
+                    removeFileFromBackend("_firstApplicantIdPhoto");
 
                 }
             });
-           
+
+            this.on("success", function (file, fileName) {
+                $("#_firstApplicantIdPhoto").val(fileName);
+            });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
         }
 
 
@@ -41,8 +55,8 @@
     //
 
     Dropzone.options.jointApplicantIdPhoto = {
-        url: _url + "/JointApplicantIdPhoto",
-        paramName: "jointApplicantIdPhoto",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -65,12 +79,21 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#jointApplicantIdPhotohidden").val('');
-                    removeFileFromBackend("jointApplicantIdPhoto", file.name);
+                    removeFileFromBackend("_jointApplicantIdPhoto");
 
                 }
             });
 
-           
+            this.on("success", function (file, fileName) {
+                $("#_jointApplicantIdPhoto").val(fileName);
+            });
+
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
         }
 
 
@@ -82,8 +105,8 @@
  
 
     Dropzone.options.itfApplicantIdPhoto = {
-        url: _url + "/ItfApplicantIdPhoto",
-        paramName: "itfApplicantIdPhoto",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -106,12 +129,20 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#itfApplicantIdPhotohidden").val('');
-                    removeFileFromBackend("itfApplicantIdPhoto", file.name);
-
-
+                    removeFileFromBackend("_itfApplicantIdPhoto");
                 }
             });
-            
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_itfApplicantIdPhoto").val(fileName);
+            });
+
+
         }
 
 
@@ -119,8 +150,8 @@
 
     
     Dropzone.options.firstJointItfAuthorisedPerson = {
-        url: _url + "/FirstJointItfAuthorisedPerson",
-        paramName: "firstJointItfAuthorisedPerson",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -142,11 +173,19 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#firstJointItfAuthorisedPersonhidden").val('');
-                    removeFileFromBackend("firstJointItfAuthorisedPerson", file.name);
-
-
+                    removeFileFromBackend("_firstJointItfAuthorisedPerson");
                 }
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_firstJointItfAuthorisedPerson").val(fileName);
+            });
+
         }
 
     };
@@ -157,8 +196,8 @@
 
     
     Dropzone.options.instAuthorisedOfficer1PhotoId = {
-        url: _url + "/InstAuthorisedOfficer1PhotoId",
-        paramName: "instAuthorisedOfficer1PhotoId",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -181,9 +220,18 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instAuthorisedOfficer1PhotoIdhidden").val('');
-                    removeFileFromBackend("instAuthorisedOfficer1PhotoId", file.name);
+                    removeFileFromBackend("_instAuthorisedOfficer1PhotoId");
 
                 }
+            });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_instAuthorisedOfficer1PhotoId").val(fileName);
             });
         }
 
@@ -193,8 +241,8 @@
 
     
     Dropzone.options.instAuthorisedOfficer2PhotoId = {
-        url: _url + "/InstAuthorisedOfficer2PhotoId",
-        paramName: "instAuthorisedOfficer2PhotoId",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple:false,
@@ -216,9 +264,18 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instAuthorisedOfficer2PhotoIdhidden").val('');
-                    removeFileFromBackend("instAuthorisedOfficer2PhotoId", file.name);
+                    removeFileFromBackend("_instAuthorisedOfficer2PhotoId");
 
                 }
+            });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_instAuthorisedOfficer2PhotoId").val(fileName);
             });
         }
     };
@@ -226,8 +283,8 @@
 
 
     Dropzone.options.instSignatory1 = {
-        url: _url + "/InstSignatory1",
-        paramName: "instSignatory1",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -249,11 +306,19 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instSignatory1hidden").val('');
-                    removeFileFromBackend("instSignatory1", file.name);
+                    removeFileFromBackend("_instSignatory1");
 
                 }
             });
-
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_instSignatory1").val(fileName);
+            });
 
            
         }
@@ -264,8 +329,8 @@
 
 
     Dropzone.options.instSignatory2 = {
-        url: _url + "/InstSignatory2",
-        paramName: "instSignatory2",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -287,20 +352,28 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instSignatory2hidden").val('');
-                    removeFileFromBackend("instSignatory2", file.name);
+                    removeFileFromBackend("_instSignatory2");
 
 
                 }
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_instSignatory2").val(fileName);
+            });
 
-           
         }
 
     };
 
     Dropzone.options.instSignatory3 = {
-        url: _url + "/InstSignatory3",
-        paramName: "instSignatory3",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -322,18 +395,26 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instSignatory3hidden").val('');
-                    removeFileFromBackend("instSignatory3", file.name);
-
-
+                    removeFileFromBackend("_instSignatory3");
                 }
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_instSignatory3").val(fileName);
+            });
+
         }
 
     };
 
     Dropzone.options.instSignatory4 = {
-        url: _url + "/InstSignatory4",
-        paramName: "instSignatory4",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -355,13 +436,20 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#instSignatory4hidden").val('');
-                    removeFileFromBackend("instSignatory4", file.name);
-
-
+                    removeFileFromBackend("_instSignatory4");
                 }
             });
 
-           
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+
+            this.on("success", function (file, fileName) {
+                $("#_instSignatory4").val(fileName);
+            });
         }
 
     };
@@ -370,8 +458,8 @@
 
 
     Dropzone.options.proofOfResidence = {
-        url: _url + "/ProofOfResidence",
-        paramName: "proofOfResidenceFiles",
+        url: _url + "/Multi",
+        paramName: "_files",
         maxFilesize: 200,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: true,
@@ -392,20 +480,31 @@
                 this.removeFile(file);
             });
             this.on("removedfile", function (file) {
-                removeFileFromBackend("proofOfResidenceFiles", file.name);
+                removeFromList("residence", file.name);
                 if (this.files.length === 0) {
                     $("#proofOfResidencehidden").val('');
 
                 }
             });
 
+            this.on("successmultiple", function (file, res) {
+                residenceList = residenceList +"," + res;
+                $("#residenceList").val(residenceList);
+            });
+
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
         }
 
     };
 
     Dropzone.options.otherBusinessFiles = {
-        url: _url + "/OtherBusinessFiles",
-        paramName: "otherBusinessFiles",
+        url: _url + "/Multi",
+        paramName: "_files",
         maxFilesize: 200,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: true,
@@ -426,14 +525,24 @@
                 this.removeFile(file);
             });
             this.on("removedfile", function (file) {
-                removeFileFromBackend("otherBusinessFiles", file.name);
+                removeFromList("busdocs", file.name);
                 if (this.files.length === 0) {
                     $("#otherBusinessFileshidden").val('');
 
                 }
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("successmultiple", function (file, res) {
+                businessDocsList = businessDocsList+"," + res;
+                $("#businessDocsList").val(businessDocsList);
 
-           
+            });
+
         }
 
 
@@ -444,8 +553,8 @@
 
 
     Dropzone.options.csdCompletedForm = {
-        url:_url + "/CsdCompletedForm",
-        paramName: "csdCompletedForm",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 200,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -456,13 +565,13 @@
         acceptedFiles: ".pdf",
         init: function () {
             this.on("addedfile", function (file) {
-                var fileName = file.name.toLowerCase();
-                var ends = fileName.endsWith(".pdf");
-                if (ends === false) {
-                    alert('invalid file type. Uploaded file must be pdf');
-                    this.removeFile(file);
-                    return;
-                }
+                //var fileName = file.name.toLowerCase();
+                //var ends = fileName.endsWith(".pdf");
+                //if (ends === false) {
+                //    alert('invalid file type. Uploaded file must be pdf');
+                //    this.removeFile(file);
+                //    return;
+                //}
                 $("#csdCompletedFormhidden").val(file.name);
                 $("#csdCompletedForm").css("border", "2px dashed #0087f7");
             });
@@ -471,14 +580,23 @@
                 alert("File limit exceeded");
                 this.removeFile(file);
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#csdCompletedFormhidden").val('');
-                    removeFileFromBackend("csdCompletedForm", file.name);
+                    removeFileFromBackend("_csdCompletedForm");
 
                 }
             });
-            
+
+            this.on("success", function (file, fileName) {
+                $("#_csdCompletedForm").val(fileName);
+            });
         }
 
 
@@ -490,8 +608,8 @@
 
     //passportPhotoshidden
     Dropzone.options.passportPhotos = {
-        url: _url + "/PassportPhotos",
-        paramName: "passportPhotos",
+        url: _url + "/Multi",
+        paramName: "_files",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: true,
@@ -512,14 +630,23 @@
                 this.removeFile(file);
             });
             this.on("removedfile", function (file) {
-                removeFileFromBackend("passportPhotos", file.name);
+                removeFromList("passport", file.name);
                 if (this.files.length === 0) {
                     $("#passportPhotoshidden").val('');
 
                 }
             });
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("successmultiple", function (file,res) {
+                passportPhotosList = passportPhotosList+"," + res;
+                $("#passportPhotosList").val(passportPhotosList);
+            });
 
-          
         }
 
     };
@@ -529,8 +656,8 @@
 
 
     Dropzone.options.firstApplicantSignature = {
-        url: _url + "/FirstApplicantSignature",
-        paramName: "firstApplicantSignature",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -552,11 +679,18 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#firstApplicantSignaturehidden").val('');
-                    removeFileFromBackend("firstApplicantSignature", file.name);
+                    removeFileFromBackend("_firstApplicantSignature");
                 }
             });
-
-
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_firstApplicantSignature").val(fileName);
+            });
         }
 
     };
@@ -565,8 +699,8 @@
 
 
     Dropzone.options.jointApplicantSignature = {
-        url: _url + "/JointApplicantSignature",
-        paramName: "jointApplicantSignature",
+        url: _url + "/Single",
+        paramName: "_file",
         maxFilesize: 20,//filesize in MB
         autoProcessQueue: true,
         uploadMultiple: false,
@@ -588,16 +722,41 @@
             this.on("removedfile", function (file) {
                 if (this.files.length === 0) {
                     $("#jointApplicantSignaturehidden").val('');
-                    removeFileFromBackend("jointApplicantSignature", file.name);
+                    removeFileFromBackend("_jointApplicantSignature");
                 }
             });
-
-
+            this.on("error", function (file, message) {
+                if (!file.accepted) {
+                    alert('File upload error. \n' + message);
+                    this.removeFile(file);
+                }
+            });
+            this.on("success", function (file, fileName) {
+                $("#_jointApplicantSignature").val(fileName);
+            });
         }
 
     };
 
 
+    function removeFromList(type, fileName) {
+        if (type === "passport") {
+            passportPhotosList = passportPhotosList.replace(fileName, "");
+            $("#passportPhotosList").val(passportPhotosList);
+
+        }
+
+        else if (type === "busdocs") {
+            businessDocsList = businessDocsList.replace(fileName, "");
+            $("#businessDocsList").val(businessDocsList);
+
+        }
+        else if (type === "residence") {
+            residenceList = residenceList.replace(fileName, "");
+            $("#residenceList").val(residenceList);
+
+        }
+    }
 
  });
 
@@ -609,29 +768,9 @@
 
 
 
-
-
-
-
-function removeFileFromBackend(type, fileName)
+function removeFileFromBackend(ctrl)
 {
-    $.ajax({
-        url: '/NewAccount/DropFile?type=' + type + "&fileName=" + fileName,
-        type: "GET",
-        async: true,
-        processData: false,
-        cache: false,
-        success: function (response) {
-             
-
-        },
-        error: function (xhr, status, error) {
-            alert(xhr.responseText);
-        }
-    });
-
-
+    $("#" + ctrl).val("");
 }
-
 
    

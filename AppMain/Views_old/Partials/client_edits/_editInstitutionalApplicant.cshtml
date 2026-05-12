@@ -1,0 +1,1352 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@using AppMain.Providers
+@{
+    var context = new DBLAccountOpeningContext();
+    var applicationId = MvcApplication.TempAccount.Id;
+    var accountType = context.AccountTypes.Find(MvcApplication.AccountType);
+    var accountTradingContacts = Utilities.GetAccountTradingContract(applicationId).OrderBy(x=>x.CreatedDate).ToList();
+    var basicProfile = Utilities.GetApplications(0, 0, null, applicationId.ToString()).FirstOrDefault();
+    var accountAuthorisedPersons = Utilities.GetAccountAuthorisedPersons(applicationId);
+ //   var accountETI = Utilities.GetAccountETI(applicationId);
+//    var accountUploads = Utilities.GetAccountFilesUploads(applicationId);
+    var accountFinancialInvestmentRiskProfile = Utilities.GetAccountInvestmentRiskProfile(applicationId);
+    var accountCustodyDetails = Utilities.GetAccountCustodyDetails(applicationId);
+    var accountInstructionEmploymentDetails = Utilities.GetAccountInstructionEmploymentDetailModel(applicationId);
+    var accountSignatories = Utilities.GetAccountSignatories(applicationId);
+    var accountMembers = Utilities.GetAccountMembers(applicationId);
+//    var accountNextOfKins = Utilities.GetAccountNextOfKins(applicationId);
+    var accountSettlementDetails = Utilities.GetAccountSettlementDetail(applicationId);
+}
+
+
+<style type="text/css">
+    .multi-select-container {
+        display: inline-block;
+        position: relative;
+    }
+
+    .multi-select-menu {
+        position: absolute;
+        left: 0;
+        top: 0.8em;
+        z-index: 1;
+        float: left;
+        min-width: 100%;
+        background: #fff;
+        margin: 1em 0;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+
+    .multi-select-menuitem {
+        display: block;
+        font-size: 0.875em;
+        padding: 0.6em 1em 0.6em 30px;
+        white-space: nowrap;
+    }
+
+    .multi-select-menuitem--titled:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        margin: 0 0 0.25em -20px;
+    }
+
+    .multi-select-menuitem--titledsr:before {
+        display: block;
+        font-weight: bold;
+        content: attr(data-group-title);
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .multi-select-menuitem + .multi-select-menuitem {
+        padding-top: 0;
+    }
+
+    .multi-select-presets {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .multi-select-menuitem input {
+        position: absolute;
+        margin-top: -15px;
+        margin-left: -25px;
+        width: 20px;
+    }
+
+    .multi-select-button {
+        display: inline-block;
+        font-size: 0.875em;
+        padding: 0.2em 0.6em;
+        max-width: 16em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: -0.5em;
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        cursor: default;
+    }
+
+        .multi-select-button:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0.4em 0.4em 0 0.4em;
+            border-color: #999 transparent transparent transparent;
+            margin-left: 0.4em;
+            vertical-align: 0.1em;
+        }
+
+    .multi-select-container--open .multi-select-menu {
+        display: block;
+    }
+
+    .multi-select-container--open .multi-select-button:after {
+        border-width: 0 0.4em 0.4em 0.4em;
+        border-color: transparent transparent #999 transparent;
+    }
+
+    .multi-select-container--positioned .multi-select-menu {
+        /* Avoid border/padding on menu messing with JavaScript width calculation */
+        box-sizing: border-box;
+    }
+
+        .multi-select-container--positioned .multi-select-menu label {
+            /* Allow labels to line wrap when menu is artificially narrowed */
+            white-space: normal;
+        }
+</style>
+
+
+<style>
+    .multi-select-menuitem input {
+        margin-top: 5px;
+    }
+</style>
+
+
+<div class="table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">Institutional Profile</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instInvestmentType" class="form-label">Investment Type *</label>
+                        <select name="instInvestmentType" id="instInvestmentType" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.InvestmentTypes.Where(x => x.IsActive))
+                                {
+                                    if (item.Id == basicProfile.InvestmentTypeId)
+                                    {
+                                        <option  selected value="@item.Id">@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="expectedAccountActivityId" class="form-label">Expected Account Activity *</label>
+                        <select name="expectedAccountActivityId" id="expectedAccountActivityId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.ExpectedAccountActivities.OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == basicProfile.ExpectedAccountActivityId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instNameOfClient" class="form-label">Name of Client *</label>
+                        <input type="text" name="instNameOfClient" id="instNameOfClient" class="form-control" value="@basicProfile.InstitutionClientName" required />
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="instNatureOfBusiness" class="form-label">Nature of Business *</label>
+                        <input type="text" name="instNatureOfBusiness" id="instNatureOfBusiness" class="form-control" value="@basicProfile.InstitutionNatureOfBusiness" required />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+
+                <td>
+                    <div class="form-group">
+                        <label for="instPricipalBroker" class="form-label">Name of Principal Broker *</label>
+                        <input type="text" name="instPricipalBroker" id="instPricipalBroker" class="form-control" value="@basicProfile.InstitutionalPrincipalBroker" required />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instCountryOfResidence" class="form-label">Country of Incorporation *</label>
+                        <select name="instCountryOfResidence" id="instCountryOfResidence" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == basicProfile.InsstitutionalCountryOfIncorporation)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <label for="instRegistrationNumber" class="form-label">Registration Number *</label>
+                        <input type="text" name="instRegistrationNumber" id="instRegistrationNumber" class="form-control" required value="@basicProfile.InstitutionRegistrationNumber"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="tin" class="form-label">TIN Number</label>
+                        <input type="text" name="tin" id="tin" class="form-control" value="@basicProfile.TIN"/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4">
+                    <div class="form-group">
+                        <label for="instFullMailingAddress">Mailing Address</label>
+                        <input type="text" name="instFullMailingAddress" id="instFullMailingAddress" value="@basicProfile.MailingAddressFull" class="form-control" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instMailingAddressCity" class="form-label">City</label>
+                        <input type="text" name="instMailingAddressCity" id="instMailingAddressCity" class="form-control" value="@basicProfile.InstStreetAddressCity" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instMailAddressCountryOfResidence" class="form-label">Country *</label>
+                        <select name="instMailAddressCountryOfResidence" id="instMailAddressCountryOfResidence" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == basicProfile.InstMailingAddressCountryId)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4">
+                    <label class="instFullStreetAddress">Street Address</label>
+                    <input type="text" name="instFullStreetAddress" id="instFullStreetAddress" value="@basicProfile.StreetAddressFull" class="form-control" />
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instSteetAddressCity" class="form-label">City</label>
+                        <input type="text" name="instSteetAddressCity" id="instSteetAddressCity" class="form-control" value="@basicProfile.InstStreetAddressCity" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instSteetAddressZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                        <input type="text" name="instSteetAddressZipCode" id="instSteetAddressZipCode" class="form-control" value="@basicProfile.InsStreetAddressZipCode" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instSteetAddressCountry" class="form-label">Country *</label>
+                        <select name="instSteetAddressCountry" id="instSteetAddressCountry" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                {
+                                    if (item.ID == basicProfile.InsStreetAddressCountryId)
+                                    {
+                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.ID">@item.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instTelephone" class="form-label">Telephone *</label>
+                        <input type="text" name="instTelephone" id="instTelephone" required class="form-control" value="@basicProfile.InsStreetAddressTel"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instFax" class="form-label">Fax</label>
+                        <input type="text" name="instFax" id="instFax" class="form-control" value="@basicProfile.InsStreetAddressFax"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instEmail" class="form-label">Email *</label>
+                        <input type="email" name="instEmail" id="instEmail" class="form-control" required value="@basicProfile.InsStreetAddressEmail"/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="instCompanyType" class="form-label">Select applicable suffix *</label>
+                        <select name="instCompanyType" id="instCompanyType" class="form-control" required>
+                            <option value="">-select-</option>
+                            <option value="LC">Local Company</option>
+                            <option value="FC">Foreign Company</option>
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        $("#instCompanyType").val('@basicProfile.InstCompanyType');
+                    </script>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instRegionalInvestmentId" class="form-label">Regional Investment Interest *</label>
+                        <select name="instRegionalInvestmentId" id="instRegionalInvestmentId" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.RegionalInvesmentInterests.OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == basicProfile.RegionalInvestmentId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="instStatementFreq" class="form-label">Frequency of Account Statements *</label>
+                        <select name="instStatementFreq" id="instStatementFreq" class="form-control" required>
+                            <option value="">-select-</option>
+                            @{
+                                foreach (var item in context.StatementFrequencies.OrderBy(x => x.Id))
+                                {
+                                    if (item.Id == basicProfile.FrequencyOfStatementsId)
+                                    {
+                                        <option selected value="@item.Id">@item.Name</option>
+                                        continue;
+                                    }
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+
+
+    <div class="table-responsive">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th colspan="4">CUSTODY ACCOUNT DETAILS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsName" class="form-label">Custodian Name *</label>
+                            <input type="text" name="custodyDetailsName" id="custodyDetailsName" required class="form-control" value="@accountCustodyDetails.CustodianName" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsPhone" class="form-label">Telephone *</label>
+                            <input type="text" name="custodyDetailsPhone" id="custodyDetailsPhone" required class="form-control" value="@accountCustodyDetails.Telephone"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsAddress" class="form-label">Address *</label>
+                            <input type="text" name="custodyDetailsAddress" id="custodyDetailsAddress" required class="form-control" value="@accountCustodyDetails.Address" />
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsFax" class="form-label">Fax</label>
+                            <input type="text" name="custodyDetailsFax" id="custodyDetailsFax" class="form-control" value="@accountCustodyDetails.Fax"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsCashAccNumber" class="form-label">Cash Account Number</label>
+                            <input type="text" name="custodyDetailsCashAccNumber" id="custodyDetailsCashAccNumber" class="form-control" value="@accountCustodyDetails.CashAccountNumber" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="custodyDetailsSecuritiesAccNumber" class="form-label">Securities Account Number</label>
+                            <input type="text" name="custodyDetailsSecuritiesAccNumber" id="custodyDetailsSecuritiesAccNumber" class="form-control" value="@accountCustodyDetails.SecuritiesAccountNumber"/>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th colspan="6">SETTLEMENT DETAILS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsCorrespondentBankId" class="form-label">Correspondent Bank *</label>
+                                <select required name="intSettlementDetailsCorrespondentBankId" id="intSettlementDetailsCorrespondentBankId" class="form-control" style="width:250px">
+                                    <option value="">-select-</option>
+                                    @{
+                                        foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
+                                        {
+                                            if (item.Id == accountSettlementDetails.CorrespondentBankId)
+                                            {
+                                                <option  selected value="@item.Id">@item.Name</option>
+                                                continue;
+                                            }
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsCorrespondentBankSwiftNo" class="form-label">Swift / Sort code</label>
+                                <input type="text"  value="@accountSettlementDetails.CorrespondentBankSwiftCode" name="intSettlementDetailsCorrespondentBankSwiftNo" id="intSettlementDetailsCorrespondentBankSwiftNo" class="form-control" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsIntermediaryBankId" class="form-label">Intermediary Bank *</label>
+                                <select required name="intSettlementDetailsIntermediaryBankId" id="intSettlementDetailsIntermediaryBankId" class="form-control">
+                                    <option value="">-select-</option>
+                                    @{
+                                        foreach (var item in context.Banks.Where(x => x.IsActive).OrderBy(x => x.Name))
+                                        {
+                                            if (item.Id == accountSettlementDetails.IntermediaryBankId)
+                                            {
+                                                <option selected value="@item.Id">@item.Name</option>
+                                                continue;
+                                            }
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsIntermediaryBankSwiftNo" class="form-label">Swift / Sort code</label>
+                                <input type="text" value="@accountSettlementDetails.IntermediaryBankSwiftCode" name="intSettlementDetailsIntermediaryBankSwiftNo" id="intSettlementDetailsIntermediaryBankSwiftNo" class="form-control" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsNameOfBeneficiary" class="form-label">Name of Beneficiary *</label>
+                                <input type="text" name="intSettlementDetailsNameOfBeneficiary" value="@accountSettlementDetails.NameOfBeneficiary" id="intSettlementDetailsNameOfBeneficiary" class="form-control" required />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsBIC" class="form-label">BIC</label>
+                                <input type="text" name="intSettlementDetailsBIC" value="@accountSettlementDetails.BIC" id="intSettlementDetailsBIC" class="form-control" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="intSettlementDetailsAccountNumber" class="form-label">Account Number *</label>
+                                <input type="text" value="@accountSettlementDetails.AccountNumber" name="intSettlementDetailsAccountNumber" id="intSettlementDetailsAccountNumber" class="form-control" required />
+                            </div>
+                        </td>
+                        <td>
+                            <input type="hidden" name="instMarginTrationOption" id="instMarginTrationOption" value="NO" />
+
+                            <div class="form-group">
+                                <label for="instOnlineTradingOption" class="form-label">Online Trading Facility *</label>
+                                <select name="instOnlineTradingOption" id="instOnlineTradingOption" class="form-control" required>
+                                    <option value="">-select-</option>
+                                    <option value="YES">YES</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            <script type="text/javascript">
+                                $("#instOnlineTradingOption").val('@accountSettlementDetails.OnlineTradingFacility');
+                            </script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <div class="table-responsive">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th colspan="6">INSTRUCTIONS AND FINANCIAL DETAILS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label for="intModeOfInstruction" class="form-label">Mode of Instructions *</label>
+                                    <select name="intModeOfInstruction" id="intModeOfInstruction" class="form-control" required>
+                                        <option value="">-select-</option>
+                                        @{
+                                            foreach (var item in context.ModeOfInstructions.Where(x => x.IsActive))
+                                            {
+                                                if (item.Id == accountInstructionEmploymentDetails.ModeOfInstructionId)
+                                                {
+                                                    <option selected value="@item.Id">@item.Name</option>
+                                                    continue;
+                                                }
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label for="intModeOfNotification" class="form-label">Mode of Notification *</label>
+                                    <select name="intModeOfNotification" id="intModeOfNotification" class="form-control" required>
+                                        <option value="">-select-</option>
+                                        @{
+                                            foreach (var item in context.ModeOfNotifications.Where(x => x.IsActive))
+                                            {
+                                                if (item.Id == accountInstructionEmploymentDetails.ModeOfNotificationId)
+                                                {
+                                                    <option selected value="@item.Id">@item.Name</option>
+                                                    continue;
+                                                }
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group" id="intSourceOfIncomeDiv">
+                                    <label for="intSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
+
+
+                                    <input type="hidden" name="intSourceOfIncome" id="intSourceOfIncome" value="1" />
+                                    <br />
+                                    <select id="intSourceOfIncomeIds" name="intSourceOfIncomeIds" multiple required>
+                                        <option value="">-select-</option>
+                                        @{
+                                            foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                                            {
+                                                if (accountInstructionEmploymentDetails.SourceOfFundsIds.Split(',').Contains(item.Id.ToString()))
+                                                {
+                                                    <option selected value="@item.Id">@item.Name</option>
+                                                    continue;
+
+                                                }
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                @{ 
+                    if (accountAuthorisedPersons == null && accountAuthorisedPersons.Count() == 0)
+                    {
+                        accountAuthorisedPersons = new List<AppModels.AccountAuthorisedPersonModel>();
+                        accountAuthorisedPersons.Add(new AppModels.AccountAuthorisedPersonModel { });
+                        accountAuthorisedPersons.Add(new AppModels.AccountAuthorisedPersonModel { });
+
+                    }
+                    var authPerson1 = accountAuthorisedPersons.FirstOrDefault();
+                    var authPerson2 = accountAuthorisedPersons.LastOrDefault();
+                }
+
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th colspan="6">Account Authorised Officers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>  <h5>Authorised Officer 1</h5></th>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Title" class="form-label">Title *</label>
+                                        <select name="intAuthorisedOfficer1Title" id="intAuthorisedOfficer1Title" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.Titles)
+                                                {
+                                                    if (item.Id == authPerson1.TitleId)
+                                                    {
+                                                        <option selected value="@item.Id">@item.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Name" class="form-label">Name *</label>
+                                        <input type="text" value="@authPerson1.Name" name="intAuthorisedOfficer1Name" id="intAuthorisedOfficer1Name" required class="form-control" />
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Mobile" class="form-label">Telephone (Mobile) *</label>
+                                        <input type="text" value="@authPerson1.Mobile" name="intAuthorisedOfficer1Mobile" id="intAuthorisedOfficer1Mobile" required class="form-control" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Fax" class="form-label">Fax</label>
+                                        <input type="text" value="@authPerson1.Fax" name="intAuthorisedOfficer1Fax" id="intAuthorisedOfficer1Fax" class="form-control" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+
+
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Tel" class="form-label">Telephone (Direct)</label>
+                                        <input type="text" value="@authPerson1.Tel" name="intAuthorisedOfficer1Tel" id="intAuthorisedOfficer1Tel" class="form-control" />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Email" class="form-label">Email *</label>
+                                        <input type="email" value="@authPerson1.Email" name="intAuthorisedOfficer1Email" id="intAuthorisedOfficer1Email" required class="form-control" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1Relation" class="form-label">Relation to the Company *</label>
+                                        <input type="text" value="@authPerson1.RelationToAccountHolder" name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required class="form-control" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1StreetAddress" class="form-label">Street Address</label>
+                                        <input type="text" value="@authPerson1.StreetAddress" name="intAuthorisedOfficer1StreetAddress" id="intAuthorisedOfficer1StreetAddress" class="form-control" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1City" class="form-label">City</label>
+                                        <input type="text" name="intAuthorisedOfficer1City" id="intAuthorisedOfficer1City" class="form-control"  value="@authPerson1.City"  />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                                        <input type="text" name="intAuthorisedOfficer1ZipCode" id="intAuthorisedOfficer1ZipCode" class="form-control"  value="@authPerson1.ZipCode"  />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1CountryId" class="form-label">Country *</label>
+                                        <select name="intAuthorisedOfficer1CountryId" id="intAuthorisedOfficer1CountryId" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                                {
+                                                    if (item.ID == authPerson1.CountryId)
+                                                    {
+                                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                                        continue;
+
+                                                    }
+                                                    <option value="@item.ID">@item.CountryName</option>
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1IDType" class="form-label">ID Type *</label>
+                                        <select name="intAuthorisedOfficer1IDType" id="intAuthorisedOfficer1IDType" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                                                {
+                                                    if (item.Id == authPerson1.IdType)
+                                                    {
+                                                        <option selected value="@item.Id">@item.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1IDNumber" class="form-label">ID Number *</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer1IDNumber" value="@authPerson1.IdNumber" id="intAuthorisedOfficer1IDNumber" required />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1IssueAuthority" class="form-label">Issuing Authority *</label>
+                                        <input type="text" name="intAuthorisedOfficer1IssueAuthority" class="form-control" id="intAuthorisedOfficer1IssueAuthority" required  value="@authPerson1.IdIssueAuthority"  />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1IdCardIssueDate" class="form-label">Issue Date</label>
+                                        <input type="date" class="form-control" name="intAuthorisedOfficer1IdCardIssueDate" id="intAuthorisedOfficer1IdCardIssueDate"  value="@authPerson1.IssueDate"  />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer1IdCardIssueExpDate" class="form-label">Expiry Date</label>
+                                        <input type="date" class="form-control" name="intAuthorisedOfficer1IdCardIssueExpDate" id="intAuthorisedOfficer1IdCardIssueExpDate"  value="@authPerson1.IDExpiryDate"  />
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label>Photo ID</label>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="~/Images/@authPerson1.IdPath" style="width:180px; height:140px;" /><br />
+                                    <input type="file" placeholder="new photo" name="instApplicantFirstAuthIdPhotoReplace" id="instApplicantFirstAuthIdPhotoReplace" onchange="javascript: validateUploadImageOnly('instApplicantFirstAuthIdPhotoReplace')" />
+
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>  <h5>Authorised Officer 2</h5></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Title" class="form-label">Title *</label>
+                                        <select name="intAuthorisedOfficer2Title" id="intAuthorisedOfficer2Title" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.Titles)
+                                                {
+                                                    if (item.Id == authPerson2.TitleId)
+                                                    {
+                                                        <option selected value="@item.Id">@item.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Name" class="form-label">Name *</label>
+                                        <input type="text" class="form-control" value="@authPerson2.Name" name="intAuthorisedOfficer2Name" id="intAuthorisedOfficer2Name" required />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Tel" class="form-label">Telephone (Direct)</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer2Tel" id="intAuthorisedOfficer2Tel" value="@authPerson2.Tel" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Mobile" class="form-label">Telephone (Mobile) *</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer2Mobile" id="intAuthorisedOfficer2Mobile" value="@authPerson2.Mobile" required />
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Fax" class="form-label">Fax</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer2Fax" id="intAuthorisedOfficer2Fax" value="@authPerson2.Fax"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Email" class="form-label">Email *</label>
+                                        <input type="email" class="form-control" name="intAuthorisedOfficer2Email" id="intAuthorisedOfficer2Email" required  value="@authPerson2.Email"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2Relation" class="form-label">Relation to the Company *</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required value="@authPerson2.RelationToAccountHolder" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2StreetAddress" class="form-label">Street Address</label>
+                                        <input type="text" class="form-control" name="intAuthorisedOfficer2StreetAddress" id="intAuthorisedOfficer2StreetAddress" value="@authPerson2.StreetAddress" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2City" class="form-label">City</label>
+                                        <input type="text" name="intAuthorisedOfficer2City" id="intAuthorisedOfficer2City" class="form-control" value="@authPerson2.City"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                                        <input type="text" name="intAuthorisedOfficer2ZipCode" id="intAuthorisedOfficer2ZipCode" class="form-control" value="@authPerson2.ZipCode"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2CountryId" class="form-label">Country *</label>
+                                        <select name="intAuthorisedOfficer2CountryId" id="intAuthorisedOfficer2CountryId" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                                                {
+                                                    if (item.ID == authPerson2.CountryId)
+                                                    {
+                                                        <option value="@item.ID" selected>@item.CountryName</option>
+                                                        continue;
+
+                                                    }
+                                                    <option value="@item.ID">@item.CountryName</option>
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2IDType" class="form-label">ID Type *</label>
+                                        <select name="intAuthorisedOfficer2IDType" id="intAuthorisedOfficer2IDType" class="form-control" required>
+                                            <option value="">-select-</option>
+                                            @{
+                                                foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                                                {
+                                                    if (item.Id == authPerson2.IdType)
+                                                    {
+                                                        <option selected value="@item.Id">@item.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2IDNumber" class="form-label">ID Number *</label>
+                                        <input type="text" value="@authPerson2.IdNumber" class="form-control" name="intAuthorisedOfficer2IDNumber" id="intAuthorisedOfficer2IDNumber" required />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2IssueAuthority" class="form-label">Issuing Authority *</label>
+                                        <input type="text" value="@authPerson2.IdIssueAuthority" class="form-control" name="intAuthorisedOfficer2IssueAuthority" id="intAuthorisedOfficer2IssueAuthority" required />
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2IdCardIssueDate" class="form-label">Issue Date</label>
+                                        <input type="date" value="@authPerson2.IssueDate" class="form-control" name="intAuthorisedOfficer2IdCardIssueDate" id="intAuthorisedOfficer2IdCardIssueDate" />
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="intAuthorisedOfficer2IdCardIssueExpDate" class="form-label">Expiry Date</label>
+                                        <input type="date" value="@authPerson2.IDExpiryDate" class="form-control" name="intAuthorisedOfficer2IdCardIssueExpDate" id="intAuthorisedOfficer2IdCardIssueExpDate" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label>Photo ID</label>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="~/Images/@authPerson2.IdPath" style="width:180px; height:140px;" /><br />
+                                    <input type="file" placeholder="new photo" name="intAuthorisedOfficer2IdPhotoReplace" id="intAuthorisedOfficer2IdPhotoReplace" onchange="javascript: validateUploadImageOnly('intAuthorisedOfficer2IdPhotoReplace')" />
+
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+
+
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">
+                                        Trading Contacts
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    if (accountTradingContacts==null || !accountTradingContacts.Any())
+                                    {
+                                        accountTradingContacts = new List<AppModels.AccountTradingContactModel>();
+                                        accountTradingContacts.Add(new AppModels.AccountTradingContactModel { });
+                                        accountTradingContacts.Add(new AppModels.AccountTradingContactModel { });
+
+                                    }
+                                    var tradingContact1 = accountTradingContacts.FirstOrDefault();
+                                    // var tradingContact1 = accountTradingContacts.FirstOrDefault();
+
+                                    if (accountTradingContacts.Count() > 1)
+                                    {
+
+                                        <tr>
+                                            <th colspan="4">1st Contact</th>
+                                        </tr>
+                                    }
+
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Title" class="form-label">Title *</label>
+                                                <select name="tradingContacts1Title" id="tradingContacts1Title" class="form-control" required>
+                                                    <option value="">-select-</option>
+                                                    @{
+                                                        foreach (var item in context.Titles)
+                                                        {
+                                                            if (item.Id == tradingContact1.TitleId)
+                                                            {
+                                                                <option selected value="@item.Id">@item.Name</option>
+                                                                continue;
+                                                            }
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Name" class="form-label">Name *</label>
+                                                <input type="text" value="@tradingContact1.Name" name="tradingContacts1Name" id="tradingContacts1Name" required class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Telephone" class="form-label">Telephone(dierct)</label>
+                                                <input type="text" value="@tradingContact1.Tel" name="tradingContacts1Telephone" id="tradingContacts1Telephone" class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Mobile" class="form-label">Mobile *</label>
+                                                <input type="text" value="@tradingContact1.Mobile" style="width:300px;" name="tradingContacts1Mobile" class="form-control" id="tradingContacts1Mobile" required />
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Fax" class="form-label">Fax</label>
+                                                <input type="text" value="@tradingContact1.Fax" name="tradingContacts1Fax" id="tradingContacts1Fax" class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="tradingContacts1Email" class="form-label">Email *</label>
+                                                <input type="text" value="@tradingContact1.Email" name="tradingContacts1Email" id="tradingContacts1Email" class="form-control" required />
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                                        if (accountTradingContacts.Count() > 1)
+                                                        {
+                                                            var tradingContact2 = accountTradingContacts.LastOrDefault();
+                                        <tr>
+                                            <th colspan="4">2nd Contact</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Title" class="form-label">Title</label>
+                                                    <select name="tradingContacts2Title" id="tradingContacts2Title" class="form-control">
+                                                        <option value="">-select-</option>
+                                                        @{
+                                                            foreach (var item in context.Titles)
+                                                            {
+                                                                if (item.Id == tradingContact2.TitleId)
+                                                                {
+                                                                    <option selected value="@item.Id">@item.Name</option>
+                                                                    continue;
+                                                                }
+                                                                <option value="@item.Id">@item.Name</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Name" class="form-label">Name</label>
+                                                    <input type="text" value="@tradingContact2.Name" name="tradingContacts2Name" id="tradingContacts2Name" class="form-control" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Telephone" class="form-label">Telephone(dierct)</label>
+                                                    <input type="text"  value="@tradingContact2.Tel" name="tradingContacts2Telephone" id="tradingContacts2Telephone" class="form-control" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Mobile" class="form-label">Mobile</label>
+                                                    <input type="text"  value="@tradingContact2.Mobile" style="width:300px;" name="tradingContacts2Mobile" id="tradingContacts2Mobile" class="form-control" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Fax" class="form-label">Fax</label>
+                                                    <input type="text"  value="@tradingContact2.Fax" name="tradingContacts2Fax" id="tradingContacts2Fax" class="form-control" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="tradingContacts2Email" class="form-label">Email</label>
+                                                    <input type="text"  value="@tradingContact2.Email" name="tradingContacts2Email" id="tradingContacts2Email" class="form-control" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                                            }
+                                }
+                            </tbody>
+                        </table>
+
+
+                        @{ 
+                            // var accountSignatories = Utilities.GetAccountSignatories(applicationId);
+
+                        }
+
+
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6">
+                                            Signatories and Mandate
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th>Signature</th>
+                                    </tr>
+                                    @{
+
+                                        var sign1 = accountSignatories.FirstOrDefault();
+                                        var sign2 = accountSignatories.ElementAt(1);
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="instSignName1" class="form-label">Name *</label>
+                                                    <input type="text" name="instSignName1" id="instSignName1" required class="form-control" value="@sign1.Name" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="instSignPosition1" class="form-label">Position *</label>
+                                                    <input type="text" name="instSignPosition1" id="instSignPosition1" required class="form-control" value="@sign1.Position" />
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <img src="~/Images/@sign1.SignaturePath" style="width:120px; height:70px;" /><br />
+                                                <input type="file" placeholder="new photo" name="instSign1" id="instSign1" onchange="javascript: validateUploadImageOnly('instSign1')" />
+
+                                            </td>
+                                        </tr>
+
+                                        <tr style="height:50px;"></tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="instSignName2"  class="form-label">Name *</label>
+                                                    <input type="text" value="@sign2.Name" name="instSignName2" id="instSignName2" required class="form-control" alt="upload new"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="instSignPosition2" class="form-label">Position *</label>
+                                                    <input type="text" value="@sign2.Position" name="instSignPosition2" id="instSignPosition2" required class="form-control" />
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <img src="~/Images/@sign2.SignaturePath" style="width:120px; height:70px;" /><br />
+                                                <input type="file" placeholder="new photo" name="instSign2" id="instSign2" alt="upload new" onchange="javascript: validateUploadImageOnly('instSign2')" />
+
+                                            </td>
+                                        </tr>
+
+
+                                        if (accountSignatories.Count() > 2)
+                                        {
+                                            var sign3 = accountSignatories.ElementAt(2);
+                                            <tr style="height:50px;"></tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label for="instSignName3" class="form-label">Name </label>
+                                                        <input type="text" value="@sign3.Name" name="instSignName3" id="instSignName3" class="form-control" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label for="instSignPosition3" class="form-label">Position </label>
+                                                        <input type="text"  value="@sign3.Position" name="instSignPosition3" id="instSignPosition3" class="form-control" />
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <img src="~/Images/@sign3.SignaturePath" style="width:120px; height:70px;" /><br />
+                                                    <input type="file" placeholder="new photo" name="instSign3" id="instSign3" onchange="javascript: validateUploadImageOnly('instSign3')" />
+
+                                                </td>
+                                            </tr>
+                                        }
+                                        if (accountSignatories.Count() > 3)
+                                        {
+                                            var sign4 = accountSignatories.ElementAt(3);
+                                            <tr style="height:50px;"></tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label for="instSignName4" class="form-label">Name </label>
+                                                        <input type="text" value="@sign4.Name" name="instSignName4" id="instSignName4" class="form-control" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label for="instSignPosition4" class="form-label">Position </label>
+                                                        <input type="text"  value="@sign4.Position" name="instSignPosition4" id="instSignPosition4" class="form-control" />
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <img src="~/Images/@sign4.SignaturePath" style="width:120px; height:70px;" /><br />
+                                                    <input type="file" placeholder="new photo" name="instSign4" id="instSign4" onchange="javascript: validateUploadImageOnly('instSign4')" />
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="instnumberOfSignatories" class="form-label">No. of Signatories *</label>
+                                                <select name="instnumberOfSignatories" class="form-control" id="instnumberOfSignatories" style="width:150px;" required>
+                                                    <option value="">-select-</option>
+                                                    @{
+                                                        foreach (var item in context.SignatureTypes.Where(x => x.Id == 3 || x.Id == 4).OrderBy(x => x.Id))
+                                                        {
+                                                            if (item.Id == basicProfile.SignatureTypeId)
+                                                            {
+                                                                <option selected value="@item.Id">@item.Name</option>
+                                                                continue;
+
+                                                            }
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+
+
+
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="form-group" style="width:250px;">
+                                                <label for="insOtherDetails" class="form-label">Other Details</label>
+                                                <input type="text" value="@basicProfile.InstOtherDetails" name="insOtherDetails" id="insOtherDetails" style="width:300px; height:100px;" class="form-control" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#intSourceOfIncomeIds').multiSelect();
+
+    });
+
+
+
+
+    function showReferalHelp() {
+        bootbox.alert("If a Databank staff directed you to this application, please enter the staff code here");
+    }
+</script>

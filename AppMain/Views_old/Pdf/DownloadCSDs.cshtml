@@ -1,0 +1,19 @@
+﻿@model IEnumerable<System.String>
+@{
+    ViewBag.Title = "Download CSDs files";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<div class="row">
+    @{
+        foreach (var item in Model)
+        {
+            <div class="col-md-1">
+                <a href="~/Images/@item" title="download" target="_blank">
+                    <i class="fa fa-file fa-2x"></i>
+
+                </a>
+            </div>
+        }
+    }
+</div>

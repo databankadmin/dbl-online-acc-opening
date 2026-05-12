@@ -78,5 +78,27 @@ namespace DBHelper.Schema
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
         public virtual DbSet<ForgottenPasswordStatu> ForgottenPasswordStatus { get; set; }
         public virtual DbSet<AccountEditRequest> AccountEditRequests { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Occupation> Occupations { get; set; }
+        public virtual DbSet<Relationship> Relationships { get; set; }
+        public virtual DbSet<AggregatedCounter> AggregatedCounters { get; set; }
+        public virtual DbSet<Hash> Hashes { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<JobParameter> JobParameters { get; set; }
+        public virtual DbSet<JobQueue> JobQueues { get; set; }
+        public virtual DbSet<List> Lists { get; set; }
+        public virtual DbSet<Schema> Schemata { get; set; }
+        public virtual DbSet<Server> Servers { get; set; }
+        public virtual DbSet<Set> Sets { get; set; }
+        public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<Counter> Counters { get; set; }
+        public virtual DbSet<SourceOfFund> SourceOfFunds { get; set; }
+        public virtual DbSet<TopUpOption> TopUpOptions { get; set; }
+        public virtual DbSet<WithdrawalOption> WithdrawalOptions { get; set; }
+        public virtual DbSet<AccountExpectedActivity> AccountExpectedActivities { get; set; }
+        public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<AccountBeneficiary> AccountBeneficiaries { get; set; }
+        public virtual DbSet<AccountCheckList> AccountCheckLists { get; set; }
+        public virtual DbSet<CheckListItem> CheckListItems { get; set; }
     }
 }

@@ -1,0 +1,222 @@
+﻿@{
+    var context = new DBHelper.Schema.DBLAccountOpeningContext();
+}
+
+
+<h4 class="myHeader">Expected Account Activity</h4>
+<div class="form-row">
+    <div class="form-flex">
+
+
+
+        <div class="form-row">
+            <div class="form-flex">
+                <div class="form-group">
+                    <label for="objectivesId" class="form-label">Objectives *</label>
+                    <select name="objectivesId" id="objectivesId" required style="width:200px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.Objectives.Where(x => x.IsActive).OrderBy(x => x.Id))
+                            {
+
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label for="investmentKnowledgeId" class="form-label">Investment Knowledge *</label>
+                    <select name="investmentKnowledgeId" id="investmentKnowledgeId" required style="width:200px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.InvestmentKnowledges.Where(x => x.IsActive).OrderBy(x => x.Id))
+                            {
+
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="riskToleranceId" class="form-label">Risk Tolerance *</label>
+                    <select name="riskToleranceId" id="riskToleranceId" required style="width:200px;">
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.RiskTolerances.Where(x => x.IsActive).OrderBy(x => x.Id))
+                            {
+
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+<div class="form-row">
+    <div class="form-flex">
+
+        <div class="form-group">
+            <label for="onlineTradingFacility" class="form-label">Online Trading Facility *</label>
+            <select name="onlineTradingFacility" id="onlineTradingFacility" required style="width:200px;">
+                <option value="">-select-</option>
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="statementFreqId" class="form-label">Frequency of Account Statements *</label>
+            <select name="statementFreqId" id="statementFreqId" style="width:200px;" required>
+                <option value="">-select-</option>
+                @{
+                    foreach (var item in context.StatementFrequencies.OrderBy(x => x.Id))
+                    {
+
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="initialInvestmentAmt">Initial Investment amount</label>
+            <input type="number" name="initialInvestmentAmt" id="initialInvestmentAmt" min="0">
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<h4>Source of Funds</h4>
+
+<div class="form-row">
+    <div class="form-flex">
+
+        @foreach (var item in context.SourceOfFunds.Take(4))
+        {
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="sourceOfFunds[]" id="@item.Id" style="width:25px;" />
+                    @item.Name
+                </label>
+            </div>
+
+        }
+
+    </div>
+    <textarea rows="5" cols="50" name="sourceOfFundsOthers" id="sourceOfFundsOthers" class="form-control" placeholder="other source of funds(if any)"></textarea>
+
+</div>
+
+
+
+
+<h4>Anticipated Investment Activity</h4>
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="topUpoptionId">Top Ups *</label>
+            <select name="topUpoptionId" id="topUpoptionId" required onchange="javascript:accountActivityChanged(this.value,'topUpoptionOthers')">
+                <option value="">-select-</option>
+                @{
+                    foreach (var item in context.TopUpOptions)
+                    {
+
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            <input type="text" name="topUpoptionOthers" id="topUpoptionOthers" style="display:none; margin-top:2%;" placeholder="others(please specify)" />
+        </div>
+
+        <div class="form-group">
+            <label for="withdrawalOptionsId">Withdrawals *</label>
+            <select name="withdrawalOptionsId" id="withdrawalOptionsId" required onchange="javascript:accountActivityChanged(this.value,'withdrawalOptionsOthers')">
+                <option value="">-select-</option>
+                @{
+                    foreach (var item in context.WithdrawalOptions)
+                    {
+
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            <input type="text" name="withdrawalOptionsOthers" id="withdrawalOptionsOthers" style="display:none; margin-top:2%;" placeholder="others(please specify)" />
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<h4>Anticipated Investment Amount</h4>
+<div class="form-row">
+    <div class="form-flex">
+        <div class="form-group">
+            <label for="expectedTopUpAmt">
+                Regular Top-up Amount
+                (Expected)
+            </label>
+            <input type="number" name="expectedTopUpAmt" id="expectedTopUpAmt" class="form-control" min="1" step="1" placeholder="0.00" />
+        </div>
+
+
+        <div class="form-group">
+            <label for="expectedWithdrawalAmt">
+                Regular Withdrawal
+                Amount (Expected)
+            </label>
+            <input type="number" name="expectedWithdrawalAmt" id="expectedWithdrawalAmt" class="form-control" min="1" step="1" placeholder="0.00" />
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--
+ <div class="form-row">
+            <div class="form-flex">
+
+    </div>
+    </div>
+-->
+
+
+<script type="text/javascript">
+    function accountActivityChanged(val, ctrl) {
+        if (parseInt(val) === 5) {
+            $("#" + ctrl).slideDown();
+            $("#" + ctrl).focus();
+        }
+        else {
+            $("#" + ctrl).slideUp();
+            $("#" + ctrl).val("");
+        }
+    }
+
+</script>

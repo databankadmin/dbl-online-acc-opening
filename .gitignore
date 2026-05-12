@@ -228,6 +228,11 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
+# Archives / large binaries
+*.zip
+*.7z
+*.rar
+
 # SQL Server
 *.mdf
 *.ldf

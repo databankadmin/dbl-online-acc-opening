@@ -103,10 +103,53 @@ namespace AppModels
         public string BranchCode { get; set; }
         public string BackConnectAccountNumber { get; set; }
         public string Password { get; set; }
-
-
+        public string CreatedBy { get; set; }
     }
 
+    public class AccountBeneficiaryModel
+    {
+        public Guid AccountId { get; set; }
+
+        public string Fullname { get; set; }
+
+        public string Phone { get; set; }
+
+        public Decimal PercentageAllocation { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string Relation { get; set; }
+
+        public int TitleId { get; set; }
+
+        public string OtherTitleDetails { get; set; }
+
+        public string Surname { get; set; }
+
+        public string Othernames { get; set; }
+
+        public int? MaritalStatusId { get; set; }
+
+        public int GenderId { get; set; }
+
+        public string BirthDate { get; set; }
+
+        public string PlaceOfBirth { get; set; }
+
+        public int CountryOfOriginId { get; set; }
+
+        public int CountryOfResidenceId { get; set; }
+
+        public int? IDCardTypeId { get; set; }
+
+        public string IDNumber { get; set; }
+
+        public string IDPlaceOfIssue { get; set; }
+
+        public string IDIssueDate { get; set; }
+
+        public string IDExpiryDate { get; set; }
+    }
     public class AccountAMLReponseModel {
 
         public System.Guid Id { get; set; }
@@ -242,25 +285,47 @@ namespace AppModels
     }
     public class AccountSettlementDetailModel {
 
-        public System.Guid Id { get; set; }
-        public System.Guid AccountId { get; set; }
+        public Guid Id { get; set; }
+
+        public Guid AccountId { get; set; }
+
         public string AccountName { get; set; }
+
         public string AccountNumber { get; set; }
-        public Nullable<int> BankId { get; set; }
+
+        public int? BankId { get; set; }
+
         public string BankName { get; set; }
-        public Nullable<int> CorrespondentBankId { get; set; }
+
+        public int? CorrespondentBankId { get; set; }
+
         public string CorrespondentBankName { get; set; }
-        public Nullable<int> IntermediaryBankId { get; set; }
+
+        public int? IntermediaryBankId { get; set; }
+
         public string IntermediaryBankName { get; set; }
+
         public string Branch { get; set; }
+
         public string SwiftCode { get; set; }
+
         public string CorrespondentBankSwiftCode { get; set; }
+
         public string IntermediaryBankSwiftCode { get; set; }
+
+        public string CorrespondentBankBranch { get; set; }
+
+        public string IntermediaryBankBranch { get; set; }
+
         public string NameOfBeneficiary { get; set; }
+
         public string BIC { get; set; }
+
         public string MarginTradingOption { get; set; }
+
         public string OnlineTradingFacility { get; set; }
-        public System.DateTime CreatedDate { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
     }
 
@@ -330,7 +395,12 @@ namespace AppModels
         public string IdValidationMode { get; set; }
         public string IdCardValidationStatus { get; set; }
 
-
+        public string ResidentPermitNo { get; set; }
+        public string ResidentPermitIssueDate { get; set; }
+        public string ResidentPermitExpiryDate { get; set; }
+        public string ResidentPermitPlaceOfIssue { get; set; }
+        public string Profession { get; set; }
+        public string ProfessionLinNumber { get; set; }
     }
 
     public class AccountInstructionEmploymentDetailModel {
@@ -439,7 +509,13 @@ namespace AppModels
 
     }
 
+    public class NameValueModel {
+        public int IntVal { get; set; }
+        public decimal DeciVal { get; set; }
+        public string Label { get; set; }
+        public string Color { get; set; }
 
+    }
     public class UserModel
     {
         public string UserId { get; set; }

@@ -1,0 +1,129 @@
+﻿@model AppModels.AccountBasicModel
+@using AppUtils
+@using AppModels
+@using AppMain.Providers
+@{
+    Layout = "~/Views/Shared/_pdfLayout.cshtml";
+    ViewBag.Title = "Applicant ETI Profile | " + Model.AccountName;
+    Guid applicationId = Guid.Parse(ViewBag.applicationId.ToString());
+    var accountETI = Utilities.GetAccountETI(applicationId);
+
+}
+
+
+
+<style type="text/css">
+
+    th.theader {
+        color: #fff;
+        background-color: #00a65a !important;
+        font-size: 16px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        page-break-inside: avoid;
+    }
+</style>
+<div class="col-md-12">
+    <div class="row" style="padding-left:2%; padding-right:2%;">
+        <img src="~/Images/pdf_header_logo.png" style="width:300px; height:80px; display:inline;" />
+        <img src="~/Images/pdf_header_databank.png" style="width:300px; height:80px; float:right;" />
+    </div>
+</div>
+
+
+<div class="col-md-12">
+    <div class="card">
+
+        <fieldset>
+            @{
+                if (accountETI == null)
+                {
+                    accountETI = new AccountETIModel
+                    {
+                        Text1 = "Text 1",
+                        Text2 = "Text 2",
+                        Text3 = "Text 3",
+                        Text4 = "Text 4"
+
+                    };
+                }
+            }
+            <br />
+            <div class="fieldset-content" style="text-align:inherit;font-size:18px;">
+
+                I / We, <input readonly type="text" style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text1" />, the undersigned,<br /><br />
+                here acting in the capacity of <input readonly type="text" style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text2" /<br /> <br />,
+                authorise and instruct Databank Brokerage Limited to execute within the earliest possible time, the
+                instructions which I am / we are likely to transmit by fax, telephone and e-mail, with regard to securities
+                transactions generally, in the name of <input type="text" readonly style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text3" / unless
+                otherwise indicated, pending receipt or not
+                of my / our original written conrmation, which when issued by me / us will be annotated with “Instructions
+                already given by telephone / e-mail or fax.
+                <br />
+                <br />
+                I am / We are however perfectly aware of inherent risks there may be in transmission of instructions by fax,
+                telephone and e-mail, such as, but not limited to, delays and errors in transmission, incomprehension,
+                absence of condentiality, transmission by unauthorised persons and loss caused thereby, and agree to
+                bear the consequences thereof.
+                <br />
+                <br />
+                In consideration of your agreeing to carry out my / our instructions by such means as aforesaid, I / we, the
+                undersigned, here acting in the capacity of <input type="text" readonly style="width:700px;display:inline; font-weight:bold; text-align:center; font-style:italic" value="@accountETI.Text4" / ,
+                undertake:
+                <br /><br />
+                <ul style="list-style-type:disc">
+                    <li>to hold you or any of your agents blameless in the execution of such instructions;</li>
+                    <li>not to enter any action against you (and in so far as need be); and</li>
+                    <li>
+                        to indemnify you for all losses and all actions, proceedings and demands that might be entered or made
+                        against you by any third party as a result of your complying with instructions transmitted by the above
+                        means, as well as for fees, costs and expenses which you might incur in relation to such actions,
+                        proceedings or demands.
+
+                    </li>
+                </ul>
+
+                <br />
+                This authorisation is given by me / us to Databank Brokerage Limited and is valid until formal revocation by
+                written instructions from me / us.
+
+                <br /><br />
+                Dated this @DateTime.Now.Date.ToString("dd") day of @DateTime.Now.ToString("MMMM yyyy").
+                <br />
+                <br />
+
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <td>@accountETI.Name1</td>
+                        <th>Email</th>
+                        <td>@accountETI.Email1</td>
+                    </tr>
+                    @{
+                        if (Model.AccountTypeId == 4)
+                        {
+                            <tr>
+                                <th>Name</th>
+                                <td>@accountETI.Name2</td>
+                                <th>Email</th>
+                                <td>@accountETI.Email2</td>
+                            </tr>
+                        }
+                    }
+
+                </table>
+
+
+
+
+            </div>
+
+
+
+        </fieldset>
+
+
+
+
+    </div>
+</div>

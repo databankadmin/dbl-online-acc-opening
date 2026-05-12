@@ -181,7 +181,7 @@
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
                         {
-                            if (item.ID == 81)
+                            if (item.SoftTechCode == "016")
                             {
                                 <option value="@item.ID" selected>@item.CountryName</option>
                                 continue;
@@ -233,7 +233,7 @@
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
                         {
-                            if (item.ID == 81)
+                            if (item.SoftTechCode == "016")
                             {
                                 <option value="@item.ID" selected>@item.CountryName</option>
                                 continue;
@@ -275,7 +275,7 @@
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
                         {
-                            if (item.ID == 81)
+                            if (item.SoftTechCode == "016")
                             {
                                 <option value="@item.ID" selected>@item.CountryName</option>
                                 continue;
@@ -426,6 +426,10 @@
                 <label for="intSettlementDetailsCorrespondentBankSwiftNo" class="form-label">Swift / Sort code</label>
                 <input type="text" name="intSettlementDetailsCorrespondentBankSwiftNo" id="intSettlementDetailsCorrespondentBankSwiftNo" />
             </div>
+            <div class="form-group">
+                <label for="intSettlementDetailsCorrespondentBankBranch" class="form-label">Correspondent Bank Branch</label>
+                <input type="text" name="intSettlementDetailsCorrespondentBankBranch" id="intSettlementDetailsCorrespondentBankBranch" />
+            </div>
 
         </div>
     </div>
@@ -450,6 +454,10 @@
             <div class="form-group">
                 <label for="intSettlementDetailsIntermediaryBankSwiftNo" class="form-label">Swift / Sort code</label>
                 <input type="text" name="intSettlementDetailsIntermediaryBankSwiftNo" id="intSettlementDetailsIntermediaryBankSwiftNo" />
+            </div>
+            <div class="form-group">
+                <label for="intSettlementDetailsIntermediaryBankBranch" class="form-label">Intermediary Bank Branch</label>
+                <input type="text" name="intSettlementDetailsIntermediaryBankBranch" id="intSettlementDetailsIntermediaryBankBranch" />
             </div>
 
         </div>
@@ -483,14 +491,14 @@
         <div class="form-flex">
 
             @*<div class="form-group">
-                <label for="instMarginTrationOption" class="form-label">Margin Trading Option *</label>
-                <select name="instMarginTrationOption" id="instMarginTrationOption" style="width:350px;" required>
-                    <option value="">-select-</option>
-                    <option value="YES">YES</option>
-                    <option value="NO">NO</option>
-                </select>
-            </div>*@
-            <input type="hidden" name="instMarginTrationOption"  id="instMarginTrationOption" value="NO"/>
+                    <label for="instMarginTrationOption" class="form-label">Margin Trading Option *</label>
+                    <select name="instMarginTrationOption" id="instMarginTrationOption" style="width:350px;" required>
+                        <option value="">-select-</option>
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>*@
+            <input type="hidden" name="instMarginTrationOption" id="instMarginTrationOption" value="NO" />
 
             <div class="form-group">
                 <label for="instOnlineTradingOption" class="form-label">Online Trading Facility *</label>
@@ -540,16 +548,16 @@
             <div class="form-group" id="intSourceOfIncomeDiv">
                 <label for="intSourceOfIncome" class="form-label">Source(s) of Income/Funds *</label>
                 @*<select name="intSourceOfIncome" id="intSourceOfIncome" required>
-            <option value="">-select-</option>
-            @{
-                foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            }
-        </select>*@
+                        <option value="">-select-</option>
+                        @{
+                            foreach (var item in context.SourceOfIncomes.Where(x => x.IsActive))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>*@
 
-                <input type="hidden" name="intSourceOfIncome" id="intSourceOfIncome" value="1" />
+                <input type="hidden" name="intSourceOfIncome" id="intSourceOfIncome" value="@context.SourceOfIncomes.FirstOrDefault().Id" />
 
                 <select id="intSourceOfIncomeIds" name="intSourceOfIncomeIds" multiple required>
                     <option value="">-select-</option>
@@ -616,7 +624,18 @@
             </div>
             <div class="form-group">
                 <label for="intAuthorisedOfficer1Relation" class="form-label">Relation to the Company *</label>
-                <input type="text" name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required />
+                @*<input type="text" name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required />*@
+                <select name="intAuthorisedOfficer1Relation" id="intAuthorisedOfficer1Relation" required>
+                    <option value="">select</option>
+                    @{
+                        foreach (var item in context.Relationships.OrderBy(x => x.Name))
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    }
+                </select>
+
+
             </div>
 
 
@@ -647,7 +666,7 @@
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
                         {
-                            if (item.ID == 81)
+                            if (item.SoftTechCode == "016")
                             {
                                 <option value="@item.ID" selected>@item.CountryName</option>
                                 continue;
@@ -694,6 +713,8 @@
                 </div>
 
                 <input type="hidden" name="instAuthorisedOfficer1PhotoIdhidden" id="instAuthorisedOfficer1PhotoIdhidden" />
+                <input type="hidden" name="_instAuthorisedOfficer1PhotoId" id="_instAuthorisedOfficer1PhotoId" />
+
 
             </div>
 
@@ -771,7 +792,19 @@
             </div>
             <div class="form-group">
                 <label for="intAuthorisedOfficer2Relation" class="form-label">Relation to the Company *</label>
-                <input type="text" name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required />
+                @*<input type="text" name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required />*@
+
+                <select name="intAuthorisedOfficer2Relation" id="intAuthorisedOfficer2Relation" required>
+                    <option value="">select</option>
+                    @{
+                        foreach (var item in context.Relationships.OrderBy(x => x.Name))
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    }
+                </select>
+
+
             </div>
 
 
@@ -802,7 +835,7 @@
                     @{
                         foreach (var item in context.Countries.OrderBy(x => x.CountryName))
                         {
-                            if (item.ID == 81)
+                            if (item.SoftTechCode == "016")
                             {
                                 <option value="@item.ID" selected>@item.CountryName</option>
                                 continue;
@@ -850,6 +883,7 @@
                 </div>
 
                 <input type="hidden" name="instAuthorisedOfficer2PhotoIdhidden" id="instAuthorisedOfficer2PhotoIdhidden" />
+                <input type="hidden" name="_instAuthorisedOfficer2PhotoId" id="_instAuthorisedOfficer2PhotoId" />
 
             </div>
 
@@ -878,6 +912,521 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <h4>Authorised Officer 3</h4>
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Name" class="form-label">Name</label>
+                <input type="text" name="intAuthorisedOfficer3Name" id="intAuthorisedOfficer3Name" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Tel" class="form-label">Telephone (Direct)</label>
+                <input type="text" name="intAuthorisedOfficer3Tel" id="intAuthorisedOfficer3Tel" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Mobile" class="form-label">Telephone (Mobile)</label>
+                <input type="text" name="intAuthorisedOfficer3Mobile" id="intAuthorisedOfficer3Mobile" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Fax" class="form-label">Fax</label>
+                <input type="text" name="intAuthorisedOfficer3Fax" id="intAuthorisedOfficer3Fax" />
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Title" class="form-label">Title</label>
+                <select name="intAuthorisedOfficer3Title" id="intAuthorisedOfficer3Title" style="width:300px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Titles)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Email" class="form-label">Email</label>
+                <input type="email" name="intAuthorisedOfficer3Email" id="intAuthorisedOfficer3Email" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3Relation" class="form-label">Relation to the Company</label>
+                @*<input type="text" name="intAuthorisedOfficer3Relation" id="intAuthorisedOfficer3Relation" required />*@
+
+                <select name="intAuthorisedOfficer3Relation" id="intAuthorisedOfficer3Relation">
+                    <option value="">select</option>
+                    @{
+                        foreach (var item in context.Relationships.OrderBy(x => x.Name))
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    }
+                </select>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3StreetAddress" class="form-label">Street Address</label>
+                <input type="text" name="intAuthorisedOfficer3StreetAddress" id="intAuthorisedOfficer3StreetAddress" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3City" class="form-label">City</label>
+                <input type="text" name="intAuthorisedOfficer3City" id="intAuthorisedOfficer3City" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                <input type="text" name="intAuthorisedOfficer3ZipCode" id="intAuthorisedOfficer3ZipCode" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3CountryId" class="form-label">Country</label>
+                <select name="intAuthorisedOfficer3CountryId" id="intAuthorisedOfficer3CountryId" style="width:200px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                        {
+                            if (item.SoftTechCode == "016")
+                            {
+                                <option value="@item.ID" selected>@item.CountryName</option>
+                                continue;
+
+                            }
+                            <option value="@item.ID">@item.CountryName</option>
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3IDType" class="form-label">ID Type</label>
+                <select name="intAuthorisedOfficer3IDType" id="intAuthorisedOfficer3IDType" style="width:250px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3IDNumber" class="form-label">ID Number</label>
+                <input type="text" name="intAuthorisedOfficer3IDNumber" id="intAuthorisedOfficer3IDNumber" />
+            </div>
+
+
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="instAuthorisedOfficer3PhotoId" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID
+                    </center>
+                </div>
+
+                <input type="hidden" name="instAuthorisedOfficer3PhotoIdhidden" id="instAuthorisedOfficer3PhotoIdhidden" />
+                <input type="hidden" name="_instAuthorisedOfficer3PhotoId" id="_instAuthorisedOfficer3PhotoId" />
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3IssueAuthority" class="form-label">Issuing Authority</label>
+                <input type="text" name="intAuthorisedOfficer3IssueAuthority" id="intAuthorisedOfficer3IssueAuthority" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3IdCardIssueDate" class="form-label">Issue Date</label>
+                <input type="date" name="intAuthorisedOfficer3IdCardIssueDate" id="intAuthorisedOfficer3IdCardIssueDate" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer3IdCardIssueExpDate" class="form-label">Expiry Date</label>
+                <input type="date" name="intAuthorisedOfficer3IdCardIssueExpDate" id="intAuthorisedOfficer3IdCardIssueExpDate" />
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <h4>Authorised Officer 4</h4>
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Name" class="form-label">Name</label>
+                <input type="text" name="intAuthorisedOfficer4Name" id="intAuthorisedOfficer4Name" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Tel" class="form-label">Telephone (Direct)</label>
+                <input type="text" name="intAuthorisedOfficer4Tel" id="intAuthorisedOfficer4Tel" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Mobile" class="form-label">Telephone (Mobile)</label>
+                <input type="text" name="intAuthorisedOfficer4Mobile" id="intAuthorisedOfficer4Mobile" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Fax" class="form-label">Fax</label>
+                <input type="text" name="intAuthorisedOfficer4Fax" id="intAuthorisedOfficer4Fax" />
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Title" class="form-label">Title</label>
+                <select name="intAuthorisedOfficer4Title" id="intAuthorisedOfficer4Title" style="width:300px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Titles)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Email" class="form-label">Email</label>
+                <input type="email" name="intAuthorisedOfficer4Email" id="intAuthorisedOfficer4Email" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4Relation" class="form-label">Relation to the Company</label>
+                @*<input type="text" name="intAuthorisedOfficer4Relation" id="intAuthorisedOfficer4Relation" required />*@
+
+                <select name="intAuthorisedOfficer4Relation" id="intAuthorisedOfficer4Relation">
+                    <option value="">select</option>
+                    @{
+                        foreach (var item in context.Relationships.OrderBy(x => x.Name))
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    }
+                </select>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4StreetAddress" class="form-label">Street Address</label>
+                <input type="text" name="intAuthorisedOfficer4StreetAddress" id="intAuthorisedOfficer4StreetAddress" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4City" class="form-label">City</label>
+                <input type="text" name="intAuthorisedOfficer4City" id="intAuthorisedOfficer4City" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                <input type="text" name="intAuthorisedOfficer4ZipCode" id="intAuthorisedOfficer4ZipCode" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4CountryId" class="form-label">Country</label>
+                <select name="intAuthorisedOfficer4CountryId" id="intAuthorisedOfficer4CountryId" style="width:300px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                        {
+                            if (item.SoftTechCode == "016")
+                            {
+                                <option value="@item.ID" selected>@item.CountryName</option>
+                                continue;
+
+                            }
+                            <option value="@item.ID">@item.CountryName</option>
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4IDType" class="form-label">ID Type</label>
+                <select name="intAuthorisedOfficer4IDType" id="intAuthorisedOfficer4IDType" style="width:250px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(4))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4IDNumber" class="form-label">ID Number</label>
+                <input type="text" name="intAuthorisedOfficer4IDNumber" id="intAuthorisedOfficer4IDNumber" />
+            </div>
+
+
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="instAuthorisedOfficer4PhotoId" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID
+                    </center>
+                </div>
+
+                <input type="hidden" name="instAuthorisedOfficer4PhotoIdhidden" id="instAuthorisedOfficer4PhotoIdhidden" />
+                <input type="hidden" name="_instAuthorisedOfficer4PhotoId" id="_instAuthorisedOfficer4PhotoId" />
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4IssueAuthority" class="form-label">Issuing Authority</label>
+                <input type="text" name="intAuthorisedOfficer4IssueAuthority" id="intAuthorisedOfficer4IssueAuthority" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4IdCardIssueDate" class="form-label">Issue Date</label>
+                <input type="date" name="intAuthorisedOfficer4IdCardIssueDate" id="intAuthorisedOfficer4IdCardIssueDate" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer4IdCardIssueExpDate" class="form-label">Expiry Date</label>
+                <input type="date" name="intAuthorisedOfficer4IdCardIssueExpDate" id="intAuthorisedOfficer4IdCardIssueExpDate" />
+            </div>
+        </div>
+    </div>
+
+
+
+    @* from 5 - 5 start *@
+
+    <h4>Authorised Officer 5</h4>
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Name" class="form-label">Name</label>
+                <input type="text" name="intAuthorisedOfficer5Name" id="intAuthorisedOfficer5Name" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Tel" class="form-label">Telephone (Direct)</label>
+                <input type="text" name="intAuthorisedOfficer5Tel" id="intAuthorisedOfficer5Tel" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Mobile" class="form-label">Telephone (Mobile)</label>
+                <input type="text" name="intAuthorisedOfficer5Mobile" id="intAuthorisedOfficer5Mobile" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Fax" class="form-label">Fax</label>
+                <input type="text" name="intAuthorisedOfficer5Fax" id="intAuthorisedOfficer5Fax" />
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Title" class="form-label">Title</label>
+                <select name="intAuthorisedOfficer5Title" id="intAuthorisedOfficer5Title" style="width:300px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Titles)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Email" class="form-label">Email</label>
+                <input type="email" name="intAuthorisedOfficer5Email" id="intAuthorisedOfficer5Email" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5Relation" class="form-label">Relation to the Company</label>
+                @*<input type="text" name="intAuthorisedOfficer5Relation" id="intAuthorisedOfficer5Relation" required />*@
+
+                <select name="intAuthorisedOfficer5Relation" id="intAuthorisedOfficer5Relation">
+                    <option value="">select</option>
+                    @{
+                        foreach (var item in context.Relationships.OrderBy(x => x.Name))
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    }
+                </select>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5StreetAddress" class="form-label">Street Address</label>
+                <input type="text" name="intAuthorisedOfficer5StreetAddress" id="intAuthorisedOfficer5StreetAddress" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5City" class="form-label">City</label>
+                <input type="text" name="intAuthorisedOfficer5City" id="intAuthorisedOfficer5City" />
+            </div>
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5ZipCode" class="form-label">Zip Code/GhanaPost Code</label>
+                <input type="text" name="intAuthorisedOfficer5ZipCode" id="intAuthorisedOfficer5ZipCode" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5CountryId" class="form-label">Country</label>
+                <select name="intAuthorisedOfficer5CountryId" id="intAuthorisedOfficer5CountryId" style="width:300px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.Countries.OrderBy(x => x.CountryName))
+                        {
+                            if (item.SoftTechCode == "016")
+                            {
+                                <option value="@item.ID" selected>@item.CountryName</option>
+                                continue;
+
+                            }
+                            <option value="@item.ID">@item.CountryName</option>
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5IDType" class="form-label">ID Type</label>
+                <select name="intAuthorisedOfficer5IDType" id="intAuthorisedOfficer5IDType" style="width:250px;">
+                    <option value="">-select-</option>
+                    @{
+                        foreach (var item in context.IDCardTypes.Where(x => x.IsActive).Take(5))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5IDNumber" class="form-label">ID Number</label>
+                <input type="text" name="intAuthorisedOfficer5IDNumber" id="intAuthorisedOfficer5IDNumber" />
+            </div>
+
+
+            <div class="form-group">
+                <div class="dropzone dropzone-previews" id="instAuthorisedOfficer5PhotoId" style="padding-top:2px;">
+                    <center style="text-align:center;">
+                        UPLOAD ID
+                    </center>
+                </div>
+
+                <input type="hidden" name="instAuthorisedOfficer5PhotoIdhidden" id="instAuthorisedOfficer5PhotoIdhidden" />
+                <input type="hidden" name="_instAuthorisedOfficer5PhotoId" id="_instAuthorisedOfficer5PhotoId" />
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-flex">
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5IssueAuthority" class="form-label">Issuing Authority</label>
+                <input type="text" name="intAuthorisedOfficer5IssueAuthority" id="intAuthorisedOfficer5IssueAuthority" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5IdCardIssueDate" class="form-label">Issue Date</label>
+                <input type="date" name="intAuthorisedOfficer5IdCardIssueDate" id="intAuthorisedOfficer5IdCardIssueDate" />
+            </div>
+
+            <div class="form-group">
+                <label for="intAuthorisedOfficer5IdCardIssueExpDate" class="form-label">Expiry Date</label>
+                <input type="date" name="intAuthorisedOfficer5IdCardIssueExpDate" id="intAuthorisedOfficer5IdCardIssueExpDate" />
+            </div>
+        </div>
+    </div>
+
+
+    @* from 5 - 5 end *@
 
 
     <h4 class="myHeader">Trading Contacts</h4>
@@ -926,7 +1475,7 @@
 
             <div class="form-group">
                 <label for="tradingContacts1Email" class="form-label">Email *</label>
-                <input type="text" name="tradingContacts1Email" id="tradingContacts1Email" required/>
+                <input type="text" name="tradingContacts1Email" id="tradingContacts1Email" required />
             </div>
         </div>
     </div>
@@ -983,6 +1532,8 @@
         </div>
     </div>
 
+
+
     <h4 class="myHeader">Signatories and Mandate(at least 2 required)</h4>
     <div class="form-row">
         <div class="form-flex">
@@ -1006,6 +1557,8 @@
 
                 <input type="hidden" name="instSignatory1hidden" id="instSignatory1hidden" />
                 <input type="hidden" name="_instSign1Capture" id="instSignatory1hidden" />
+                <input type="hidden" name="_instSignatory1" id="_instSignatory1" />
+
 
             </div>
 
@@ -1037,6 +1590,7 @@
                 </div>
 
                 <input type="hidden" name="instSignatory2hidden" id="instSignatory2hidden" />
+                <input type="hidden" name="_instSignatory2" id="_instSignatory2" />
 
             </div>
 
@@ -1070,6 +1624,7 @@
                 </div>
 
                 <input type="hidden" name="instSignatory3hidden" id="instSignatory3hidden" />
+                <input type="hidden" name="_instSignatory3" id="_instSignatory3" />
 
             </div>
 
@@ -1105,6 +1660,7 @@
                 </div>
 
                 <input type="hidden" name="instSignatory4hidden" id="instSignatory4hidden" />
+                <input type="hidden" name="_instSignatory4" id="_instSignatory4" />
 
             </div>
 
@@ -1145,9 +1701,9 @@
             </div>
 
 
-            <div class="form-group"  style="width:250px;">
+            <div class="form-group" style="width:250px;">
                 <label for="insOtherDetails" class="form-label">Other Details</label>
-                <input type="text" name="insOtherDetails" id="insOtherDetails" style="width:150px;"/>
+                <input type="text" name="insOtherDetails" id="insOtherDetails" style="width:150px;" />
             </div>
             <div class="form-group">
                 <label for="staffRefCode" class="form-label">Do you have introducer Code? (optional) <a style="color:blue;" onclick="javascript:showReferalHelp()">Need help?</a></label>

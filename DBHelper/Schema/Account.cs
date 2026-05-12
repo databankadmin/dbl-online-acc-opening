@@ -30,6 +30,9 @@ namespace DBHelper.Schema
             this.AccountNextOfKinDetails = new HashSet<AccountNextOfKinDetail>();
             this.AccountSettlementDetails = new HashSet<AccountSettlementDetail>();
             this.AccountEditRequests = new HashSet<AccountEditRequest>();
+            this.AccountExpectedActivities = new HashSet<AccountExpectedActivity>();
+            this.AccountBeneficiaries = new HashSet<AccountBeneficiary>();
+            this.AccountCheckLists = new HashSet<AccountCheckList>();
         }
     
         public System.Guid Id { get; set; }
@@ -81,6 +84,10 @@ namespace DBHelper.Schema
         public string Reviewer { get; set; }
         public string CancelledORRejectBy { get; set; }
         public string Password { get; set; }
+        public decimal InitialInvestmentAmount { get; set; }
+        public string MODE_OF_APP { get; set; }
+        public string InvestmentObjective { get; set; }
+        public string CreatedBy { get; set; }
     
         public virtual AccountType AccountType { get; set; }
         public virtual Country Country { get; set; }
@@ -119,5 +126,11 @@ namespace DBHelper.Schema
         public virtual StaffRefList StaffRefList { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountEditRequest> AccountEditRequests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountExpectedActivity> AccountExpectedActivities { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountBeneficiary> AccountBeneficiaries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountCheckList> AccountCheckLists { get; set; }
     }
 }

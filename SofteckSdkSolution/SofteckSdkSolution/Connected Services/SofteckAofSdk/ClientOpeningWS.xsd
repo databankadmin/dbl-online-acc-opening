@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://ws/" targetNamespace="http://ws/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="openClient" type="tns:openClient" />
+  <xs:element name="openClientResponse" type="tns:openClientResponse" />
+  <xs:complexType name="clientAofApiDAO">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:complexType name="clientAofApiBean">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="accStatmentFreq" type="xs:string" />
+      <xs:element minOccurs="0" name="appId" type="xs:string" />
+      <xs:element minOccurs="0" name="applicantObj" type="xs:string" />
+      <xs:element minOccurs="0" name="approximateAnnualIncome" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonCity" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonCountry" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonEmail" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonFax" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonFullName" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonMailingAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonMob" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonNicExpDate" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonNicIssueAuthority" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonNicIssueDate" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonNicPhotoId" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonRelation" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonTel" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonUploadNicImgID" type="xs:string" />
+      <xs:element minOccurs="0" name="authPersonZipCode" type="xs:string" />
+      <xs:element minOccurs="0" name="branch" type="xs:string" />
+      <xs:element minOccurs="0" name="cityAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="commBankAccName" type="xs:string" />
+      <xs:element minOccurs="0" name="commBankAccNo" type="xs:string" />
+      <xs:element minOccurs="0" name="commBankBranch" type="xs:string" />
+      <xs:element minOccurs="0" name="commBankSelection" type="xs:string" />
+      <xs:element minOccurs="0" name="countryAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="courtConviction" type="xs:string" />
+      <xs:element minOccurs="0" name="courtConvictionDetail" type="xs:string" />
+      <xs:element minOccurs="0" name="currentEmployer" type="xs:string" />
+      <xs:element minOccurs="0" name="currentEmployerAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="currentOccupation" type="xs:string" />
+      <xs:element minOccurs="0" name="declaration" type="xs:string" />
+      <xs:element minOccurs="0" name="dob" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="email" type="xs:string" />
+      <xs:element minOccurs="0" name="employmentFromDate" type="xs:string" />
+      <xs:element minOccurs="0" name="employmentStatus" type="xs:string" />
+      <xs:element minOccurs="0" name="employmentToDate" type="xs:string" />
+      <xs:element minOccurs="0" name="expDate" type="xs:string" />
+      <xs:element minOccurs="0" name="expectedAccActivity" type="xs:string" />
+      <xs:element minOccurs="0" name="fax" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinEmail" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinFaxNum" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinMailingAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinMobNum" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinName" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinRelation" type="xs:string" />
+      <xs:element minOccurs="0" name="firstKinTelNum" type="xs:string" />
+      <xs:element minOccurs="0" name="firstName" type="xs:string" />
+      <xs:element minOccurs="0" name="gender" type="xs:string" />
+      <xs:element minOccurs="0" name="incomeFundSource" type="xs:string" />
+      <xs:element minOccurs="0" name="investmentHorizon" type="xs:string" />
+      <xs:element minOccurs="0" name="investmentKnowledge" type="xs:string" />
+      <xs:element minOccurs="0" name="investmentType" type="xs:string" />
+      <xs:element minOccurs="0" name="issueDate" type="xs:string" />
+      <xs:element minOccurs="0" name="madenName" type="xs:string" />
+      <xs:element minOccurs="0" name="mailingAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="mailingAddCity" type="xs:string" />
+      <xs:element minOccurs="0" name="mailingAddCountry" type="xs:string" />
+      <xs:element minOccurs="0" name="mailingAddZipCode" type="xs:string" />
+      <xs:element minOccurs="0" name="maritialStatus" type="xs:string" />
+      <xs:element minOccurs="0" name="mobileNum" type="xs:string" />
+      <xs:element minOccurs="0" name="modeOfInstruction" type="xs:string" />
+      <xs:element minOccurs="0" name="modeOfNotification" type="xs:string" />
+      <xs:element minOccurs="0" name="motherMadenName" type="xs:string" />
+      <xs:element minOccurs="0" name="nationality" type="xs:string" />
+      <xs:element minOccurs="0" name="netWorth" type="xs:string" />
+      <xs:element minOccurs="0" name="nicIssueAuth" type="xs:string" />
+      <xs:element minOccurs="0" name="nicNum" type="xs:string" />
+      <xs:element minOccurs="0" name="nicPhotoIdType" type="xs:string" />
+      <xs:element minOccurs="0" name="nomineeTrust" type="xs:string" />
+      <xs:element minOccurs="0" name="nomineeTrustName" type="xs:string" />
+      <xs:element minOccurs="0" name="occupation" type="xs:string" />
+      <xs:element minOccurs="0" name="onlineTradingFac" type="xs:string" />
+      <xs:element minOccurs="0" name="otherName" type="xs:string" />
+      <xs:element minOccurs="0" name="previousEmployer" type="xs:string" />
+      <xs:element minOccurs="0" name="previousOccupation" type="xs:string" />
+      <xs:element minOccurs="0" name="residentialAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="riskTolerence" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinEmail" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinFax" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinFullName" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinMailingAdd" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinMobNum" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinRelation" type="xs:string" />
+      <xs:element minOccurs="0" name="secKinTelNum" type="xs:string" />
+      <xs:element minOccurs="0" name="signImgId" type="xs:string" />
+      <xs:element minOccurs="0" name="signNum" type="xs:string" />
+      <xs:element minOccurs="0" name="srName" type="xs:string" />
+      <xs:element minOccurs="0" name="suffix" type="xs:string" />
+      <xs:element minOccurs="0" name="swiftSortCode" type="xs:string" />
+      <xs:element minOccurs="0" name="taxIdNo" type="xs:string" />
+      <xs:element minOccurs="0" name="tellephoneNum" type="xs:string" />
+      <xs:element minOccurs="0" name="title" type="xs:string" />
+      <xs:element minOccurs="0" name="totEmploymentYear" type="xs:string" />
+      <xs:element minOccurs="0" name="uploadImgId" type="xs:string" />
+      <xs:element minOccurs="0" name="zipCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="openClient">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:clientAofApiBean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="openClientResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

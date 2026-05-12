@@ -58,6 +58,10 @@
           <Property Name="Reviewer" Type="varchar" MaxLength="100" />
           <Property Name="CancelledORRejectBy" Type="varchar" MaxLength="100" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="InitialInvestmentAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="MODE_OF_APP" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="InvestmentObjective" Type="varchar" MaxLength="500" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AccountAMLResponses">
           <Key>
@@ -104,6 +108,43 @@
           <Property Name="IdValidationMode" Type="varchar" MaxLength="100" />
           <Property Name="ManualValidationComment" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="AccountBeneficiary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Fullname" Type="varchar" MaxLength="500" />
+          <Property Name="Phone" Type="varchar" MaxLength="500" />
+          <Property Name="PercentageAllocation" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Relation" Type="varchar" MaxLength="100" />
+          <Property Name="TitleId" Type="int" />
+          <Property Name="OtherTitleDetails" Type="varchar" MaxLength="200" />
+          <Property Name="Surname" Type="varchar" MaxLength="100" />
+          <Property Name="Othernames" Type="varchar" MaxLength="100" />
+          <Property Name="MaritalStatusId" Type="int" />
+          <Property Name="GenderId" Type="int" />
+          <Property Name="BirthDate" Type="varchar" MaxLength="50" />
+          <Property Name="PlaceOfBirth" Type="varchar" MaxLength="100" />
+          <Property Name="CountryOfOriginId" Type="int" />
+          <Property Name="CountryOfResidenceId" Type="int" />
+          <Property Name="IDCardTypeId" Type="int" />
+          <Property Name="IDNumber" Type="varchar" MaxLength="100" />
+          <Property Name="IDPlaceOfIssue" Type="varchar" MaxLength="100" />
+          <Property Name="IDIssueDate" Type="varchar" MaxLength="100" />
+          <Property Name="IDExpiryDate" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="AccountCheckList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CheckListItemId" Type="int" Nullable="false" />
+          <Property Name="IsChecked" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="AccountEditRequest">
           <Key>
             <PropertyRef Name="Id" />
@@ -114,6 +155,10 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="ErrorList" Type="varchar(max)" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DBLFormEnabled" Type="bit" Nullable="false" />
+          <Property Name="FileUploadEnabled" Type="bit" Nullable="false" />
+          <Property Name="AMLEnabled" Type="bit" Nullable="false" />
+          <Property Name="ETIEnabled" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountETI">
           <Key>
@@ -131,6 +176,21 @@
           <Property Name="Name2" Type="varchar" MaxLength="500" />
           <Property Name="Email2" Type="varchar" MaxLength="500" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountExpectedActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AccountId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SourceOfFundIs" Type="varchar" MaxLength="50" />
+          <Property Name="SourceOfFundsOthers" Type="varchar" MaxLength="200" />
+          <Property Name="TopUpoptionId" Type="int" />
+          <Property Name="TopUpoptionOthers" Type="varchar" MaxLength="200" />
+          <Property Name="WithdrawalOptionsId" Type="int" />
+          <Property Name="WithdrawalOptionsOthers" Type="varchar" MaxLength="200" />
+          <Property Name="ExpectedTopUpAmt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExpectedWithdrawalAmt" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="AccountFileUploads">
           <Key>
@@ -262,6 +322,13 @@
           <Property Name="IdValidationBy" Type="varchar" MaxLength="200" />
           <Property Name="IdValidationMode" Type="varchar" MaxLength="50" />
           <Property Name="ManualValidationComment" Type="varchar(max)" />
+          <Property Name="ResidentPermitNumber" Type="varchar" MaxLength="100" />
+          <Property Name="ResidentPermitNumberPlaceOfIssue" Type="varchar" MaxLength="100" />
+          <Property Name="ResidentPermitNumberIssueDate" Type="varchar" MaxLength="100" />
+          <Property Name="ResidentPermitNumberExpiryDate" Type="varchar" MaxLength="100" />
+          <Property Name="Profession" Type="varchar" MaxLength="100" />
+          <Property Name="GhanaCardNo" Type="varchar" MaxLength="50" />
+          <Property Name="ProfessionalLicenceNumber" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="AccountNextOfKinDetails">
           <Key>
@@ -306,6 +373,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AMLQuestionCategory">
           <Key>
@@ -342,6 +410,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AppSettings">
           <Key>
@@ -368,6 +437,7 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="LastLogin" Type="datetime" />
+          <Property Name="SignatureImg" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="AuditLog">
           <Key>
@@ -402,6 +472,23 @@
           <Property Name="PHONE_TWO" Type="nvarchar" MaxLength="255" />
           <Property Name="POST" Type="float" />
           <Property Name="LOG_ID" Type="float" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CheckListItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -410,6 +497,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CountryName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="50" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CSDDepositoryParticipantOption">
           <Key>
@@ -418,6 +506,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DocTypes">
           <Key>
@@ -434,6 +523,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ExpectedAccountActivity">
           <Key>
@@ -442,6 +532,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FileUploadTypes">
           <Key>
@@ -472,6 +563,13 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="IDCardType">
           <Key>
             <PropertyRef Name="Id" />
@@ -479,6 +577,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="InvestmentHorizon">
           <Key>
@@ -503,6 +602,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MailServerSettings">
           <Key>
@@ -526,6 +626,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MessageHistory">
           <Key>
@@ -546,6 +647,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ModeOfNotification">
           <Key>
@@ -554,6 +656,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ModeOfReceivingStatement">
           <Key>
@@ -579,6 +682,14 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Occupation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="RegionalInvesmentInterest">
           <Key>
             <PropertyRef Name="Id" />
@@ -586,6 +697,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Relationship">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="500" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="ResidentialStatus">
           <Key>
@@ -602,6 +721,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -618,6 +738,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SourceOfFunds">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SourceOfIncome">
           <Key>
@@ -626,6 +754,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="500" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SoftTechCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="StaffRefList">
           <Key>
@@ -649,6 +778,126 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TopUpOptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="WithdrawalOptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="AggregatedCounter">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="bigint" Nullable="false" />
+          <Property Name="ExpireAt" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DBLAccountOpening.HangFire.Counter' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Counter">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="ExpireAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Hash">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Field" />
+          </Key>
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Field" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="ExpireAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StateId" Type="bigint" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvocationData" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Arguments" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="ExpireAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="JobParameter">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="JobQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Queue" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="Queue" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FetchedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="List">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="ExpireAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Schema">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Version" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Server">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Data" Type="nvarchar(max)" />
+          <Property Name="LastHeartbeat" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Set">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Score" Type="float" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ExpireAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Data" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_Account_AccountType">
           <End Role="AccountType" Type="Self.AccountType" Multiplicity="1" />
@@ -818,6 +1067,114 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AccountBeneficiary_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="CountryOfOriginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Country_Residence">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="CountryOfResidenceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Gender">
+          <End Role="Gender" Type="Self.Gender" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_IDCardType">
+          <End Role="IDCardType" Type="Self.IDCardType" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IDCardType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="IDCardTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_MaritalStatus">
+          <End Role="MaritalStatus" Type="Self.MaritalStatus" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MaritalStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="MaritalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Title">
+          <End Role="Title" Type="Self.Title" Multiplicity="0..1" />
+          <End Role="AccountBeneficiary" Type="Self.AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountCheckList_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountCheckList" Type="Self.AccountCheckList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountCheckList">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountCheckList_CheckListItem">
+          <End Role="CheckListItem" Type="Self.CheckListItem" Multiplicity="1" />
+          <End Role="AccountCheckList" Type="Self.AccountCheckList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CheckListItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountCheckList">
+              <PropertyRef Name="CheckListItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_AccountEditRequest_Account">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="AccountEditRequest" Type="Self.AccountEditRequest" Multiplicity="*" />
@@ -839,6 +1196,42 @@
             </Principal>
             <Dependent Role="AccountETI">
               <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountExpectedActivity_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="AccountExpectedActivity" Type="Self.AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountExpectedActivity_TopUpOptions">
+          <End Role="TopUpOptions" Type="Self.TopUpOptions" Multiplicity="0..1" />
+          <End Role="AccountExpectedActivity" Type="Self.AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TopUpOptions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="TopUpoptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountExpectedActivity_WithdrawalOptions">
+          <End Role="WithdrawalOptions" Type="Self.WithdrawalOptions" Multiplicity="0..1" />
+          <End Role="AccountExpectedActivity" Type="Self.AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WithdrawalOptions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="WithdrawalOptionsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1190,12 +1583,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HangFire_JobParameter_Job">
+          <End Role="Job" Type="Self.Job" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JobParameter" Type="Self.JobParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobParameter">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HangFire_State_Job">
+          <End Role="Job" Type="Self.Job" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="State" Type="Self.State" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="State">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBLAccountOpeningModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountAMLResponses" EntityType="Self.AccountAMLResponses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountAuthorisedPerson" EntityType="Self.AccountAuthorisedPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountBeneficiary" EntityType="Self.AccountBeneficiary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountCheckList" EntityType="Self.AccountCheckList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountEditRequest" EntityType="Self.AccountEditRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountETI" EntityType="Self.AccountETI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountExpectedActivity" EntityType="Self.AccountExpectedActivity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountFileUploads" EntityType="Self.AccountFileUploads" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountFinancialInvestmentRiskProfile" EntityType="Self.AccountFinancialInvestmentRiskProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountInsCustodyAccountDetails" EntityType="Self.AccountInsCustodyAccountDetails" Schema="dbo" store:Type="Tables" />
@@ -1215,6 +1639,8 @@
           <EntitySet Name="AuditLog" EntityType="Self.AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CheckListItem" EntityType="Self.CheckListItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSDDepositoryParticipantOption" EntityType="Self.CSDDepositoryParticipantOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocTypes" EntityType="Self.DocTypes" Schema="dbo" store:Type="Tables" />
@@ -1223,6 +1649,7 @@
           <EntitySet Name="FileUploadTypes" EntityType="Self.FileUploadTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForgottenAccountDetails" EntityType="Self.ForgottenAccountDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ForgottenPasswordStatus" EntityType="Self.ForgottenPasswordStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gender" EntityType="Self.Gender" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IDCardType" EntityType="Self.IDCardType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentHorizon" EntityType="Self.InvestmentHorizon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvestmentKnowledge" EntityType="Self.InvestmentKnowledge" Schema="dbo" store:Type="Tables" />
@@ -1235,15 +1662,37 @@
           <EntitySet Name="ModeOfReceivingStatement" EntityType="Self.ModeOfReceivingStatement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NetWorth" EntityType="Self.NetWorth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Objectives" EntityType="Self.Objectives" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Occupation" EntityType="Self.Occupation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegionalInvesmentInterest" EntityType="Self.RegionalInvesmentInterest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Relationship" EntityType="Self.Relationship" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResidentialStatus" EntityType="Self.ResidentialStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskTolerance" EntityType="Self.RiskTolerance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SignatureTypes" EntityType="Self.SignatureTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SourceOfFunds" EntityType="Self.SourceOfFunds" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceOfIncome" EntityType="Self.SourceOfIncome" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StaffRefList" EntityType="Self.StaffRefList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatementFrequency" EntityType="Self.StatementFrequency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TopUpOptions" EntityType="Self.TopUpOptions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WithdrawalOptions" EntityType="Self.WithdrawalOptions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AggregatedCounter" EntityType="Self.AggregatedCounter" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Hash" EntityType="Self.Hash" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Job" EntityType="Self.Job" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="JobParameter" EntityType="Self.JobParameter" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="JobQueue" EntityType="Self.JobQueue" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="List" EntityType="Self.List" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Schema" EntityType="Self.Schema" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Server" EntityType="Self.Server" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Set" EntityType="Self.Set" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="State" EntityType="Self.State" Schema="HangFire" store:Type="Tables" />
+          <EntitySet Name="Counter" EntityType="Self.Counter" store:Type="Tables" store:Schema="HangFire">
+            <DefiningQuery>SELECT 
+    [Counter].[Key] AS [Key], 
+    [Counter].[Value] AS [Value], 
+    [Counter].[ExpireAt] AS [ExpireAt]
+    FROM [HangFire].[Counter] AS [Counter]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Account_AccountType" Association="Self.FK_Account_AccountType">
             <End Role="AccountType" EntitySet="AccountType" />
             <End Role="Account" EntitySet="Account" />
@@ -1300,6 +1749,42 @@
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountAuthorisedPerson" EntitySet="AccountAuthorisedPerson" />
           </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Account" Association="Self.FK_AccountBeneficiary_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Country" Association="Self.FK_AccountBeneficiary_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Country_Residence" Association="Self.FK_AccountBeneficiary_Country_Residence">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Gender" Association="Self.FK_AccountBeneficiary_Gender">
+            <End Role="Gender" EntitySet="Gender" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_IDCardType" Association="Self.FK_AccountBeneficiary_IDCardType">
+            <End Role="IDCardType" EntitySet="IDCardType" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_MaritalStatus" Association="Self.FK_AccountBeneficiary_MaritalStatus">
+            <End Role="MaritalStatus" EntitySet="MaritalStatus" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Title" Association="Self.FK_AccountBeneficiary_Title">
+            <End Role="Title" EntitySet="Title" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountCheckList_Account" Association="Self.FK_AccountCheckList_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountCheckList" EntitySet="AccountCheckList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountCheckList_CheckListItem" Association="Self.FK_AccountCheckList_CheckListItem">
+            <End Role="CheckListItem" EntitySet="CheckListItem" />
+            <End Role="AccountCheckList" EntitySet="AccountCheckList" />
+          </AssociationSet>
           <AssociationSet Name="FK_AccountEditRequest_Account" Association="Self.FK_AccountEditRequest_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountEditRequest" EntitySet="AccountEditRequest" />
@@ -1307,6 +1792,18 @@
           <AssociationSet Name="FK_AccountETI_Account" Association="Self.FK_AccountETI_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="AccountETI" EntitySet="AccountETI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountExpectedActivity_Account" Association="Self.FK_AccountExpectedActivity_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountExpectedActivity_TopUpOptions" Association="Self.FK_AccountExpectedActivity_TopUpOptions">
+            <End Role="TopUpOptions" EntitySet="TopUpOptions" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountExpectedActivity_WithdrawalOptions" Association="Self.FK_AccountExpectedActivity_WithdrawalOptions">
+            <End Role="WithdrawalOptions" EntitySet="WithdrawalOptions" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivity" />
           </AssociationSet>
           <AssociationSet Name="FK_AccountFileUploads_Account" Association="Self.FK_AccountFileUploads_Account">
             <End Role="Account" EntitySet="Account" />
@@ -1424,6 +1921,14 @@
             <End Role="ForgottenPasswordStatus" EntitySet="ForgottenPasswordStatus" />
             <End Role="ForgottenAccountDetails" EntitySet="ForgottenAccountDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_HangFire_JobParameter_Job" Association="Self.FK_HangFire_JobParameter_Job">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="JobParameter" EntitySet="JobParameter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HangFire_State_Job" Association="Self.FK_HangFire_State_Job">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="State" EntitySet="State" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1437,6 +1942,7 @@
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_AccountType" FromRole="AccountType" ToRole="Account" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AMLQuestion">
           <Key>
@@ -1460,6 +1966,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_ApproximateAnnualIncome" FromRole="ApproximateAnnualIncome" ToRole="AccountFinancialInvestmentRiskProfile" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AppSetting">
           <Key>
@@ -1495,6 +2002,9 @@
           <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country" FromRole="Country" ToRole="AccountMember" />
           <NavigationProperty Name="AccountMembers1" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country1" FromRole="Country" ToRole="AccountMember" />
           <NavigationProperty Name="AccountMembers2" Relationship="DBLAccountOpeningModel.FK_AccountMember_Country2" FromRole="Country" ToRole="AccountMember" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Country" FromRole="Country" ToRole="AccountBeneficiary" />
+          <NavigationProperty Name="AccountBeneficiaries1" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Country_Residence" FromRole="Country" ToRole="AccountBeneficiary" />
         </EntityType>
         <EntityType Name="CSDDepositoryParticipantOption">
           <Key>
@@ -1505,6 +2015,7 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption" FromRole="CSDDepositoryParticipantOption" ToRole="Account" />
           <NavigationProperty Name="Accounts1" Relationship="DBLAccountOpeningModel.FK_Account_CSDDepositoryParticipantOption1" FromRole="CSDDepositoryParticipantOption" ToRole="Account" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DocType">
           <Key>
@@ -1522,6 +2033,7 @@
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_EmploymentStatus" FromRole="EmploymentStatu" ToRole="AccountInstructionEmploymentDetail" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="IDCardType">
           <Key>
@@ -1530,6 +2042,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_IDCardType" FromRole="IDCardType" ToRole="AccountBeneficiary" />
         </EntityType>
         <EntityType Name="InvestmentHorizon">
           <Key>
@@ -1557,6 +2071,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_InvestmentType" FromRole="InvestmentType" ToRole="Account" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MailServerSetting">
           <Key>
@@ -1593,6 +2108,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfInstruction" FromRole="ModeOfInstruction" ToRole="AccountInstructionEmploymentDetail" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ModeOfNotification">
           <Key>
@@ -1602,6 +2118,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_ModeOfNotification" FromRole="ModeOfNotification" ToRole="AccountInstructionEmploymentDetail" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ModeOfReceivingStatement">
           <Key>
@@ -1654,6 +2171,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountFinancialInvestmentRiskProfiles" Relationship="DBLAccountOpeningModel.FK_AccountFinancialInvestmentRiskProfile_RiskTolerance" FromRole="RiskTolerance" ToRole="AccountFinancialInvestmentRiskProfile" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SignatureType">
           <Key>
@@ -1662,6 +2180,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="StatementFrequency">
           <Key>
@@ -1680,6 +2199,7 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AccountInsTradingContacts" Relationship="DBLAccountOpeningModel.FK_AccountInsTradingContacts_Title" FromRole="Title" ToRole="AccountInsTradingContact" />
           <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_Title" FromRole="Title" ToRole="AccountMember" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Title" FromRole="Title" ToRole="AccountBeneficiary" />
         </EntityType>
         <EntityContainer Name="DBLAccountOpeningContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountTypes" EntityType="Self.AccountType" />
@@ -1915,6 +2435,84 @@
             <End Role="Account" EntitySet="Accounts" />
             <End Role="AccountEditRequest" EntitySet="AccountEditRequests" />
           </AssociationSet>
+          <EntitySet Name="Cities" EntityType="DBLAccountOpeningModel.City" />
+          <EntitySet Name="Occupations" EntityType="DBLAccountOpeningModel.Occupation" />
+          <EntitySet Name="Relationships" EntityType="DBLAccountOpeningModel.Relationship" />
+          <EntitySet Name="AggregatedCounters" EntityType="DBLAccountOpeningModel.AggregatedCounter" />
+          <EntitySet Name="Hashes" EntityType="DBLAccountOpeningModel.Hash" />
+          <EntitySet Name="Jobs" EntityType="DBLAccountOpeningModel.Job" />
+          <EntitySet Name="JobParameters" EntityType="DBLAccountOpeningModel.JobParameter" />
+          <EntitySet Name="JobQueues" EntityType="DBLAccountOpeningModel.JobQueue" />
+          <EntitySet Name="Lists" EntityType="DBLAccountOpeningModel.List" />
+          <EntitySet Name="Schemata" EntityType="DBLAccountOpeningModel.Schema" />
+          <EntitySet Name="Servers" EntityType="DBLAccountOpeningModel.Server" />
+          <EntitySet Name="Sets" EntityType="DBLAccountOpeningModel.Set" />
+          <EntitySet Name="States" EntityType="DBLAccountOpeningModel.State" />
+          <EntitySet Name="Counters" EntityType="DBLAccountOpeningModel.Counter" />
+          <AssociationSet Name="FK_HangFire_JobParameter_Job" Association="DBLAccountOpeningModel.FK_HangFire_JobParameter_Job">
+            <End Role="Job" EntitySet="Jobs" />
+            <End Role="JobParameter" EntitySet="JobParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HangFire_State_Job" Association="DBLAccountOpeningModel.FK_HangFire_State_Job">
+            <End Role="Job" EntitySet="Jobs" />
+            <End Role="State" EntitySet="States" />
+          </AssociationSet>
+          <EntitySet Name="SourceOfFunds" EntityType="DBLAccountOpeningModel.SourceOfFund" />
+          <EntitySet Name="TopUpOptions" EntityType="DBLAccountOpeningModel.TopUpOption" />
+          <EntitySet Name="WithdrawalOptions" EntityType="DBLAccountOpeningModel.WithdrawalOption" />
+          <EntitySet Name="AccountExpectedActivities" EntityType="DBLAccountOpeningModel.AccountExpectedActivity" />
+          <AssociationSet Name="FK_AccountExpectedActivity_Account" Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountExpectedActivity_TopUpOptions" Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_TopUpOptions">
+            <End Role="TopUpOption" EntitySet="TopUpOptions" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountExpectedActivity_WithdrawalOptions" Association="DBLAccountOpeningModel.FK_AccountExpectedActivity_WithdrawalOptions">
+            <End Role="WithdrawalOption" EntitySet="WithdrawalOptions" />
+            <End Role="AccountExpectedActivity" EntitySet="AccountExpectedActivities" />
+          </AssociationSet>
+          <EntitySet Name="Genders" EntityType="DBLAccountOpeningModel.Gender" />
+          <EntitySet Name="AccountBeneficiaries" EntityType="DBLAccountOpeningModel.AccountBeneficiary" />
+          <AssociationSet Name="FK_AccountBeneficiary_Account" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Country" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Country_Residence" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Country_Residence">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Gender" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Gender">
+            <End Role="Gender" EntitySet="Genders" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_IDCardType" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_IDCardType">
+            <End Role="IDCardType" EntitySet="IDCardTypes" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_MaritalStatus" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_MaritalStatus">
+            <End Role="MaritalStatu" EntitySet="MaritalStatus" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountBeneficiary_Title" Association="DBLAccountOpeningModel.FK_AccountBeneficiary_Title">
+            <End Role="Title" EntitySet="Titles" />
+            <End Role="AccountBeneficiary" EntitySet="AccountBeneficiaries" />
+          </AssociationSet>
+          <EntitySet Name="AccountCheckLists" EntityType="DBLAccountOpeningModel.AccountCheckList" />
+          <EntitySet Name="CheckListItems" EntityType="DBLAccountOpeningModel.CheckListItem" />
+          <AssociationSet Name="FK_AccountCheckList_Account" Association="DBLAccountOpeningModel.FK_AccountCheckList_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountCheckList" EntitySet="AccountCheckLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountCheckList_CheckListItem" Association="DBLAccountOpeningModel.FK_AccountCheckList_CheckListItem">
+            <End Role="CheckListItem" EntitySet="CheckListItems" />
+            <End Role="AccountCheckList" EntitySet="AccountCheckLists" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="MaritalStatu">
           <Key>
@@ -1924,6 +2522,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountMembers" Relationship="DBLAccountOpeningModel.FK_AccountMember_MaritalStatus" FromRole="MaritalStatu" ToRole="AccountMember" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_MaritalStatus" FromRole="MaritalStatu" ToRole="AccountBeneficiary" />
         </EntityType>
         <EntityType Name="SourceOfIncome">
           <Key>
@@ -1933,6 +2533,7 @@
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AccountInstructionEmploymentDetails" Relationship="DBLAccountOpeningModel.FK_AccountInstructionEmploymentDetails_SourceOfIncome" FromRole="SourceOfIncome" ToRole="AccountInstructionEmploymentDetail" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Account">
           <Key>
@@ -2011,6 +2612,13 @@
           <Property Name="CancelledORRejectBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AccountEditRequests" Relationship="DBLAccountOpeningModel.FK_AccountEditRequest_Account" FromRole="Account" ToRole="AccountEditRequest" />
+          <NavigationProperty Name="AccountExpectedActivities" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_Account" FromRole="Account" ToRole="AccountExpectedActivity" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Account" FromRole="Account" ToRole="AccountBeneficiary" />
+          <Property Name="InitialInvestmentAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="MODE_OF_APP" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="InvestmentObjective" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountCheckLists" Relationship="DBLAccountOpeningModel.FK_AccountCheckList_Account" FromRole="Account" ToRole="AccountCheckList" />
         </EntityType>
         <EntityType Name="AccountAMLRespons">
           <Key>
@@ -2232,6 +2840,13 @@
           <Property Name="IdValidationBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="IdValidationMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ManualValidationComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentPermitNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentPermitNumberPlaceOfIssue" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentPermitNumberIssueDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ResidentPermitNumberExpiryDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Profession" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GhanaCardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProfessionalLicenceNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AccountNextOfKinDetail">
           <Key>
@@ -2732,6 +3347,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Accounts" Relationship="DBLAccountOpeningModel.FK_Account_ExpectedAccountActivity" FromRole="ExpectedAccountActivity" ToRole="Account" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Account_ExpectedAccountActivity">
           <End Type="DBLAccountOpeningModel.ExpectedAccountActivity" Role="ExpectedAccountActivity" Multiplicity="0..1" />
@@ -2771,6 +3387,7 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastLogin" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Role" Relationship="DBLAccountOpeningModel.FK_AppUser_Role" FromRole="AppUser" ToRole="Role" />
+          <Property Name="SignatureImg" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -2884,6 +3501,7 @@
           <Property Name="PHONE_TWO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="POST" Type="Double" />
           <Property Name="LOG_ID" Type="Double" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AuditLog">
           <Key>
@@ -2926,6 +3544,10 @@
           <Property Name="ErrorList" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountEditRequest_Account" FromRole="AccountEditRequest" ToRole="Account" />
+          <Property Name="DBLFormEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="FileUploadEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AMLEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="ETIEnabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_AccountEditRequest_Account">
           <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
@@ -2939,6 +3561,414 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Occupation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Relationship">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SoftTechCode" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AggregatedCounter">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Int64" Nullable="false" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Hash">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Field" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Field" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="7" />
+        </EntityType>
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StateId" Type="Int64" />
+          <Property Name="StateName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvocationData" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Arguments" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="JobParameters" Relationship="DBLAccountOpeningModel.FK_HangFire_JobParameter_Job" FromRole="Job" ToRole="JobParameter" />
+          <NavigationProperty Name="States" Relationship="DBLAccountOpeningModel.FK_HangFire_State_Job" FromRole="Job" ToRole="State" />
+        </EntityType>
+        <EntityType Name="JobParameter">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Job" Relationship="DBLAccountOpeningModel.FK_HangFire_JobParameter_Job" FromRole="JobParameter" ToRole="Job" />
+        </EntityType>
+        <EntityType Name="JobQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Queue" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="Queue" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FetchedAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="List">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Schema">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Version" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Server">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastHeartbeat" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Set">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Double" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Job" Relationship="DBLAccountOpeningModel.FK_HangFire_State_Job" FromRole="State" ToRole="Job" />
+        </EntityType>
+        <EntityType Name="Counter">
+          <Key>
+            <PropertyRef Name="Key" />
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="ExpireAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_HangFire_JobParameter_Job">
+          <End Type="DBLAccountOpeningModel.Job" Role="Job" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBLAccountOpeningModel.JobParameter" Role="JobParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobParameter">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HangFire_State_Job">
+          <End Type="DBLAccountOpeningModel.Job" Role="Job" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBLAccountOpeningModel.State" Role="State" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="State">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SourceOfFund">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TopUpOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountExpectedActivities" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_TopUpOptions" FromRole="TopUpOption" ToRole="AccountExpectedActivity" />
+        </EntityType>
+        <EntityType Name="WithdrawalOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountExpectedActivities" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_WithdrawalOptions" FromRole="WithdrawalOption" ToRole="AccountExpectedActivity" />
+        </EntityType>
+        <EntityType Name="AccountExpectedActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="SourceOfFundIs" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SourceOfFundsOthers" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TopUpoptionId" Type="Int32" />
+          <Property Name="TopUpoptionOthers" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="WithdrawalOptionsId" Type="Int32" />
+          <Property Name="WithdrawalOptionsOthers" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ExpectedTopUpAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExpectedWithdrawalAmt" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_Account" FromRole="AccountExpectedActivity" ToRole="Account" />
+          <NavigationProperty Name="TopUpOption" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_TopUpOptions" FromRole="AccountExpectedActivity" ToRole="TopUpOption" />
+          <NavigationProperty Name="WithdrawalOption" Relationship="DBLAccountOpeningModel.FK_AccountExpectedActivity_WithdrawalOptions" FromRole="AccountExpectedActivity" ToRole="WithdrawalOption" />
+        </EntityType>
+        <Association Name="FK_AccountExpectedActivity_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountExpectedActivity" Role="AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountExpectedActivity_TopUpOptions">
+          <End Type="DBLAccountOpeningModel.TopUpOption" Role="TopUpOption" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountExpectedActivity" Role="AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TopUpOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="TopUpoptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountExpectedActivity_WithdrawalOptions">
+          <End Type="DBLAccountOpeningModel.WithdrawalOption" Role="WithdrawalOption" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountExpectedActivity" Role="AccountExpectedActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WithdrawalOption">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountExpectedActivity">
+              <PropertyRef Name="WithdrawalOptionsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountBeneficiaries" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Gender" FromRole="Gender" ToRole="AccountBeneficiary" />
+        </EntityType>
+        <EntityType Name="AccountBeneficiary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="Fullname" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="PercentageAllocation" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Relation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TitleId" Type="Int32" />
+          <Property Name="OtherTitleDetails" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Othernames" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MaritalStatusId" Type="Int32" />
+          <Property Name="GenderId" Type="Int32" />
+          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PlaceOfBirth" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CountryOfOriginId" Type="Int32" />
+          <Property Name="CountryOfResidenceId" Type="Int32" />
+          <Property Name="IDCardTypeId" Type="Int32" />
+          <Property Name="IDNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IDPlaceOfIssue" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IDIssueDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IDExpiryDate" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Account" FromRole="AccountBeneficiary" ToRole="Account" />
+          <NavigationProperty Name="Country" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Country" FromRole="AccountBeneficiary" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Country_Residence" FromRole="AccountBeneficiary" ToRole="Country" />
+          <NavigationProperty Name="Gender" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Gender" FromRole="AccountBeneficiary" ToRole="Gender" />
+          <NavigationProperty Name="IDCardType" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_IDCardType" FromRole="AccountBeneficiary" ToRole="IDCardType" />
+          <NavigationProperty Name="MaritalStatu" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_MaritalStatus" FromRole="AccountBeneficiary" ToRole="MaritalStatu" />
+          <NavigationProperty Name="Title" Relationship="DBLAccountOpeningModel.FK_AccountBeneficiary_Title" FromRole="AccountBeneficiary" ToRole="Title" />
+        </EntityType>
+        <Association Name="FK_AccountBeneficiary_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Country">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="CountryOfOriginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Country_Residence">
+          <End Type="DBLAccountOpeningModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="CountryOfResidenceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Gender">
+          <End Type="DBLAccountOpeningModel.Gender" Role="Gender" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="GenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_IDCardType">
+          <End Type="DBLAccountOpeningModel.IDCardType" Role="IDCardType" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IDCardType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="IDCardTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_MaritalStatus">
+          <End Type="DBLAccountOpeningModel.MaritalStatu" Role="MaritalStatu" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MaritalStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="MaritalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountBeneficiary_Title">
+          <End Type="DBLAccountOpeningModel.Title" Role="Title" Multiplicity="0..1" />
+          <End Type="DBLAccountOpeningModel.AccountBeneficiary" Role="AccountBeneficiary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountBeneficiary">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AccountCheckList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="CheckListItemId" Type="Int32" Nullable="false" />
+          <Property Name="IsChecked" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="DBLAccountOpeningModel.FK_AccountCheckList_Account" FromRole="AccountCheckList" ToRole="Account" />
+          <NavigationProperty Name="CheckListItem" Relationship="DBLAccountOpeningModel.FK_AccountCheckList_CheckListItem" FromRole="AccountCheckList" ToRole="CheckListItem" />
+        </EntityType>
+        <EntityType Name="CheckListItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountCheckLists" Relationship="DBLAccountOpeningModel.FK_AccountCheckList_CheckListItem" FromRole="CheckListItem" ToRole="AccountCheckList" />
+        </EntityType>
+        <Association Name="FK_AccountCheckList_Account">
+          <End Type="DBLAccountOpeningModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountCheckList" Role="AccountCheckList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountCheckList">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountCheckList_CheckListItem">
+          <End Type="DBLAccountOpeningModel.CheckListItem" Role="CheckListItem" Multiplicity="1" />
+          <End Type="DBLAccountOpeningModel.AccountCheckList" Role="AccountCheckList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CheckListItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountCheckList">
+              <PropertyRef Name="CheckListItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2948,6 +3978,7 @@
           <EntitySetMapping Name="AccountTypes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountType">
               <MappingFragment StoreEntitySet="AccountType">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -2970,6 +4001,7 @@
           <EntitySetMapping Name="ApproximateAnnualIncomes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.ApproximateAnnualIncome">
               <MappingFragment StoreEntitySet="ApproximateAnnualIncome">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3003,6 +4035,7 @@
           <EntitySetMapping Name="Countries">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Country">
               <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CountryName" ColumnName="CountryName" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3012,6 +4045,7 @@
           <EntitySetMapping Name="CSDDepositoryParticipantOptions">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.CSDDepositoryParticipantOption">
               <MappingFragment StoreEntitySet="CSDDepositoryParticipantOption">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3030,6 +4064,7 @@
           <EntitySetMapping Name="EmploymentStatus">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.EmploymentStatu">
               <MappingFragment StoreEntitySet="EmploymentStatus">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3039,6 +4074,7 @@
           <EntitySetMapping Name="IDCardTypes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.IDCardType">
               <MappingFragment StoreEntitySet="IDCardType">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3066,6 +4102,7 @@
           <EntitySetMapping Name="InvestmentTypes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.InvestmentType">
               <MappingFragment StoreEntitySet="InvestmentType">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3104,6 +4141,7 @@
           <EntitySetMapping Name="ModeOfInstructions">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.ModeOfInstruction">
               <MappingFragment StoreEntitySet="ModeOfInstruction">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3113,6 +4151,7 @@
           <EntitySetMapping Name="ModeOfNotifications">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.ModeOfNotification">
               <MappingFragment StoreEntitySet="ModeOfNotification">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3167,6 +4206,7 @@
           <EntitySetMapping Name="RiskTolerances">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.RiskTolerance">
               <MappingFragment StoreEntitySet="RiskTolerance">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3176,6 +4216,7 @@
           <EntitySetMapping Name="SignatureTypes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.SignatureType">
               <MappingFragment StoreEntitySet="SignatureTypes">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3202,6 +4243,7 @@
           <EntitySetMapping Name="MaritalStatus">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.MaritalStatu">
               <MappingFragment StoreEntitySet="MaritalStatus">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -3211,6 +4253,7 @@
           <EntitySetMapping Name="SourceOfIncomes">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.SourceOfIncome">
               <MappingFragment StoreEntitySet="SourceOfIncome">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -3220,6 +4263,10 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="InvestmentObjective" ColumnName="InvestmentObjective" />
+                <ScalarProperty Name="MODE_OF_APP" ColumnName="MODE_OF_APP" />
+                <ScalarProperty Name="InitialInvestmentAmount" ColumnName="InitialInvestmentAmount" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="CancelledORRejectBy" ColumnName="CancelledORRejectBy" />
                 <ScalarProperty Name="Reviewer" ColumnName="Reviewer" />
@@ -3432,6 +4479,13 @@
           <EntitySetMapping Name="AccountMembers">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountMember">
               <MappingFragment StoreEntitySet="AccountMember">
+                <ScalarProperty Name="ProfessionalLicenceNumber" ColumnName="ProfessionalLicenceNumber" />
+                <ScalarProperty Name="GhanaCardNo" ColumnName="GhanaCardNo" />
+                <ScalarProperty Name="Profession" ColumnName="Profession" />
+                <ScalarProperty Name="ResidentPermitNumberExpiryDate" ColumnName="ResidentPermitNumberExpiryDate" />
+                <ScalarProperty Name="ResidentPermitNumberIssueDate" ColumnName="ResidentPermitNumberIssueDate" />
+                <ScalarProperty Name="ResidentPermitNumberPlaceOfIssue" ColumnName="ResidentPermitNumberPlaceOfIssue" />
+                <ScalarProperty Name="ResidentPermitNumber" ColumnName="ResidentPermitNumber" />
                 <ScalarProperty Name="ManualValidationComment" ColumnName="ManualValidationComment" />
                 <ScalarProperty Name="IdValidationMode" ColumnName="IdValidationMode" />
                 <ScalarProperty Name="IdValidationBy" ColumnName="IdValidationBy" />
@@ -3525,6 +4579,7 @@
           <EntitySetMapping Name="ExpectedAccountActivities">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.ExpectedAccountActivity">
               <MappingFragment StoreEntitySet="ExpectedAccountActivity">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -3534,6 +4589,7 @@
           <EntitySetMapping Name="AppUsers">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AppUser">
               <MappingFragment StoreEntitySet="AppUser">
+                <ScalarProperty Name="SignatureImg" ColumnName="SignatureImg" />
                 <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3599,6 +4655,7 @@
           <EntitySetMapping Name="Branches">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.Branch">
               <MappingFragment StoreEntitySet="Branches">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
                 <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
                 <ScalarProperty Name="POST" ColumnName="POST" />
                 <ScalarProperty Name="PHONE_TWO" ColumnName="PHONE_TWO" />
@@ -3634,11 +4691,246 @@
           <EntitySetMapping Name="AccountEditRequests">
             <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountEditRequest">
               <MappingFragment StoreEntitySet="AccountEditRequest">
+                <ScalarProperty Name="ETIEnabled" ColumnName="ETIEnabled" />
+                <ScalarProperty Name="AMLEnabled" ColumnName="AMLEnabled" />
+                <ScalarProperty Name="FileUploadEnabled" ColumnName="FileUploadEnabled" />
+                <ScalarProperty Name="DBLFormEnabled" ColumnName="DBLFormEnabled" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="ErrorList" ColumnName="ErrorList" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.City">
+              <MappingFragment StoreEntitySet="Cities">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Occupations">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Occupation">
+              <MappingFragment StoreEntitySet="Occupation">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Relationships">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Relationship">
+              <MappingFragment StoreEntitySet="Relationship">
+                <ScalarProperty Name="SoftTechCode" ColumnName="SoftTechCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AggregatedCounters">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AggregatedCounter">
+              <MappingFragment StoreEntitySet="AggregatedCounter">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hashes">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Hash">
+              <MappingFragment StoreEntitySet="Hash">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Field" ColumnName="Field" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Job">
+              <MappingFragment StoreEntitySet="Job">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Arguments" ColumnName="Arguments" />
+                <ScalarProperty Name="InvocationData" ColumnName="InvocationData" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobParameters">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.JobParameter">
+              <MappingFragment StoreEntitySet="JobParameter">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobQueues">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.JobQueue">
+              <MappingFragment StoreEntitySet="JobQueue">
+                <ScalarProperty Name="FetchedAt" ColumnName="FetchedAt" />
+                <ScalarProperty Name="Queue" ColumnName="Queue" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lists">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.List">
+              <MappingFragment StoreEntitySet="List">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schemata">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Schema">
+              <MappingFragment StoreEntitySet="Schema">
+                <ScalarProperty Name="Version" ColumnName="Version" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servers">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Server">
+              <MappingFragment StoreEntitySet="Server">
+                <ScalarProperty Name="LastHeartbeat" ColumnName="LastHeartbeat" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sets">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Set">
+              <MappingFragment StoreEntitySet="Set">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.State">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Counters">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Counter">
+              <MappingFragment StoreEntitySet="Counter">
+                <ScalarProperty Name="ExpireAt" ColumnName="ExpireAt" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SourceOfFunds">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.SourceOfFund">
+              <MappingFragment StoreEntitySet="SourceOfFunds">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TopUpOptions">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.TopUpOption">
+              <MappingFragment StoreEntitySet="TopUpOptions">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WithdrawalOptions">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.WithdrawalOption">
+              <MappingFragment StoreEntitySet="WithdrawalOptions">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountExpectedActivities">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountExpectedActivity">
+              <MappingFragment StoreEntitySet="AccountExpectedActivity">
+                <ScalarProperty Name="ExpectedWithdrawalAmt" ColumnName="ExpectedWithdrawalAmt" />
+                <ScalarProperty Name="ExpectedTopUpAmt" ColumnName="ExpectedTopUpAmt" />
+                <ScalarProperty Name="WithdrawalOptionsOthers" ColumnName="WithdrawalOptionsOthers" />
+                <ScalarProperty Name="WithdrawalOptionsId" ColumnName="WithdrawalOptionsId" />
+                <ScalarProperty Name="TopUpoptionOthers" ColumnName="TopUpoptionOthers" />
+                <ScalarProperty Name="TopUpoptionId" ColumnName="TopUpoptionId" />
+                <ScalarProperty Name="SourceOfFundsOthers" ColumnName="SourceOfFundsOthers" />
+                <ScalarProperty Name="SourceOfFundIs" ColumnName="SourceOfFundIs" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genders">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.Gender">
+              <MappingFragment StoreEntitySet="Gender">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountBeneficiaries">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountBeneficiary">
+              <MappingFragment StoreEntitySet="AccountBeneficiary">
+                <ScalarProperty Name="IDExpiryDate" ColumnName="IDExpiryDate" />
+                <ScalarProperty Name="IDIssueDate" ColumnName="IDIssueDate" />
+                <ScalarProperty Name="IDPlaceOfIssue" ColumnName="IDPlaceOfIssue" />
+                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+                <ScalarProperty Name="IDCardTypeId" ColumnName="IDCardTypeId" />
+                <ScalarProperty Name="CountryOfResidenceId" ColumnName="CountryOfResidenceId" />
+                <ScalarProperty Name="CountryOfOriginId" ColumnName="CountryOfOriginId" />
+                <ScalarProperty Name="PlaceOfBirth" ColumnName="PlaceOfBirth" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+                <ScalarProperty Name="MaritalStatusId" ColumnName="MaritalStatusId" />
+                <ScalarProperty Name="Othernames" ColumnName="Othernames" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="OtherTitleDetails" ColumnName="OtherTitleDetails" />
+                <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+                <ScalarProperty Name="Relation" ColumnName="Relation" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="PercentageAllocation" ColumnName="PercentageAllocation" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountCheckLists">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.AccountCheckList">
+              <MappingFragment StoreEntitySet="AccountCheckList">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+                <ScalarProperty Name="CheckListItemId" ColumnName="CheckListItemId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CheckListItems">
+            <EntityTypeMapping TypeName="DBLAccountOpeningModel.CheckListItem">
+              <MappingFragment StoreEntitySet="CheckListItem">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

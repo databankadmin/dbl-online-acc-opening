@@ -1,0 +1,149 @@
+﻿@using DBHelper.Schema
+@using AppUtils
+@{
+    var context = new DBLAccountOpeningContext();
+    var questions = context.AMLQuestions.OrderBy(x => x.Id).ToList();
+    var applicationId = MvcApplication.TempAccount.Id;
+    var accountAmlResponses = Utilities.GetAccountAMlReponses(applicationId);
+
+}
+
+<form method="post" enctype="multipart/form-data" class="form-horizontal" id="appForm">
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <div class="fieldset-content">
+
+            <table cellspacing="5">
+                <thead>
+                    <tr class="greenHeader">
+                        <td>Category</td>
+                        <td style="width:750px;">Question</td>
+                        <td>Response</td>
+                        <th>Remark</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var category in context.AMLQuestionCategories.Where(x => x.IsActive))
+                        {
+                            var categoryQuestions = context.AMLQuestions.Where(x => x.CategoryId == category.Id);
+                            <tr>
+                                <th style="width:200px;">@category.Name</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+
+
+                            foreach (var question in categoryQuestions.Where(x => x.IsActive))
+                            {
+                                var ans = accountAmlResponses.FirstOrDefault(x => x.QuestionId == question.Id);
+                                string quesId = Utilities.GeneratePassword(6);
+                                if (ans == null)
+                                {
+                                    ans = new AppModels.AccountAMLReponseModel { };
+                                }
+                                <tr>
+                                    <td></td>
+                                    <td>@question.Question</td>
+                                    @{
+                                        if (question.IsDropDown)
+                                        {
+                                            <td>
+                                                @{
+                                                    if (question.Id == 12)
+                                                    {
+                                                        <select name="amlQues_@question.Id" style="width: 200px;" required id="q12" class="form-control">
+                                                            <option value="">-select-</option>
+                                                            <option value="E-payment e.g. Credit or debit cards">E-payment e.g. Credit or debit cards</option>
+                                                            <option value="Cheque">Cheque</option>
+                                                            <option value="Bank Transfers">Bank Transfers</option>
+                                                            <option value="Cash">Cash</option>
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (ans.YesNo == "Yes")
+                                                        {
+                                                            <select name="amlQues_@question.Id" style="width: 200px;" id="@quesId" required class="form-control">
+                                                                <option value="">-select-</option>
+                                                                <option value="Yes" selected>Yes</option>
+                                                                <option value="No">No</option>
+                                                            </select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select name="amlQues_@question.Id" style="width: 200px;" id="@quesId" required class="form-control">
+                                                                <option value="">-select-</option>
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No" selected>No</option>
+                                                            </select>
+                                                        }
+
+                                                    }
+                                                }
+
+                                            </td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <input type="text" style="margin-top: 5px; width: 300px;" name="amlQues_@question.Id" id="@quesId" value="@ans.YesNo" class="form-control" />
+
+                                            </td>
+
+                                        }
+
+                                        <td>
+                                            <input type="text" style="margin-top: 5px; width: 200px;" name="remark[]" id="@Guid.NewGuid().ToString()" value="@ans.Remark" class="form-control" />
+
+                                        </td>
+
+                                    }
+
+
+                                </tr>
+                            }
+                        }
+                    }
+
+
+
+
+
+                </tbody>
+
+            </table>
+            <br /><br />
+
+            <style type="text/css">
+                #q1Option, #q2Option, #q3Option, #q4Option, #q5Option, #q6Option, #q7Option, #q8Option {
+                    min-width: 200px;
+                }
+            </style>
+        </div>
+    </fieldset>
+
+    <hr />
+    <center>
+        <input type="submit" class="btn btn-success btn-lg" value="Save Changes" />
+
+    </center>
+</form>
+@{
+    if (accountAmlResponses != null && accountAmlResponses.Any(x => x.QuestionId == 12))
+    {
+        <script type="text/javascript">
+    $("#q12").val('@accountAmlResponses.FirstOrDefault(x=>x.QuestionId==12).YesNo');
+        </script>
+
+
+
+
+    }
+}
+

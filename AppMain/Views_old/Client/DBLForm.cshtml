@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "DBLForm";
+    Layout = "~/Views/Shared/_Client.cshtml";
+}
+<style>
+    .table td, .table th {
+        padding: 3px;
+    }
+
+    thead {
+        background-color: #124830;
+        color: white;
+    }
+    .form-group {
+    margin-bottom:-1px;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Databank Brokerage Form
+                </h5>
+            </div>
+            <div class="card-body">
+
+                <form method="post" enctype="multipart/form-data" class="form-horizontal" id="appForm">
+                    @Html.AntiForgeryToken()
+                    @{
+
+
+                        //MvcApplication.TempAccount.AccountTypeId = 4;
+                        if (MvcApplication.TempAccount.AccountTypeId <= 3)
+                        {
+                            @Html.Partial("~/Views/Partials/client_edits/_editFirstApplicant.cshtml")
+                        }
+
+
+                        else
+                        {
+                            @Html.Partial("~/Views/Partials/client_edits/_editInstitutionalApplicant.cshtml")
+                        }
+
+                    }
+
+                    <br/>
+                    <hr/>
+                    <center>
+                        <input type="submit" class="btn btn-success btn-lg" value="Save Changes" />
+
+                    </center>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

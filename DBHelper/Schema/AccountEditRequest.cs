@@ -20,6 +20,10 @@ namespace DBHelper.Schema
         public System.DateTime CreatedDate { get; set; }
         public string ErrorList { get; set; }
         public bool IsActive { get; set; }
+        public bool DBLFormEnabled { get; set; }
+        public bool FileUploadEnabled { get; set; }
+        public bool AMLEnabled { get; set; }
+        public bool ETIEnabled { get; set; }
     
         public virtual Account Account { get; set; }
     }

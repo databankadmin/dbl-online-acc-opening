@@ -24,5 +24,6 @@ namespace DBHelper.Schema
         public string PHONE_TWO { get; set; }
         public Nullable<double> POST { get; set; }
         public Nullable<double> LOG_ID { get; set; }
+        public string SoftTechCode { get; set; }
     }
 }
