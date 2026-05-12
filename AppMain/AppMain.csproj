@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.props" Condition="Exists('..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.props')" />
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -79,6 +80,21 @@
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=8.6.1.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.PDF.8.6.0\lib\net40\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=20.3460.0.47, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Compression.Base.20.3.0.47\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=20.3460.0.47, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.20.3.0.47\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=20.3460.0.47, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.AspNet.20.3.0.47\lib\net46\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -179,6 +195,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\DropZoneUploaderController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewAccountController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
@@ -264,6 +281,7 @@
     <Content Include="Connected Services\DBLSoftTechServiceReference\AppMain.DBLSoftTechServiceReference.results.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Connected Services\DBLSoftTechServiceReference\configuration91.svcinfo" />
     <None Include="Connected Services\DBLSoftTechServiceReference\configuration.svcinfo" />
     <None Include="Connected Services\DBLSoftTechServiceReference\Reference.svcmap">
@@ -1396,85 +1414,13 @@
     <Content Include="files\bower_components\switchery\css\switchery.min.css" />
     <Content Include="files\bower_components\switchery\js\switchery.min.js" />
     <Content Include="files\bower_components\underscore\js\underscore-min.js" />
-    <Content Include="Images\0806ed5f-4005-42b8-930b-9d5e22e9f7df144909637527807860337447.PNG" />
-    <Content Include="Images\0f9739d7-c2f0-41d6-9d85-7d3fc7fceb67675719637528735908537019.png" />
-    <Content Include="Images\144ccc1d-3e34-48f7-a781-ac28af2c43c3942488637527263045210847.PNG" />
-    <Content Include="Images\193a3faf-7248-4e7f-8667-c5bb50cf95a9640554637527232014313785.PNG" />
-    <Content Include="Images\1bd2f456-6778-4937-8491-ad063a1badf0724967637527314397534103.png" />
-    <Content Include="Images\1beea752-52c7-44ea-8cf1-8d0d9ed3d48a514903637518520705575831.PNG" />
-    <Content Include="Images\3117e616-ed0d-4d3c-a643-660c99ce35d1998177637572778871227404.jpeg" />
-    <Content Include="Images\3ec50e6b-3aaa-46b4-b8bf-49a71e2541fc467375637518735490700023.png" />
-    <Content Include="Images\403c6d73-88fa-4caa-8bcd-a94885fdcdef177128637528735908083010.PNG" />
-    <Content Include="Images\4118b734-235b-4273-a6dc-de267f418b83373165637518735486652703.PNG" />
-    <Content Include="Images\44a50528-8fdf-4ff4-a15c-0432fd6bab44101735637572706922374115.png" />
-    <Content Include="Images\494e401a-c42f-49e5-a2c0-5fc101d49aa8653097637572705977077551.PNG" />
-    <Content Include="Images\54a59426-56b2-4103-ac10-0c3657e48fff929869637528735908172869.PNG" />
-    <Content Include="Images\54f151ad-ede2-4931-8ee1-e9afed24b8a4960916637572708761158192.png" />
-    <Content Include="Images\55fb1864-3cb2-4172-a985-a9e82019ee34800355637572705976998122.PNG" />
-    <Content Include="Images\57b2977f-986d-45f2-9208-df567919e663497540637520184368465626.png" />
-    <Content Include="Images\59698727-4484-448f-b100-8d26912b22a1790299637518735490809715.png" />
-    <Content Include="Images\5e1178be-bae2-4e4a-9dd1-6fde2fca3fda681152637518520246379113.png" />
-    <Content Include="Images\60158d38-b578-42d7-b95e-ecfc8a457180868784637518735490260216.jpg" />
-    <Content Include="Images\633f0464-d2b5-4341-a56e-f208b9089eae116043637518735490104428.jpg" />
-    <Content Include="Images\64540919-4257-4db5-ad44-e45e61bd4644932841637528735905106354.PNG" />
-    <Content Include="Images\6529cfa5-1c07-4fba-8671-1c7e0109d3ce144909637527807860397281.PNG" />
-    <Content Include="Images\68a434c4-90d7-4f02-8413-f7222b86ccaf897100637518489241397514.png" />
-    <Content Include="Images\68a69283-e14c-4017-8b95-c584d4e0c434191554637518515012293655.png" />
-    <Content Include="Images\6a01e7b1-7bc9-4b28-b3ad-6d84d26f8c6e370652637527807859579469.PNG" />
-    <Content Include="Images\6a316fe9-beff-4864-b653-c292d6253982654038637518475807768863.png" />
-    <Content Include="Images\6b0f70a3-27f4-4029-880e-8f4cdf8887c7352003637527239676462004.PNG" />
-    <Content Include="Images\6ca74417-b28c-43a4-aef6-d528f1683e9a819213637527239679572356.PNG" />
-    <Content Include="Images\6f136a6c-0f21-455c-8ed3-0a999408eac7869242637527807860068166.PNG" />
-    <Content Include="Images\725122e3-b4a9-4650-ac15-79e711000766721984637527807860257765.PNG" />
-    <Content Include="Images\73a556ae-4409-4f73-b902-187d9cfdda53370955637527252878992679.PNG" />
-    <Content Include="Images\7647c154-6467-4cd6-bbb8-b85bc3fbe17a233210637518520725650857.PNG" />
-    <Content Include="Images\7df34814-b98c-4af7-bbc4-b5077effc39d932841637528735905036540.PNG" />
-    <Content Include="Images\7f542aa8-b1d0-4814-8efa-46b97a652bc2916312637518520705077087.PNG" />
-    <Content Include="Images\7fdc03d0-3e72-406d-8979-b384e9a59b51869242637527807860128002.PNG" />
-    <Content Include="Images\873b39b3-bb4a-49eb-86ee-7307a4f9de72898948637520184368096611.PNG" />
-    <Content Include="Images\894ec3bd-b787-44d3-8052-af01c3307e76868784637518735490184272.jpg" />
-    <Content Include="Images\89d057ec-6eaa-4c79-b384-c6638678a9df352003637527239676541797.PNG" />
-    <Content Include="Images\8a0333e7-9d0e-43a9-9955-25687479438a305223637572778868843865.jpeg" />
-    <Content Include="Images\8ed8937e-8a1e-4d03-9b8c-07f2a121cdf1696851637527252876029645.PNG" />
-    <Content Include="Images\94e0be3f-9886-4639-adea-660f004869ee751690637520184368286103.PNG" />
-    <Content Include="Images\997ea63f-503e-4089-a85e-57ec8561562e101735637572706922374115.png" />
-    <Content Include="Images\9ab12749-c33f-4931-addc-a4de368ebcab918860637518735489115836.PNG" />
-    <Content Include="Images\9b3f45f5-3c04-42f1-bdac-19a0a47e61e7595936637518735489065977.PNG" />
-    <Content Include="Images\9c5aa35b-d45c-4578-bf00-2d5b7ebcba7e320601637527232011067111.PNG" />
-    <Content Include="Images\9e466030-670e-444f-8614-7cd121bb3d9c724967637527314397623866.png" />
-    <Content Include="Images\9e5f6b6a-bb74-4f3b-a39c-9b7f99e78f0d903605637527314394751549.png" />
-    <Content Include="Images\9e9b187f-b6be-44f8-bb18-6bf81bc2855c496289637527239679425982.PNG" />
-    <Content Include="Images\a2ad214a-69f4-45a0-ac3a-a84c3d417588310116637518520199855500.png" />
-    <Content Include="Images\a6e023ae-208a-42e3-b69b-3407448da307518213637527252878892927.PNG" />
-    <Content Include="Images\a7c5579f-8389-47a6-948f-cdb739a3a1f8769794637527263041859804.PNG" />
-    <Content Include="Images\a897300f-5aa5-44ab-96ea-474f0b5d6b4a169559637520184270712021.PNG" />
-    <Content Include="Images\ad83ea6d-c3b3-45ad-89d9-b0ff679e3ad8493296637527232014393532.PNG" />
-    <Content Include="Images\af3cf87f-4161-44c5-aa8e-cc3f385742f8370955637527252878942815.PNG" />
-    <Content Include="Images\bbc6b3d6-61bc-4970-b8ca-8d661db50ae2903605637527314394731889.png" />
-    <Content Include="Images\bd0ce5ad-0af1-42fc-99ab-c3186651f9c0492483637520184270811778.PNG" />
-    <Content Include="Images\bd1855ba-55ea-4f9a-8034-96e6bc241d66518213637527252878764567.PNG" />
+    <Content Include="Images\13c403f9-aed8-49db-9dbd-fb9e72ef292d147067638530101269241300.jpeg" />
+    <Content Include="Images\72e0ddc3-a3af-4ea3-90f6-a63ef78f90c1157284638530100843631412.jpg" />
+    <Content Include="Images\875822e4-3085-42de-9389-a95e6e2b3aa8355626638530100886811472.jpeg" />
+    <Content Include="Images\9403176f-b5d4-4547-9579-b35c1d8f0df0242653638017931799439313.PNG" />
     <Content Include="Images\brokerage_header.jpg" />
-    <Content Include="Images\c1155dc5-da30-46be-98d2-efc874082e3d320601637527232011007556.png" />
-    <Content Include="Images\c3d83b5b-2ed8-480b-9047-2e8bc1c1294a305223637572778868834089.PNG" />
-    <Content Include="Images\c5cc66a6-76d3-4cc3-b193-ad7a349d6ed4685010637518470881162110.png" />
-    <Content Include="Images\c675e92d-fbe9-4527-9720-0130a5bbf121848020637518485452750161.jpeg" />
-    <Content Include="Images\cf5d9ae8-d772-4c4c-bb28-2dab1ea878ad622536637527263041949558.PNG" />
-    <Content Include="Images\d1b95316-95a8-4108-8131-d01648e7bac1673206637520184368784765.png" />
-    <Content Include="Images\d251ce75-b987-493d-b4ae-3049918261cf696851637527252876069535.PNG" />
-    <Content Include="Images\d41500f0-ca9e-4d16-ba67-5356232e837e341785637518735489365168.PNG" />
-    <Content Include="Images\d55f0fa0-cfed-4e43-a655-0b737f552a6d373165637518735486602554.PNG" />
-    <Content Include="Images\d617d53e-f742-4a7d-be1f-e7ef6e57affe960916637572708761128274.png" />
-    <Content Include="Images\d92d5ddc-e9b6-40fb-9cde-71e7001decd8929869637528735908225537.PNG" />
-    <Content Include="Images\da888660-d5c6-4972-bbdd-cb1bb4ba4582596395637527807858801550.PNG" />
     <Content Include="Images\databank.png" />
-    <Content Include="Images\dbea898b-8f6b-4c07-b60d-24dce1cb8c2e916312637518520705146922.PNG" />
-    <Content Include="Images\eb0ca9e7-8fe1-4a55-9940-cb99f469d44a514903637518520705635613.PNG" />
-    <Content Include="Images\ebd931b4-1e0b-4d39-a9f0-32cc95a79ef9365413637527263045360443.PNG" />
-    <Content Include="Images\ef840ed4-c933-490f-aa0f-9fa3f31f0c27273471637527807858741715.PNG" />
-    <Content Include="Images\efcbdcaf-05fe-4c0a-880d-e7a0165a1545614633637518735490590308.jpeg" />
     <Content Include="Images\email.png" />
-    <Content Include="Images\f96b7e87-110c-42f3-9cf8-c9683c2fe05b194986637527807859360054.PNG" />
-    <Content Include="Images\fe0739d7-390f-45c1-b299-43bd7d1ee7e7224692637520184367228938.PNG" />
     <Content Include="Images\gifs\1.gif" />
     <Content Include="Images\gifs\2.gif" />
     <Content Include="Images\gifs\3.gif" />
@@ -1502,6 +1448,10 @@
     <Content Include="multiselect\test\SpecRunner.html" />
     <Content Include="multiselect\test\spec\MultiSelectSpec.js" />
     <Content Include="multiselect\test\test-styles.css" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\appProfile.js" />
     <Content Include="Scripts\dropZoneInit.js" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -1526,6 +1476,11 @@
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Assets\backyard\fonts\icon-7-stroke\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Scripts\dropZoneInit4.js" />
+    <Content Include="Scripts\dropZoneInit3.js" />
+    <Content Include="Scripts\jquery.multi-select.js" />
+    <Content Include="Scripts\jquery.multi-select.min.js" />
+    <Content Include="Scripts\validateUploads.js" />
     <Content Include="signoTec\bluebird.min.js" />
     <Content Include="signoTec\index.html" />
     <Content Include="signoTec\Info.html" />
@@ -1787,112 +1742,16 @@
     <Content Include="files\bower_components\datedropper\css\dd-icon\dd-icon.ttf" />
     <Content Include="files\bower_components\datedropper\css\dd-icon\dd-icon.woff" />
     <Content Include="files\bower_components\datedropper\css\dd-icon\dd-icond41d.eot" />
-    <Content Include="Images\0006fd29-e454-437b-8c65-d0d7955ae764477431637572705976768753.pdf" />
-    <Content Include="Images\08b5f7db-31fb-4b79-bdc2-95a46dd9ee69816220637527232014583485.pdf" />
-    <Content Include="Images\096db89f-552a-4896-b507-c1bac015791a530966637572778868066149.pdf" />
-    <Content Include="Images\30150415-2539-4f0d-9e0c-9cf76347c61f248994637572706922304301.pdf" />
-    <Content Include="Images\3941801f-5e53-4b3c-8496-ab7d7e5bd76a872526637518460260314395.pdf" />
-    <Content Include="Images\3c5ca657-1b61-4ad0-bc51-5a4a8280a2d9124539637520184369532788.pdf" />
-    <Content Include="Images\3efc699f-73f2-4d82-855d-4e086a6db01c724125637518459298522188.pdf" />
-    <Content Include="Images\46d74d21-dc10-4be6-a017-57ebc3a8e329880891637518477401812435.pdf" />
-    <Content Include="Images\53f19e17-3931-4928-acd9-1edb11d58f13786518637518491804437026.pdf" />
-    <Content Include="Images\54c795d4-189d-4e32-a483-a52c9a02336c954376637520184004023709.pdf" />
-    <Content Include="Images\5f688b36-e87f-4163-b2da-9a6433768db2982090637527314394218660.pdf" />
-    <Content Include="Images\67b21662-7475-44d0-8a29-0bedc272d38a953374637518520523896847.pdf" />
-    <Content Include="Images\6bfc706f-d89b-42de-87b9-13ba29920236271797637520184369243543.pdf" />
-    <Content Include="Images\6df197bd-e690-447e-80e5-782d510acfc6949717637520175032504921.pdf" />
-    <Content Include="Images\6e43981d-5203-4585-8331-59bc37f42a14207845637518449377080461.pdf" />
-    <Content Include="Images\70edc75e-5542-4d92-91c2-3202635365a4886329637518477820024980.pdf" />
-    <Content Include="Images\73e9efe9-627d-4b35-b65a-27b262e290f0434251637528735904607969.pdf" />
-    <Content Include="Images\7bb6dd1f-df77-4631-aa06-bd5a22562cd5.pdf" />
-    <Content Include="Images\7d892ab3-6c52-49d8-bb62-3e71bba6f53b123946637527263041450959.pdf" />
-    <Content Include="Images\8c7a8410-d936-4aa2-9198-9a963f54aad7574752637527232010658486.pdf" />
-    <Content Include="Images\928643c8-82fa-4280-900e-6c40818e43f9208175637572708761038491.pdf" />
-    <Content Include="Images\9574daa6-3c0b-4332-9419-52c1659ac71f722357637572778873115788.pdf" />
-    <Content Include="Images\a67e00ef-ac61-4c4f-b8ee-675aeae048e0525948637520184369024125.pdf" />
-    <Content Include="Images\afd06ade-2b80-41ee-b64e-d3a46229b1c0951002637527252875660634.pdf" />
-    <Content Include="Images\AML_Profile_sdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538171133258567.pdf" />
-    <Content Include="Images\AML_Profile_sdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538278362581960.pdf" />
-    <Content Include="Images\AML_Profile_xcvvvxcvxc_Kwesi_vcvxv_637538166316329174.pdf" />
-    <Content Include="Images\AML_Profile_xcvvvxcvxc_Kwesi_vcvxv_637538166909924331.pdf" />
-    <Content Include="Images\AML_Profile_xcvvvxcvxc_sdff_vcvxv_637602245738150371.pdf" />
-    <Content Include="Images\AML_Profile_xcvvvxcvxc_sdff_vcvxv_637602246990349411.pdf" />
-    <Content Include="Images\b406c4c4-f94d-4a11-a839-0e791a7c2060921832637518735486044080.pdf" />
-    <Content Include="Images\ba29d915-80a5-4331-927b-2542f775bd15606211637518520724728670.pdf" />
-    <Content Include="Images\cc48c994-dc2c-461f-9901-70bbb1478c9d847084637518473285207048.pdf" />
     <Content Include="Images\csd.pdf" />
-    <Content Include="Images\dbf9829b-22ae-46c8-bd94-7f0efa0189a1463993637518520053337863.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637534936000771456.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637534966819010807.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535097638274898.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535101021895757.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535509493654490.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535512454032626.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535514591464715.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535517639370113.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535520305276223.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535529738965284.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535530307183919.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535531939222053.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535534008286882.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535534386930290.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535535086352776.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535536233100696.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535537157256892.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637535537582539388.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637537695105318324.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637538232960598785.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637538239914244046.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637538241440276994.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637538243422750196.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637538247305437813.pdf" />
-    <Content Include="Images\DBL_DataEbenezer_Kwesi_Foh_JOINT_Nana_Yaa_Abrafi_Foh_637539080284949132.pdf" />
-    <Content Include="Images\DBL_DataEbenezer__vcvxv_637534940471758843.pdf" />
-    <Content Include="Images\DBL_DataEbenezer__vcvxv_637534942260413959.pdf" />
-    <Content Include="Images\DBL_DataPatience___Agyemang_637534946186576312.pdf" />
-    <Content Include="Images\DBL_DataPatience___Agyemang_637535095421493942.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637534925888690099.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637534928060040632.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637534930366489778.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538168281132757.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538248505060619.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538250006815957.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538252464590602.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538253272836470.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538254758084452.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538267884159228.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538268989029343.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538270138870282.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538271895046238.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538273335965799.pdf" />
-    <Content Include="Images\DBL_Datasdfsdfdsfds_Kwesi_fdsfdfsf_ITF_jfdlsdjflk_jfdkdsjfdslk_sadasjkl_637538277293106394.pdf" />
-    <Content Include="Images\DBL_DataTechNest_637534934099680280.pdf" />
-    <Content Include="Images\DBL_DataTechNest_637538197133744682.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538230462425194.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538231967363601.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538275986255321.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538458365042744.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538461463860913.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538461560595021.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637538465490105855.pdf" />
-    <Content Include="Images\DBL_Dataxcvvvxcvxc_Kwesi_vcvxv_637539080060117075.pdf" />
-    <Content Include="Images\DBL_Data_xcvvvxcvxc_sdff_vcvxv_637594581258784246.pdf" />
-    <Content Include="Images\DBL_Data_xcvvvxcvxc_sdff_vcvxv_637602247965064738.pdf" />
-    <Content Include="Images\e2c5ec27-82ff-4e32-9581-7e24fd0da94a298722637518478830732372.pdf" />
-    <Content Include="Images\e7d93a24-a46d-45bf-833e-b3c8363ca83a546691637572778872832631.pdf" />
-    <Content Include="Images\ea6c14cd-472b-4856-b685-e2200a2b229e528461637528735908646736.pdf" />
-    <Content Include="Images\ETI_Profile_Ebenezer__vcvxv_637602239688307617.pdf" />
-    <Content Include="Images\ETI_Profile_xcvvvxcvxc_Kwesi_vcvxv_637538194753946401.pdf" />
-    <Content Include="Images\ETI_Profile_xcvvvxcvxc_Kwesi_vcvxv_637538195242320048.pdf" />
-    <Content Include="Images\f7182b08-12a8-47fd-b23b-1738233eb84d185833637518447531719674.pdf" />
-    <Content Include="Images\f81981a6-740d-4d53-b5a6-a24ea275172d420729637527807858512324.pdf" />
-    <Content Include="Images\fbad5940-2ed9-49e7-abd2-1f3997ae7df7323595637527239676083304.pdf" />
     <None Include="Connected Services\DBLSoftTechServiceReference\ClientOpeningWS.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\DBLSoftTechServiceReference\ClientOpeningWSService.wsdl" />
     <Content Include="multiselect\Makefile" />
     <Content Include="multiselect\README.md" />
+    <Content Include="Images\CSD  ACCOUNT OPENING FORM %28CSD FORM 1%29_August 12 2022 FILLABLE.pdf" />
+    <Content Include="Images\2f551e93-92cd-466b-b15c-b0d72d6eade9564805638530103292872871.pdf" />
+    <Content Include="Images\3bb263ae-7150-4f3d-8940-df31781756f6241053638530099574507813.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -1905,14 +1764,14 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config">
+    <Content Include="Webold.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <Content Include="Webold.Debug.config">
+      <DependentUpon>Webold.config</DependentUpon>
     </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <Content Include="Webold.Release.config">
+      <DependentUpon>Webold.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -1968,13 +1827,26 @@
     <Content Include="Views\Client\ConfirmSubmit.cshtml" />
     <Content Include="Views\Client\ChangePassword.cshtml" />
     <Content Include="Views\Partials\_signnatureCapture.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Partials\_expectedAccountActivity.cshtml" />
+    <Content Include="Views\Partials\_beneficiaries.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Pdf\DownloadCSDs.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\DropZoneUploader\" />
     <Folder Include="Views\FileUploader\" />
     <Folder Include="Views\FileUpload\" />
-    <Folder Include="Views\Pdf\" />
     <Folder Include="Views\Utilities\" />
   </ItemGroup>
   <ItemGroup>
@@ -1991,10 +1863,6 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\SofteckSdkSolution\SofteckSdkSolution\SofteckSdkSolution\SofteckSdkSolution.csproj">
-      <Project>{A6B88F0C-DBEB-4C12-AEDC-EFD266942478}</Project>
-      <Name>SofteckSdkSolution</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AppLogger\AppLogger.csproj">
       <Project>{bc0d2ff7-e3f4-4127-b720-da280b27030d}</Project>
       <Name>AppLogger</Name>
@@ -2011,12 +1879,19 @@
       <Project>{67694dcf-563e-4b96-9bdf-0258ad1b9352}</Project>
       <Name>DBHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SofteckSdkSolution\SofteckSdkSolution\SofteckSdkSolution.csproj">
+      <Project>{a6b88f0c-dbeb-4c12-aedc-efd266942478}</Project>
+      <Name>SofteckSdkSolution</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\DBLSoftTechServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -2053,8 +1928,11 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.targets" Condition="Exists('..\packages\Microsoft.TypeScript.MSBuild.5.4.4\build\Microsoft.TypeScript.MSBuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

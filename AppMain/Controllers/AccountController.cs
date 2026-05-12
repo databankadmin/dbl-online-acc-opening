@@ -22,19 +22,6 @@ namespace AppMain.Controllers
         public ActionResult Index(string message = null)
         {
             Utilities.AppUsers = AppServerHelper.GetAppUsers();
-
-            //string windowsName = WindowsPrincipal.Current.Identity.Name;
-            ////OR
-            //string windowsName2 = Thread.CurrentPrincipal.Identity.Name;
-            //      ViewBag._user = //_user.Name+ ", "+_user.DisplayName+","+_user.DistinguishedName+","+_user.EmailAddress+","+_user.Description+","+_user.GivenName+","+_user.SamAccountName+", "+_user.Surname+", "+_user.UserPrincipalName;
-
-            //ViewBag.Message = "Name1: "+windowsName+" Name 2: "+windowsName2;
-            //if (!string.IsNullOrEmpty(message))
-            //{
-            //    ViewBag.Message = message.Decrypt();
-            //}
-
-            //RecurringJob.AddOrUpdate(() => Utilities.ProcessQuickSMS(), "*/1 * * * *");
             RecurringJob.AddOrUpdate(() => Utilities.ProcessEmails(), "*/1 * * * *");
             ViewBag.username = string.Empty;
             return View();
@@ -110,7 +97,8 @@ namespace AppMain.Controllers
                 FormsAuthentication.SetAuthCookie(username, false);
                 Profile.Initialize(username, true);
                 Utilities.LogActivity(username,"Successful login");
-                return RedirectToAction("Applications", "Admin");
+                Utilities.AppUsers = AppServerHelper.GetAppUsers();
+                return RedirectToAction("Dashboard", "Admin");
             }
             else if (accountUser!=null)
             {

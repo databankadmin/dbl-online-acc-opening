@@ -5,6 +5,7 @@ using AppUtils;
 using DBHelper.Schema;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -19,15 +20,10 @@ namespace AppMain.Controllers
     {
         public Account CurrentUser
         {
-
-            get
-            {
-
-                return Utilities.GetSessionUserClient() as Account;
-            }
+            get { return Utilities.GetSessionUserClient() as Account; }
         }
-        
-        public ActionResult DBLForm(string message=null)
+
+        public ActionResult DBLForm(string message = null)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -74,7 +70,7 @@ namespace AppMain.Controllers
 
 
 
-        [HttpPost,ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
 
         public ActionResult DBLForm(int investmentType = 0, int firstApplicantTitle = 0, string firstApplicantSurname = null, string firstApplicantFname = null, string firstApplicantOname = null, int firstApplicantNationality = 0,
             string firstApplicantDOB = null, string firstApplicantPlaceOfBirth = null, int firstApplicantMaritalStatus = 0, string firstApplicantMotherMaidenName = null, string firstApplicantFullResidentialAddress = null, string firstApplicantResidentialCity = null,
@@ -99,7 +95,7 @@ namespace AppMain.Controllers
             string instructionsEmploymentDetailsCurrentOccupation = null, string instructionsEmploymentDetailsCurrentEmployer = null, string instructionsEmploymentDetailsCurrentEmployerAddress = null, string instructionsEmploymentDetailsCurrentEmployerFrom = null, string instructionsEmploymentDetailsCurrentEmployerTo = null,
             int annualIncomeId = 0, int networthId = 0, int investmentHorizonId = 0, int objectivesId = 0, int investmentKnowledgeId = 0, int riskToleranceId = 0,
             string onlineTradingFacility = null, string declarationHasBeenConvicted = null, string convictionDetails = null, string actingAsNominee = null, string singleAccDeclarationFullName = null,
-            int numberOfSignatories = 0,string staffRefCode=null,
+            int numberOfSignatories = 0, string staffRefCode = null,
 
 
              int instInvestmentType = 0, string instNameOfClient = null, string instPricipalBroker = null, string instNatureOfBusiness = null, int instCountryOfResidence = 0, string instRegistrationNumber = null, string instFullMailingAddress = null, string instMailingAddressCity = null, int instMailAddressCountryOfResidence = 0,
@@ -119,14 +115,14 @@ namespace AppMain.Controllers
             string instSignName1 = null, string instSignPosition1 = null, string instSignName2 = null, string instSignPosition2 = null, string instSignName3 = null, string instSignPosition3 = null, string instSignName4 = null, string instSignPosition4 = null,
             int instnumberOfSignatories = 0, string insOtherDetails = null,
 
-           // firstApplicantAuthPersonIdReplace
-            HttpPostedFileBase firstApplicantPhotoReplace=null,HttpPostedFileBase firstApplicantSignatureReplace=null,HttpPostedFileBase firstApplicantAuthPersonIdReplace=null,
-            HttpPostedFileBase jointApplicantPhotoReplace=null,HttpPostedFileBase jointApplicantSignatureReplace=null, HttpPostedFileBase itfApplicantPhotoReplace=null,
+            // firstApplicantAuthPersonIdReplace
+            HttpPostedFileBase firstApplicantPhotoReplace = null, HttpPostedFileBase firstApplicantSignatureReplace = null, HttpPostedFileBase firstApplicantAuthPersonIdReplace = null,
+            HttpPostedFileBase jointApplicantPhotoReplace = null, HttpPostedFileBase jointApplicantSignatureReplace = null, HttpPostedFileBase itfApplicantPhotoReplace = null,
 
-            HttpPostedFileBase instApplicantFirstAuthIdPhotoReplace=null,HttpPostedFileBase intAuthorisedOfficer2IdPhotoReplace=null,
-            HttpPostedFileBase instSign1=null,HttpPostedFileBase instSign2=null,HttpPostedFileBase instSign3=null,HttpPostedFileBase instSign4=null,
+            HttpPostedFileBase instApplicantFirstAuthIdPhotoReplace = null, HttpPostedFileBase intAuthorisedOfficer2IdPhotoReplace = null,
+            HttpPostedFileBase instSign1 = null, HttpPostedFileBase instSign2 = null, HttpPostedFileBase instSign3 = null, HttpPostedFileBase instSign4 = null,
 
-           int yearsOfEmployment = 0,  string tin = null, string firstApplicantMaidenName = null, int statementFreqId = 0, int expectedAccountActivityId = 0, string firstApplicantGender = null, string jointApplicantGender = null, string itfApplicantGender = null,
+           int yearsOfEmployment = 0, string tin = null, string firstApplicantMaidenName = null, int statementFreqId = 0, int expectedAccountActivityId = 0, string firstApplicantGender = null, string jointApplicantGender = null, string itfApplicantGender = null,
             List<string> remark = null, List<int> instructionsEmploymentDetailsSourceOfIncomeIds = null, List<int> intSourceOfIncomeIds = null
 
             )
@@ -198,20 +194,21 @@ namespace AppMain.Controllers
                         firstApplicant.IssuingAuthority = firstApplicantIdIssuingAuthority;
                         firstApplicant.IdCardIssueDate = firstApplicantIdCardIssueDate;
                         firstApplicant.IdCardExpiryDate = firstApplicantIdCardExpDate;
+                        firstApplicant.GhanaCardNo = firstApplicant.GhanaCardNo.Trim();
 
                         if (firstApplicantResidentialCountry > 0)
                         {
                             firstApplicant.ResidentialCountryId = firstApplicantResidentialCountry;
                         }
-                        if (firstApplicantMailingCountry>0)
+                        if (firstApplicantMailingCountry > 0)
                         {
                             firstApplicant.MailingAddressCountryId = firstApplicantMailingCountry;
                         }
-                        if (firstApplicantPhotoReplace!=null)
+                        if (firstApplicantPhotoReplace != null)
                         {
                             firstApplicant.IdPath = SaveFileUpload(firstApplicantPhotoReplace);
                         }
-                        if (firstApplicantSignatureReplace!=null)
+                        if (firstApplicantSignatureReplace != null)
                         {
                             firstApplicant.SignaturePath = SaveFileUpload(firstApplicantSignatureReplace);
                         }
@@ -239,13 +236,13 @@ namespace AppMain.Controllers
                             jointApplicant.IssuingAuthority = jointApplicantIdIssuingAuthority;
                             jointApplicant.IdCardIssueDate = jointApplicantIdCardIssueDate;
                             jointApplicant.IdCardExpiryDate = jointApplicantIdCardExpDate;
-                            // jointApplicant.IdPath = SaveFileUpload(_JointApplicantIdPhoto),
-                            // jointApplicant.SignaturePath = SaveFileUpload(_JointApplicantSignature),
-                            if (jointApplicantPhotoReplace!=null)
+                            jointApplicant.GhanaCardNo = jointApplicant.GhanaCardNo.Trim();
+
+                            if (jointApplicantPhotoReplace != null)
                             {
                                 jointApplicant.IdPath = SaveFileUpload(jointApplicantPhotoReplace);
                             }
-                            if (jointApplicantSignatureReplace!=null)
+                            if (jointApplicantSignatureReplace != null)
                             {
                                 jointApplicant.SignaturePath = SaveFileUpload(jointApplicantSignatureReplace);
                             }
@@ -253,7 +250,7 @@ namespace AppMain.Controllers
                         context.SaveChanges();
                         if (accountType == 3)
                         {//itf
-                            var itfApplicant= accountMembers.LastOrDefault();
+                            var itfApplicant = accountMembers.LastOrDefault();
 
                             itfApplicant.Lname = itfApplicantSurname;
                             itfApplicant.Fname = itfApplicantFname;
@@ -267,7 +264,9 @@ namespace AppMain.Controllers
                             itfApplicant.IssuingAuthority = itfApplicantIdIssuingAuthority;
                             itfApplicant.IdCardIssueDate = itfApplicantIdCardIssueDate;
                             itfApplicant.IdCardExpiryDate = itfApplicantIdCardExpDate;
-                            if (itfApplicantPhotoReplace!=null)
+                            itfApplicant.GhanaCardNo = itfApplicant.GhanaCardNo.Trim();
+
+                            if (itfApplicantPhotoReplace != null)
                             {
                                 itfApplicant.IdPath = SaveFileUpload(itfApplicantPhotoReplace);
                             }
@@ -276,7 +275,7 @@ namespace AppMain.Controllers
 
 
                         //next of kins
-                        var nextOfKins = context.AccountNextOfKinDetails.Where(x=>x.AccountId==MvcApplication.TempAccount.Id).ToList();
+                        var nextOfKins = context.AccountNextOfKinDetails.Where(x => x.AccountId == MvcApplication.TempAccount.Id).ToList();
                         context.AccountNextOfKinDetails.RemoveRange(nextOfKins);
                         var nextOfKin1 = new AccountNextOfKinDetail
                         {
@@ -349,7 +348,7 @@ namespace AppMain.Controllers
                             {
                                 authorisedPerson.IdType = authorisedPersonApplicantIdType;
                             }
-                            if (firstApplicantAuthPersonIdReplace!=null)
+                            if (firstApplicantAuthPersonIdReplace != null)
                             {
                                 authorisedPerson.IdPath = SaveFileUpload(firstApplicantAuthPersonIdReplace);
                             }
@@ -408,19 +407,19 @@ namespace AppMain.Controllers
                         context.AccountFinancialInvestmentRiskProfiles.RemoveRange(riskProfile);
 
                         context.AccountFinancialInvestmentRiskProfiles.Add(new AccountFinancialInvestmentRiskProfile
-                   {
-                    AccountId = account.Id,
-                    AnnualIncomeId = annualIncomeId,
-                    NetworthId = networthId,
-                    InvestmentHorizonId = investmentHorizonId,
-                    ObjectivesId = objectivesId,
-                    InvestmentKnowledgeId = investmentKnowledgeId,
-                    RiskToleranceId = riskToleranceId,
-                    OnlineTradingFacility = onlineTradingFacility,
-                    CreatedDate = DateTime.Now,
-                    Id = Guid.NewGuid(),
-                });
-                    context.SaveChanges();
+                        {
+                            AccountId = account.Id,
+                            AnnualIncomeId = annualIncomeId,
+                            NetworthId = networthId,
+                            InvestmentHorizonId = investmentHorizonId,
+                            ObjectivesId = objectivesId,
+                            InvestmentKnowledgeId = investmentKnowledgeId,
+                            RiskToleranceId = riskToleranceId,
+                            OnlineTradingFacility = onlineTradingFacility,
+                            CreatedDate = DateTime.Now,
+                            Id = Guid.NewGuid(),
+                        });
+                        context.SaveChanges();
 
 
                     }
@@ -449,7 +448,7 @@ namespace AppMain.Controllers
                         account.InstCompanyType = instCompanyType;
                         account.RegionalInvestmentId = instRegionalInvestmentId;
                         account.FrequencyOfStatementsId = instStatementFreq;
-                      //  account.AccountTypeId = accountType;
+                        //  account.AccountTypeId = accountType;
                         account.SignatureTypeId = instnumberOfSignatories;
                         account.InstOtherDetails = insOtherDetails;
                         if (instSteetAddressCountry > 0)
@@ -457,7 +456,7 @@ namespace AppMain.Controllers
                             account.InsStreetAddressCountryId = instSteetAddressCountry;
                         }
 
-                      
+
                         accountId = account.Id.ToString();
                         context.SaveChanges();
                         //custody account details
@@ -492,7 +491,7 @@ namespace AppMain.Controllers
                             AccountName = null,
                             CreatedDate = DateTime.Now,
                             Id = Guid.NewGuid(),
-                            };
+                        };
                         if (intSettlementDetailsCorrespondentBankId > 0)
                         {
                             settlementDetails.CorrespondentBankId = intSettlementDetailsCorrespondentBankId;
@@ -543,10 +542,10 @@ namespace AppMain.Controllers
                             IDExpiryDate = intAuthorisedOfficer1IdCardIssueExpDate,
                             MailingAddress = null,
                             SignaturePath = authPersonsSignsIds.FirstOrDefault(),
-                            IdPath= authPersonsPhotoIds.FirstOrDefault(),
-                           
+                            IdPath = authPersonsPhotoIds.FirstOrDefault(),
+
                         };
-                        if (instApplicantFirstAuthIdPhotoReplace!=null)
+                        if (instApplicantFirstAuthIdPhotoReplace != null)
                         {
                             authorisedOfficer1.IdPath = SaveFileUpload(instApplicantFirstAuthIdPhotoReplace);
                         }
@@ -589,7 +588,7 @@ namespace AppMain.Controllers
                             SignaturePath = authPersonsSignsIds.LastOrDefault(),
                             IdPath = authPersonsPhotoIds.LastOrDefault(),
                         };
-                        if (intAuthorisedOfficer2IdPhotoReplace!=null)
+                        if (intAuthorisedOfficer2IdPhotoReplace != null)
                         {
                             authorisedOfficer2.IdPath = SaveFileUpload(intAuthorisedOfficer2IdPhotoReplace);
 
@@ -650,8 +649,8 @@ namespace AppMain.Controllers
 
                         context.SaveChanges();
                         //signatures
-                        
-                        var signatures = context.AccountInstSignatoriesMandates.OrderBy(x=>x.CreatedDate).Where(x => x.AccountId == account.Id).ToList();
+
+                        var signatures = context.AccountInstSignatoriesMandates.OrderBy(x => x.CreatedDate).Where(x => x.AccountId == account.Id).ToList();
                         var signaturesExisting = signatures.Select(x => x.SignaturePath);
                         context.AccountInstSignatoriesMandates.RemoveRange(signatures);
 
@@ -665,13 +664,13 @@ namespace AppMain.Controllers
                             Position = instSignPosition1,
                             SignaturePath = signaturesExisting.FirstOrDefault()
                         };
-                        if (instSign1!=null)
+                        if (instSign1 != null)
                         {
                             sign1.SignaturePath = SaveFileUpload(instSign1);
                         }
                         context.AccountInstSignatoriesMandates.Add(sign1);
 
-                        var sign2=new AccountInstSignatoriesMandate
+                        var sign2 = new AccountInstSignatoriesMandate
                         {
 
                             Id = Guid.NewGuid(),
@@ -679,7 +678,7 @@ namespace AppMain.Controllers
                             CreatedDate = DateTime.Now,
                             Name = instSignName2,
                             Position = instSignPosition2,
-                            SignaturePath=  signaturesExisting.LastOrDefault()
+                            SignaturePath = signaturesExisting.LastOrDefault()
                         };
                         if (instSign2 != null)
                         {
@@ -721,6 +720,25 @@ namespace AppMain.Controllers
 
                 }
             }
+
+            catch (DbEntityValidationException e)
+            {
+                string msg = string.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Logger.Instance.logWarning("Entity of type \"{0}\" in state \"{1}\" has the following validation errors: " + eve.Entry.Entity.GetType().Name + eve.Entry.State.ToString());
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        msg = msg + "\n" + ve.PropertyName.ToString() + ve.ErrorMessage.ToString();
+                        Logger.Instance.logWarning("- Property: \"{0}\", Error: \"{1}\"" + ve.PropertyName.ToString() + ve.ErrorMessage.ToString());
+                    }
+                }
+
+                //return RedirectToAction("ClientRedemptions");
+                return RedirectToAction("DBLForm", new { message = msg.Encrypt() });
+
+            }
+
             catch (Exception ex)
             {
                 Logger.Instance.logError(ex);
@@ -730,7 +748,7 @@ namespace AppMain.Controllers
 
         }
 
-        public ActionResult AppProfile(string message=null)
+        public ActionResult AppProfile(string message = null)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -741,7 +759,7 @@ namespace AppMain.Controllers
 
         public ActionResult SudmitApplication()
         {
-            using (var context=new DBLAccountOpeningContext())
+            using (var context = new DBLAccountOpeningContext())
             {
                 var model = context.Accounts.Find(MvcApplication.TempAccount.Id);
                 model.StatusId = 1;
@@ -751,7 +769,7 @@ namespace AppMain.Controllers
 
             }
         }
-        public ActionResult FileUploads(string message=null)
+        public ActionResult FileUploads(string message = null)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -782,23 +800,23 @@ namespace AppMain.Controllers
             return saveName;
         }
 
-        [HttpPost,ValidateAntiForgeryToken]
-        public ActionResult ReplaceFile(Guid applicationId,int typeId,string oldPath, HttpPostedFileBase imgFile=null,HttpPostedFileBase pdfFile=null)
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult ReplaceFile(Guid applicationId, int typeId, string oldPath, HttpPostedFileBase imgFile = null, HttpPostedFileBase pdfFile = null)
         {
-            using (var context=new DBLAccountOpeningContext())
+            using (var context = new DBLAccountOpeningContext())
             {
                 var model = context.Accounts.Find(applicationId);
-                if (typeId==0)
+                if (typeId == 0)
                 {
                     //csd
                     model.CSDFormPath = SaveFileUpload(pdfFile);
                     context.SaveChanges();
-                    return RedirectToAction("FileUploads",new { message ="File Uploaded!".Encrypt()});
+                    return RedirectToAction("FileUploads", new { message = "File Uploaded!".Encrypt() });
                 }
                 else
                 {
-                    var find = context.AccountFileUploads.FirstOrDefault(x=>x.Path==oldPath);
-                    if (find!=null)
+                    var find = context.AccountFileUploads.FirstOrDefault(x => x.Path == oldPath);
+                    if (find != null)
                     {
                         find.Path = SaveFileUpload(imgFile);
                         context.SaveChanges();
@@ -812,7 +830,7 @@ namespace AppMain.Controllers
         }
 
 
-        public ActionResult ETI(string message=null)
+        public ActionResult ETI(string message = null)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -821,13 +839,13 @@ namespace AppMain.Controllers
             return View();
         }
 
-        [HttpPost,ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult ETI(string indemnityTxt1 = null, string indemnityTxt2 = null, string indemnityTxt3 = null, string indemnityTxt4 = null, string indemnityName1 = null, string indemnityName2 = null, string indemnityEmail1 = null, string indemnityEmail2 = null)
         {
-            using (var context=new DBLAccountOpeningContext())
+            using (var context = new DBLAccountOpeningContext())
             {
 
-                var model = context.AccountETIs.FirstOrDefault(x=>x.AccountId==MvcApplication.TempAccount.Id);
+                var model = context.AccountETIs.FirstOrDefault(x => x.AccountId == MvcApplication.TempAccount.Id);
                 model.Text1 = indemnityTxt1;
                 model.Text2 = indemnityTxt2;
                 model.Text3 = indemnityTxt3;
@@ -843,7 +861,7 @@ namespace AppMain.Controllers
         }
 
 
-        public ActionResult AML(string message=null)
+        public ActionResult AML(string message = null)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -852,10 +870,10 @@ namespace AppMain.Controllers
             return View();
         }
 
-        [HttpPost,ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult AML(List<string> remark = null)
         {
-            using (var context=new DBLAccountOpeningContext())
+            using (var context = new DBLAccountOpeningContext())
             {
                 var oldResponses = context.AccountAMLResponses.Where(x => x.AccountId == MvcApplication.TempAccount.Id);
                 context.AccountAMLResponses.RemoveRange(oldResponses);
